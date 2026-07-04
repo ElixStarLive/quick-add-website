@@ -19,7 +19,6 @@
     "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
     "multer": "^2.2.0",
-    "openai": "^6.45.0",
     "sqlite3": "^5.1.6",
     "stripe": "^14.10.0"
   },

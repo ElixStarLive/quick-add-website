@@ -6,12 +6,8 @@ const fs = require('fs');
 const sqlite3 = require('sqlite3').verbose();
 const helmet = require('helmet');
 const multer = require('multer');
-const OpenAI = require('openai');
 const {
-  buildEstimate,
-  classifyJobLocally,
-  validateAIClassification,
-  getCategoryIdsForAI
+  buildEstimate
 } = require('./lib/uk-pricing-engine');
 
 require('dotenv').config();
@@ -27,7 +23,12 @@ function envTrim(name) {
 const ADMIN_SECRET = envTrim('ADMIN_SECRET');
 const SESSION_SECRET = envTrim('SESSION_SECRET');
 const SITE_URL = envTrim('SITE_URL').replace(/\/$/, '');
-const DB_PATH = envTrim('DATABASE_PATH') || envTrim('DATABASE_URL').replace(/^sqlite:/, '') || './quickpost.db';
+function resolveDbPath() {
+  const raw = envTrim('DATABASE_PATH') || envTrim('DATABASE_URL').replace(/^sqlite:/, '');
+  if (!raw) return path.join(__dirname, 'quickpost.db');
+  return path.isAbsolute(raw) ? raw : path.join(__dirname, raw);
+}
+const DB_PATH = resolveDbPath();
 const LISTING_FEE_PENCE = 100;
 const STRIPE_PUBLISHABLE_KEY = envTrim('STRIPE_PUBLISHABLE_KEY') || envTrim('VITE_STRIPE_PUBLISHABLE_KEY');
 
@@ -191,6 +192,7 @@ const upload = multer({
 app.use('/uploads', express.static(uploadsDir));
 
 // Initialize SQLite database
+fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
 const db = new sqlite3.Database(DB_PATH, (err) => {
   if (err) {
     console.error('Error opening database:', err.message);
@@ -455,85 +457,13 @@ async function verifyListingPayment(paymentIntentId, sellerEmail) {
 
 // API Routes
 
-let openai;
-const OPENAI_CONFIGURED = Boolean(
-  process.env.OPENAI_API_KEY &&
-  !process.env.OPENAI_API_KEY.includes('your_') &&
-  process.env.OPENAI_API_KEY.startsWith('sk-')
-);
-if (OPENAI_CONFIGURED) {
-  openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-  console.log('AI job classifier enabled (prices from UK pricing engine)');
-} else {
-  console.log('OpenAI not configured — estimates use UK pricing engine only (still accurate)');
-}
-
-const CLASSIFY_SYSTEM_PROMPT = `You classify UK home service and trade jobs for a pricing engine.
-You must NEVER invent prices or GBP amounts — only classify the job.
-
-Available categories and scopes:
-${JSON.stringify(getCategoryIdsForAI(), null, 2)}
-
-Rules:
-- Distinguish minor_repair (leaking tap, blocked drain) from full_refit (full bathroom/kitchen renewal, rip-out, new suite).
-- "Full bathroom renovation" or "2m x 2m bathroom refit" = category full_bathroom, scope full_refit.
-- "Leaking tap" = plumbing_repair, scope minor_repair — NOT full_bathroom.
-- Extract sqm from dimensions like "2x2", "2m x 2m", "4 sq m" if mentioned.
-- location_tier: london | south_east | major_city | uk_average | rural
-- quality_tier: budget | standard | premium | luxury
-
-Respond ONLY with JSON:
-{
-  "category_id": "one of the ids above",
-  "scope": "minor_repair|partial|standard|full_refit|major_project",
-  "sqm": number or null,
-  "quality_tier": "budget|standard|premium|luxury",
-  "location_tier": "london|south_east|major_city|uk_average|rural",
-  "notes": "brief reason for classification"
-}`;
-
-app.get('/api/ai/status', (req, res) => {
-  res.json({
-    enabled: true,
-    ai_enhanced: OPENAI_CONFIGURED,
-    mode: OPENAI_CONFIGURED ? 'ai+engine' : 'engine'
-  });
-});
-
-app.post('/api/estimate', rateLimit('estimate', 20, 60000), async (req, res) => {
+app.post('/api/estimate', rateLimit('estimate', 20, 60000), (req, res) => {
   const { job_type, description, location, budget } = req.body;
   if (!job_type && !description) {
     return res.status(400).json({ error: 'Describe the work type or add a description.' });
   }
 
-  let classification = null;
-
-  if (openai) {
-    try {
-      const completion = await openai.chat.completions.create({
-        model: process.env.OPENAI_MODEL || 'gpt-4o',
-        messages: [
-          { role: 'system', content: CLASSIFY_SYSTEM_PROMPT },
-          {
-            role: 'user',
-            content: `Work type: ${job_type || 'Not specified'}
-Location: ${location || 'UK'}
-Description: ${description || 'Not provided'}
-Customer budget: ${budget || 'Not entered'}`
-          }
-        ],
-        response_format: { type: 'json_object' },
-        temperature: 0.1,
-        max_tokens: 300
-      });
-      const raw = JSON.parse(completion.choices[0].message.content);
-      classification = validateAIClassification(raw, job_type, description, location);
-    } catch (error) {
-      console.error('AI classify error (using engine fallback):', error.message);
-    }
-  }
-
-  const result = buildEstimate({ job_type, description, location, budget, classification });
+  const result = buildEstimate({ job_type, description, location, budget });
   res.json(result);
 });
 
@@ -918,7 +848,7 @@ app.get('/api/dashboard', (req, res) => {
 
 // Health check for hosting platforms
 app.get('/api/health', (req, res) => {
-  res.json({ ok: true, env: NODE_ENV, stripe: Boolean(stripe), ai: OPENAI_CONFIGURED, estimator: 'engine' });
+  res.json({ ok: true, env: NODE_ENV, stripe: Boolean(stripe), estimator: 'engine' });
 });
 
 // Static frontend (after API routes)

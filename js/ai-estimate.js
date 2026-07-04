@@ -1,4 +1,4 @@
-/** UK job estimate — pricing engine + optional AI classification (never fake numbers). */
+/** UK job estimate — pricing engine (no external AI). */
 async function fetchAiEstimate(payload) {
   const res = await fetch('/api/estimate', {
     method: 'POST',
@@ -45,19 +45,9 @@ async function initAiEstimateUI(options) {
     budgetInput
   } = options;
 
-  let mode = 'engine';
-  try {
-    const st = await fetch('/api/ai/status').then((r) => r.json());
-    mode = st.ai_enhanced ? 'ai+engine' : 'engine';
-  } catch {
-    mode = 'engine';
-  }
-
   if (statusEl) {
     statusEl.style.display = 'block';
-    statusEl.textContent = mode === 'ai+engine'
-      ? 'Smart estimate: AI reads your job, UK trade rates calculate the price.'
-      : 'UK trade rate calculator — add OPENAI_API_KEY to .env for smarter job reading.';
+    statusEl.textContent = 'UK trade rate calculator — guide prices from real labour and material rates.';
   }
 
   if (!btnEl) return;
