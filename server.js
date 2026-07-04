@@ -20,24 +20,42 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const IS_PRODUCTION = NODE_ENV === 'production';
-const ADMIN_SECRET = process.env.ADMIN_SECRET || '';
-const SESSION_SECRET = process.env.SESSION_SECRET || '';
-const SITE_URL = (process.env.SITE_URL || '').replace(/\/$/, '');
-const DB_PATH = process.env.DATABASE_PATH || process.env.DATABASE_URL?.replace(/^sqlite:/, '') || './quickpost.db';
+function envTrim(name) {
+  return String(process.env[name] || '').trim();
+}
+
+const ADMIN_SECRET = envTrim('ADMIN_SECRET');
+const SESSION_SECRET = envTrim('SESSION_SECRET');
+const SITE_URL = envTrim('SITE_URL').replace(/\/$/, '');
+const DB_PATH = envTrim('DATABASE_PATH') || envTrim('DATABASE_URL').replace(/^sqlite:/, '') || './quickpost.db';
 const LISTING_FEE_PENCE = 100;
-const STRIPE_PUBLISHABLE_KEY = process.env.STRIPE_PUBLISHABLE_KEY || process.env.VITE_STRIPE_PUBLISHABLE_KEY || '';
+const STRIPE_PUBLISHABLE_KEY = envTrim('STRIPE_PUBLISHABLE_KEY') || envTrim('VITE_STRIPE_PUBLISHABLE_KEY');
 
 app.set('trust proxy', 1);
 
 function validateProductionConfig() {
   if (!IS_PRODUCTION) return;
+  const checks = {
+    STRIPE_SECRET_KEY: envTrim('STRIPE_SECRET_KEY'),
+    STRIPE_PUBLISHABLE_KEY,
+    ADMIN_SECRET,
+    SESSION_SECRET
+  };
   const missing = [];
-  if (!process.env.STRIPE_SECRET_KEY) missing.push('STRIPE_SECRET_KEY');
-  if (!STRIPE_PUBLISHABLE_KEY) missing.push('STRIPE_PUBLISHABLE_KEY');
-  if (!ADMIN_SECRET || ADMIN_SECRET.includes('your_')) missing.push('ADMIN_SECRET');
-  if (!SESSION_SECRET || SESSION_SECRET.includes('your_')) missing.push('SESSION_SECRET');
+  if (!checks.STRIPE_SECRET_KEY) missing.push('STRIPE_SECRET_KEY');
+  if (!checks.STRIPE_PUBLISHABLE_KEY) missing.push('STRIPE_PUBLISHABLE_KEY (or VITE_STRIPE_PUBLISHABLE_KEY)');
+  if (!checks.ADMIN_SECRET || checks.ADMIN_SECRET.includes('your_')) missing.push('ADMIN_SECRET');
+  if (!checks.SESSION_SECRET || checks.SESSION_SECRET.includes('your_')) missing.push('SESSION_SECRET');
   if (missing.length) {
-    console.error('Production startup blocked. Set these env vars:', missing.join(', '));
+    console.error('Production startup blocked. Missing or empty:', missing.join(', '));
+    console.error('Env present (true/false, values not shown):', {
+      STRIPE_SECRET_KEY: Boolean(checks.STRIPE_SECRET_KEY),
+      STRIPE_PUBLISHABLE_KEY: Boolean(checks.STRIPE_PUBLISHABLE_KEY),
+      ADMIN_SECRET: Boolean(checks.ADMIN_SECRET),
+      SESSION_SECRET: Boolean(checks.SESSION_SECRET),
+      NODE_ENV,
+      RAILWAY_ENVIRONMENT: process.env.RAILWAY_ENVIRONMENT || 'not set'
+    });
     process.exit(1);
   }
 }
@@ -74,8 +92,8 @@ app.use(cors(IS_PRODUCTION && SITE_URL ? { origin: SITE_URL } : {}));
 
 let stripe;
 try {
-  if (process.env.STRIPE_SECRET_KEY) {
-    stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+  if (envTrim('STRIPE_SECRET_KEY')) {
+    stripe = require('stripe')(envTrim('STRIPE_SECRET_KEY'));
   } else if (IS_PRODUCTION) {
     console.error('STRIPE_SECRET_KEY is required in production');
     process.exit(1);
