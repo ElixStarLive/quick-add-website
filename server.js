@@ -280,85 +280,6 @@ function initializeDatabase() {
 
 function finishDatabaseInit() {
   insertForSaleTable();
-  if (!IS_PRODUCTION) {
-    insertSampleJobs();
-  }
-}
-
-function insertSampleJobs() {
-  const sampleJobs = [
-    {
-      user_id: 1,
-      title: 'Kitchen renovation – London',
-      description: 'Full kitchen refit needed. Remove old units, fit new kitchen, tiling and plumbing. Materials on site.',
-      location: 'London',
-      salary: '£8,500 fixed price',
-      contact_email: 'homeowner@example.com',
-      contact_phone: '07860266619',
-      status: 'approved'
-    },
-    {
-      user_id: 1,
-      title: 'Decorator – Manchester',
-      description: 'Painting and decorating for a 3-bed house. Walls, ceilings and woodwork throughout.',
-      location: 'Manchester',
-      salary: '£1,800 fixed price',
-      contact_email: 'homeowner@example.com',
-      contact_phone: '07860266619',
-      status: 'approved'
-    },
-    {
-      user_id: 1,
-      title: 'Plumber needed – Birmingham',
-      description: 'Bathroom leak and new shower installation. Needs doing this week.',
-      location: 'Birmingham',
-      salary: '£650 fixed price',
-      contact_email: 'homeowner@example.com',
-      contact_phone: '07860266619',
-      status: 'approved'
-    },
-    {
-      user_id: 1,
-      title: 'Mobile mechanic – oil change at my address',
-      description: 'Full service and oil change on a Vauxhall Astra. Mobile mechanic to come to my address.',
-      location: 'London',
-      salary: '£180 fixed price',
-      contact_email: 'homeowner@example.com',
-      contact_phone: '07860266619',
-      status: 'approved'
-    },
-    {
-      user_id: 1,
-      title: 'Electrician – Central London',
-      description: 'Full rewire and new consumer unit for a 2-bed flat. EICR certificate needed.',
-      location: 'London',
-      salary: '£2,800 fixed price',
-      contact_email: 'homeowner@example.com',
-      contact_phone: '07860266619',
-      status: 'approved'
-    }
-  ];
-
-  // First, insert a sample user
-  db.run(`INSERT OR IGNORE INTO users (name, email, password) VALUES (?, ?, ?)`, 
-    ['Sample Homeowner', 'homeowner@example.com', 'password123'], function(err) {
-    if (err) {
-      console.log('User already exists or error:', err.message);
-    }
-    
-    // Now insert sample jobs
-    sampleJobs.forEach(job => {
-      db.run(`INSERT OR IGNORE INTO jobs (user_id, title, description, location, salary, contact_email, contact_phone, status) 
-              VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, 
-        [job.user_id, job.title, job.description, job.location, job.salary, job.contact_email, job.contact_phone, job.status],
-        function(err) {
-          if (err) {
-            console.log('Error inserting job:', err.message);
-          }
-        }
-      );
-    });
-  });
 }
 
 // ----- Shop / for-sale items -----
@@ -379,30 +300,6 @@ function insertForSaleTable() {
   )`, (err) => {
     db.run('ALTER TABLE ads ADD COLUMN image_url TEXT', () => {});
     db.run('ALTER TABLE ads ADD COLUMN listing_payment_id TEXT', () => {});
-    if (!err && !IS_PRODUCTION) insertSampleForSaleAds();
-  });
-}
-
-function insertSampleForSaleAds() {
-  const samples = [
-    { category: 'cars', title: 'Car battery – nearly new', price: '£45', location: 'London', description: 'Used for 3 months, fits most Vauxhall models.', image_url: '/uploads/samples/car-battery.jpg' },
-    { category: 'furniture', title: 'Sofa – excellent condition', price: '£120', location: 'London', description: 'Grey 3-seater, collection only.', image_url: '/uploads/samples/sofa.jpg' },
-    { category: 'electronics', title: 'Samsung 43" Smart TV', price: '£180', location: 'London', description: '4K, with remote and stand.', image_url: '/uploads/samples/tv.jpg' },
-    { category: 'phones', title: 'iPhone 12 – good condition', price: '£280', location: 'London', description: '128GB, unlocked, no scratches.', image_url: '/uploads/samples/iphone.jpg' },
-    { category: 'appliances', title: 'Bosch washing machine', price: '£150', location: 'London', description: '8kg, 1400 spin, works perfectly.', image_url: '/uploads/samples/washing-machine.jpg' },
-    { category: 'tools', title: 'Power drill set – like new', price: '£45', location: 'London', description: 'Cordless with 2 batteries and case.', image_url: '/uploads/samples/drill.jpg' },
-    { category: 'garden', title: 'Petrol lawn mower', price: '£110', location: 'Surrey', description: 'Self-propelled, serviced.', image_url: '/uploads/samples/lawn-mower.jpg' },
-    { category: 'sports', title: 'Mountain bike – 21 speed', price: '£130', location: 'Bristol', description: '26 inch wheels, recently serviced.', image_url: '/uploads/samples/bike.jpg' }
-  ];
-  samples.forEach((ad) => {
-    db.run(`INSERT OR IGNORE INTO ads (category, title, description, location, price, contact_email, contact_phone, status, ad_type, image_url)
-            SELECT ?, ?, ?, ?, ?, 'seller@example.com', '07860266619', 'approved', 'forsale', ?
-            WHERE NOT EXISTS (SELECT 1 FROM ads WHERE title = ? AND ad_type = 'forsale')`,
-      [ad.category, ad.title, ad.description, ad.location, ad.price, ad.image_url, ad.title]);
-    [ad.title, ad.title.replace(/\u2013/g, '-'), ad.title.replace(/-/g, '\u2013')].forEach((title) => {
-      db.run(`UPDATE ads SET image_url = ? WHERE title = ? AND ad_type = 'forsale' AND (image_url IS NULL OR image_url = '')`,
-        [ad.image_url, title]);
-    });
   });
 }
 
@@ -785,6 +682,73 @@ app.post('/api/payments/confirm', async (req, res) => {
 });
 
 // Admin routes (protected)
+function cleanUploadedFiles() {
+  try {
+    for (const name of fs.readdirSync(uploadsDir)) {
+      if (name === '.gitkeep') continue;
+      fs.rmSync(path.join(uploadsDir, name), { recursive: true, force: true });
+    }
+  } catch (err) {
+    console.error('Upload cleanup error:', err.message);
+  }
+}
+
+function purgeAllListings(done) {
+  db.serialize(() => {
+    db.run('DELETE FROM payments');
+    db.run('DELETE FROM jobs');
+    db.run('DELETE FROM ads');
+    db.run('DELETE FROM contact_messages');
+    db.run("DELETE FROM users WHERE email LIKE '%@example.com' OR email = 'test@test.com'", function (err) {
+      cleanUploadedFiles();
+      done(err);
+    });
+  });
+}
+
+app.get('/api/admin/ads', requireAdmin, (req, res) => {
+  db.all('SELECT * FROM ads ORDER BY created_at DESC', (err, ads) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json({ ads });
+  });
+});
+
+app.post('/api/admin/purge-all', requireAdmin, (req, res) => {
+  purgeAllListings((err) => {
+    if (err) return res.status(500).json({ error: err.message });
+    console.log('Admin purge: all listings removed');
+    res.json({ ok: true, message: 'All jobs, shop listings, payments and contact messages removed.' });
+  });
+});
+
+app.delete('/api/admin/jobs/:id', requireAdmin, (req, res) => {
+  const jobId = req.params.id;
+  db.serialize(() => {
+    db.run('DELETE FROM payments WHERE job_id = ?', [jobId]);
+    db.run('DELETE FROM jobs WHERE id = ?', [jobId], function (err) {
+      if (err) return res.status(500).json({ error: err.message });
+      if (!this.changes) return res.status(404).json({ error: 'Job not found' });
+      res.json({ ok: true });
+    });
+  });
+});
+
+app.delete('/api/admin/ads/:id', requireAdmin, (req, res) => {
+  const adId = req.params.id;
+  db.get('SELECT image_url FROM ads WHERE id = ?', [adId], (err, ad) => {
+    if (err) return res.status(500).json({ error: err.message });
+    if (!ad) return res.status(404).json({ error: 'Listing not found' });
+    db.run('DELETE FROM ads WHERE id = ?', [adId], function (delErr) {
+      if (delErr) return res.status(500).json({ error: delErr.message });
+      if (ad.image_url && ad.image_url.startsWith('/uploads/')) {
+        const file = path.join(__dirname, ad.image_url.replace(/^\//, ''));
+        fs.unlink(file, () => {});
+      }
+      res.json({ ok: true });
+    });
+  });
+});
+
 app.get('/api/admin/jobs', requireAdmin, (req, res) => {
   db.all('SELECT * FROM jobs ORDER BY created_at DESC', (err, jobs) => {
     if (err) {
