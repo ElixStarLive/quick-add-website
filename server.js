@@ -937,7 +937,7 @@ process.on('unhandledRejection', (reason) => {
   console.error('Unhandled rejection:', reason);
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`QuickPost Ads running on port ${PORT} (${NODE_ENV})`);
   if (IS_PRODUCTION) {
     console.log('Production mode — Stripe required, mock payments disabled');
