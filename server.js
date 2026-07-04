@@ -280,6 +280,19 @@ function initializeDatabase() {
 
 function finishDatabaseInit() {
   insertForSaleTable();
+  if (IS_PRODUCTION) purgeDemoContentQuiet();
+}
+
+function purgeDemoContentQuiet() {
+  db.serialize(() => {
+    db.run("DELETE FROM payments WHERE job_id IN (SELECT id FROM jobs WHERE contact_email LIKE '%@example.com')");
+    db.run("DELETE FROM jobs WHERE contact_email LIKE '%@example.com'");
+    db.run("DELETE FROM ads WHERE contact_email LIKE '%@example.com' OR image_url LIKE '/uploads/samples/%'");
+    db.run("DELETE FROM users WHERE email LIKE '%@example.com' OR email = 'test@test.com'", () => {
+      cleanUploadedFiles();
+      console.log('Demo listings removed from production database');
+    });
+  });
 }
 
 // ----- Shop / for-sale items -----
