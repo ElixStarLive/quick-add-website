@@ -14,17 +14,23 @@ require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const NODE_ENV = process.env.NODE_ENV || 'development';
+const NODE_ENV = process.env.NODE_ENV || (process.env.RAILWAY_ENVIRONMENT ? 'production' : 'development');
 const IS_PRODUCTION = NODE_ENV === 'production';
 function envTrim(name) {
   return String(process.env[name] || '').trim();
+}
+
+function normalizeSqlitePath(value) {
+  const raw = String(value || '').trim();
+  if (!raw) return '';
+  return raw.replace(/^sqlite:/i, '');
 }
 
 const ADMIN_SECRET = envTrim('ADMIN_SECRET');
 const SESSION_SECRET = envTrim('SESSION_SECRET');
 const SITE_URL = envTrim('SITE_URL').replace(/\/$/, '');
 function resolveDbPath() {
-  const raw = envTrim('DATABASE_PATH') || envTrim('DATABASE_URL').replace(/^sqlite:/, '');
+  const raw = normalizeSqlitePath(envTrim('DATABASE_PATH')) || normalizeSqlitePath(envTrim('DATABASE_URL'));
   if (!raw) return path.join(__dirname, 'quickpost.db');
   return path.isAbsolute(raw) ? raw : path.join(__dirname, raw);
 }
