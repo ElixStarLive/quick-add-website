@@ -92,7 +92,11 @@ app.use(helmet({
       imgSrc: ["'self'", "data:", "https:", "blob:"],
       connectSrc: ["'self'", "https://api.stripe.com"]
     }
-  }
+  },
+  hsts: IS_PRODUCTION ? { maxAge: 31536000, includeSubDomains: true, preload: false } : false,
+  frameguard: { action: 'sameorigin' },
+  crossOriginOpenerPolicy: { policy: 'same-origin' },
+  crossOriginResourcePolicy: { policy: 'same-origin' }
 }));
 
 app.use(cors(IS_PRODUCTION && SITE_URL ? { origin: SITE_URL } : {}));

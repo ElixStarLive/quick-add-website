@@ -7,7 +7,7 @@
   --color-primary-hover: #a01830;
   --color-accent: #c41e3a;
   --color-text: #ffffff;
-  --color-text-muted: #b0b0b0;
+  --color-text-muted: #d4d4d4;
   --color-border: #333333;
   --font-sans: 'Segoe UI', system-ui, -apple-system, sans-serif;
   --shadow: 0 4px 20px rgba(0,0,0,0.4);
@@ -429,7 +429,8 @@ a:hover {
 }
 
 .search-bar input::placeholder {
-  color: var(--color-text-muted);
+  color: #c8c8c8;
+  opacity: 1;
 }
 
 .search-bar select {
@@ -898,7 +899,8 @@ a:hover {
 
 .form-group input::placeholder,
 .form-group textarea::placeholder {
-  color: var(--color-text-muted);
+  color: #c8c8c8;
+  opacity: 1;
 }
 
 .form-group textarea {
