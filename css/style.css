@@ -1,15 +1,14 @@
 /* QuickPost Ads – CarShine-style dark theme */
 :root {
-  --color-bg: #121212;
-  --color-bg-elevated: #1e1e1e;
-  --color-surface: #1e1e1e;
-  --color-primary: #e11d48;
-  --color-primary-hover: #f43f5e;
-  --color-accent: #e11d48;
+  --color-bg: #0f0f0f;
+  --color-bg-elevated: #1a1a1a;
+  --color-surface: #242424;
+  --color-primary: #c41e3a;
+  --color-primary-hover: #a01830;
+  --color-accent: #c41e3a;
   --color-text: #ffffff;
-  --color-text-secondary: #d1d5db;
-  --color-text-muted: #9ca3af;
-  --color-border: #343434;
+  --color-text-muted: #b0b0b0;
+  --color-border: #333333;
   --font-sans: 'Segoe UI', system-ui, -apple-system, sans-serif;
   --shadow: 0 4px 20px rgba(0,0,0,0.4);
   --radius: 4px;
@@ -45,7 +44,7 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
 
 /* Top bar */
 .top-bar {
-  background: #121212;
+  background: #0a0a0a;
   padding: 0.5rem 1.5rem;
   font-size: 0.85rem;
 }
@@ -189,12 +188,12 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
 }
 
 .btn-dark {
-  background: #121212;
+  background: #0a0a0a;
   color: #ffffff;
 }
 
 .btn-dark:hover {
-  background: #1e1e1e;
+  background: #1a1a1a;
   color: #ffffff;
 }
 
@@ -248,7 +247,7 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
 
 .hero-desc {
   font-size: 0.95rem;
-  color: var(--color-text-secondary);
+  color: var(--color-text-muted);
   max-width: 480px;
   margin: 0 0 1.5rem;
   line-height: 1.6;
@@ -964,7 +963,7 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
 }
 
 .page-subtitle {
-  color: var(--color-text-secondary);
+  color: var(--color-text-muted);
   margin-bottom: 1.5rem;
 }
 
@@ -1141,7 +1140,7 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
   gap: 1.25rem;
   align-items: center;
   padding: 1.25rem 1.5rem;
-  background: linear-gradient(135deg, #1e1e1e 0%, #2a1218 50%, #1a0a10 100%);
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a1218 50%, #1a0a10 100%);
   border: 1px solid rgba(196, 30, 58, 0.4);
   border-radius: var(--radius);
 }
