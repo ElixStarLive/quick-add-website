@@ -68,3 +68,11 @@ function setStoredDashboardEmail(email) {
   localStorage.setItem(DASHBOARD_EMAIL_STORAGE_KEY, trimmed);
   setStoredUserEmail(trimmed);
 }
+
+(function loadMobileNav() {
+  if (document.querySelector('script[data-mobile-nav]')) return;
+  const s = document.createElement('script');
+  s.src = 'js/mobile-nav.js';
+  s.dataset.mobileNav = '1';
+  document.head.appendChild(s);
+})();
