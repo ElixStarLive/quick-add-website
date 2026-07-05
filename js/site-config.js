@@ -96,8 +96,9 @@ function setStoredDashboardEmail(email) {
 
       walkText(span, (textNode) => {
         let t = textNode.textContent;
-        t = t.replace('23 Calderon Road, Leyton, London E11 4ET', 'Leyton, London E11 4ET');
+        t = t.replace('23 Calderon Road, Leyton, London E11 4ET', 'Leyton E11');
         t = t.replace('Phone: ', '').replace('Email: ', '');
+        t = t.replace('info@QuickPostAds.co.uk', 'info@QuickPostAds.co.uk');
         textNode.textContent = t;
       });
     });
