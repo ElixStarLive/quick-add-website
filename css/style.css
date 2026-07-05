@@ -1177,22 +1177,75 @@ a:hover {
   }
 
   .site-header .nav-links {
-    flex-wrap: wrap;
-    gap: 0.3rem 0.5rem;
-    justify-content: flex-end;
+    width: 100%;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 0.35rem;
+    justify-content: flex-start;
+    padding-bottom: 0.1rem;
+  }
+
+  .site-header .nav-links::-webkit-scrollbar {
+    display: none;
   }
 
   .site-header .nav-links a {
-    font-size: 0.68rem;
+    font-size: 0.62rem;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 
   .site-header .nav-links .btn {
-    padding: 0.35rem 0.55rem;
-    font-size: 0.68rem;
+    padding: 0.3rem 0.5rem;
+    font-size: 0.62rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .app-promo-section {
+    margin-bottom: 1rem;
+    padding: 0 0.4rem;
+  }
+
+  .app-promo-card {
+    grid-template-columns: auto 1fr auto;
+    gap: 0.45rem;
+    padding: 0.45rem 0.55rem;
+    align-items: center;
+  }
+
+  .app-promo-icon {
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 6px;
+  }
+
+  .app-promo-icon svg {
+    width: 0.9rem;
+    height: 0.9rem;
+  }
+
+  .app-promo-text h2 {
+    font-size: 0.72rem;
+    margin: 0;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  .app-promo-text p {
+    display: none;
+  }
+
+  .app-promo-card .btn {
+    padding: 0.28rem 0.45rem;
+    font-size: 0.58rem;
+    white-space: nowrap;
   }
 
   body.has-mobile-nav {
-    padding-bottom: calc(2.15rem + env(safe-area-inset-bottom, 0px));
+    padding-bottom: calc(1.75rem + env(safe-area-inset-bottom, 0px));
   }
 
   .mobile-bottom-nav {
@@ -1207,7 +1260,7 @@ a:hover {
     z-index: 200;
     background: var(--color-bg-elevated);
     border-top: 1px solid var(--color-border);
-    padding: 0.06rem 0 calc(0.06rem + env(safe-area-inset-bottom, 0px));
+    padding: 0.05rem 0 calc(0.05rem + env(safe-area-inset-bottom, 0px));
     box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.25);
   }
 
@@ -1215,31 +1268,33 @@ a:hover {
     flex: 1 1 0;
     min-width: 0;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: nowrap;
     align-items: center;
     justify-content: center;
-    gap: 0;
-    padding: 0.08rem 0.02rem;
+    gap: 0.12rem;
+    padding: 0.1rem 0.04rem;
     color: var(--color-text-muted);
-    font-size: 0.42rem;
+    font-size: 0.5rem;
     font-weight: 600;
     text-align: center;
-    min-height: 1.85rem;
+    min-height: 1.55rem;
     border-radius: 4px;
     line-height: 1;
   }
 
   .mobile-nav-item span {
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    max-width: none;
+    overflow: visible;
+    text-overflow: clip;
     white-space: nowrap;
-    padding: 0 1px;
+    padding: 0;
+    flex-shrink: 0;
   }
 
   .mobile-nav-item svg {
-    width: 0.78rem;
-    height: 0.78rem;
+    width: 0.72rem;
+    height: 0.72rem;
     fill: currentColor;
     flex-shrink: 0;
   }
@@ -1251,14 +1306,15 @@ a:hover {
   .mobile-nav-item--primary {
     color: #fff;
     background: var(--color-primary);
-    margin: 0 0.03rem;
-    border-radius: 5px;
+    margin: 0 0.02rem;
+    border-radius: 4px;
     align-self: stretch;
+    padding: 0.1rem 0.06rem;
   }
 
   .mobile-nav-item--primary svg {
-    width: 0.82rem;
-    height: 0.82rem;
+    width: 0.75rem;
+    height: 0.75rem;
   }
 
   .mobile-nav-item--primary.is-active {
@@ -1471,14 +1527,48 @@ a:hover {
 
   .site-header .nav-links {
     width: 100%;
+    flex-wrap: nowrap;
+    overflow-x: auto;
     justify-content: flex-start;
-    gap: 0.25rem 0.4rem;
+    gap: 0.3rem;
   }
 
   .site-header .nav-links a,
   .site-header .nav-links .btn {
-    font-size: 0.58rem;
-    padding: 0.28rem 0.4rem;
+    font-size: 0.55rem;
+    padding: 0.22rem 0.35rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .app-promo-card {
+    padding: 0.38rem 0.45rem;
+    gap: 0.3rem;
+  }
+
+  .app-promo-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .app-promo-text h2 {
+    font-size: 0.62rem;
+  }
+
+  .app-promo-card .btn {
+    font-size: 0.5rem;
+    padding: 0.2rem 0.32rem;
+  }
+
+  .mobile-nav-item {
+    font-size: 0.44rem;
+    gap: 0.06rem;
+    min-height: 1.4rem;
+  }
+
+  .mobile-nav-item svg {
+    width: 0.62rem;
+    height: 0.62rem;
   }
 
   .logo {
@@ -1564,27 +1654,7 @@ a:hover {
 
   .app-promo-section {
     padding: 0 0.6rem;
-    margin-bottom: 1.25rem;
-  }
-
-  .app-promo-card {
-    padding: 0.85rem;
-    gap: 0.65rem;
-  }
-
-  .app-promo-text h2 {
-    font-size: 1rem;
-  }
-
-  .app-promo-text p {
-    font-size: 0.78rem;
-  }
-
-  .app-promo-card .btn {
-    width: 100%;
-    justify-content: center;
-    white-space: normal;
-    text-align: center;
+    margin-bottom: 0.75rem;
   }
 
   .category-grid {
