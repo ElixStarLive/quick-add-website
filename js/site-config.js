@@ -76,3 +76,37 @@ function setStoredDashboardEmail(email) {
   s.dataset.mobileNav = '1';
   document.head.appendChild(s);
 })();
+
+(function compactTopBarForMobile() {
+  const MQ = window.matchMedia('(max-width: 768px)');
+  const saved = new Map();
+
+  function walkText(node, fn) {
+    node.childNodes.forEach((child) => {
+      if (child.nodeType === Node.TEXT_NODE) fn(child);
+      else if (child.nodeType === Node.ELEMENT_NODE) walkText(child, fn);
+    });
+  }
+
+  function apply() {
+    document.querySelectorAll('.top-bar-contact span').forEach((span, i) => {
+      if (!saved.has(span)) saved.set(span, span.innerHTML);
+      span.innerHTML = saved.get(span);
+      if (!MQ.matches) return;
+
+      walkText(span, (textNode) => {
+        let t = textNode.textContent;
+        t = t.replace('23 Calderon Road, Leyton, London E11 4ET', 'Leyton, London E11 4ET');
+        t = t.replace('Phone: ', '').replace('Email: ', '');
+        textNode.textContent = t;
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', apply);
+  } else {
+    apply();
+  }
+  MQ.addEventListener('change', apply);
+})();
