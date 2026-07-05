@@ -1,63 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://www.quickpostads.co.uk/</loc>
+    <loc>https://your-domain.com/</loc>
+    <lastmod>2024-01-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://www.quickpostads.co.uk/jobs.html</loc>
+    <loc>https://your-domain.com/jobs.html</loc>
+    <lastmod>2024-01-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.quickpostads.co.uk/post-job.html</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://www.quickpostads.co.uk/post-ad.html</loc>
+    <loc>https://your-domain.com/post-job.html</loc>
+    <lastmod>2024-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.quickpostads.co.uk/categories.html</loc>
+    <loc>https://your-domain.com/categories.html</loc>
+    <lastmod>2024-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.quickpostads.co.uk/search.html</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.quickpostads.co.uk/for-employers.html</loc>
+    <loc>https://your-domain.com/for-employers.html</loc>
+    <lastmod>2024-01-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.quickpostads.co.uk/roadmap.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.quickpostads.co.uk/contact.html</loc>
+    <loc>https://your-domain.com/contact.html</loc>
+    <lastmod>2024-01-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://www.quickpostads.co.uk/privacy-policy.html</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.4</priority>
+    <loc>https://your-domain.com/privacy-policy.html</loc>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://www.quickpostads.co.uk/terms-of-service.html</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.4</priority>
-  </url>
-  <url>
-    <loc>https://www.quickpostads.co.uk/content-rules.html</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.4</priority>
+    <loc>https://your-domain.com/terms-of-service.html</loc>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
 </urlset>

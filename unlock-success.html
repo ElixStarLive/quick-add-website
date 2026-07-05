@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="en-GB" xml:lang="en-GB">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Contact unlocked on QuickPost Ads. Payment successful — homeowner phone and email are saved in your dashboard for this UK job.">
   <title>Contact unlocked – QuickPost Ads</title>
-  <link rel="stylesheet" href="css/style.css?v=37">
+  <link rel="stylesheet" href="css/style.css?v=8">
 </head>
 <body>
   <script src="js/site-config.js?v=2"></script>
@@ -55,15 +54,15 @@
         <strong>Purchase saved.</strong> This unlock is recorded (User, Job, £5, Paid). You won't be charged again for this job — you can always see this contact in your <a href="dashboard.html">Dashboard</a>.
       </div>
 
-      <div class="job-contact-reveal" id="unlock-contact">
-        <p><strong>Homeowner contact</strong></p>
-        <p id="unlock-phone">Loading…</p>
-        <p id="unlock-email">Loading…</p>
+      <div class="job-contact-reveal">
+        <p><strong>Employer contact</strong></p>
+        <p>Phone: 074XX XXXXXX</p>
+        <p>Email: jobs@example.com</p>
       </div>
 
-      <p style="margin-top: 1rem;"><strong>Job:</strong> <span id="unlock-job-title">Loading…</span></p>
-
       <p class="job-contact-watermark" style="margin-top: 1rem;">Contact is also available in your Dashboard. Do not share — for your use only. Need a refund? <a href="contact.html">Contact us</a>.</p>
+
+      <p style="margin-top: 1rem;"><strong>Job:</strong> Warehouse Worker – London (£13/hour)</p>
 
       <p class="mt-2">
         <a href="#" id="view-job-link" class="btn btn-outline" style="margin-right: 0.5rem;">View job page</a>
@@ -83,34 +82,12 @@
     <p>QuickPost Ads · Post local jobs &amp; classifieds.</p>
   </footer>
   <script>
-    (async function () {
-      const params = new URLSearchParams(window.location.search);
-      const jobId = params.get('job');
-      if (!jobId) {
-        document.getElementById('unlock-job-title').textContent = 'Job not found';
-        return;
-      }
+    (function() {
+      var params = new URLSearchParams(window.location.search);
+      var jobId = params.get('job') || '1';
       try { sessionStorage.setItem('jobUnlocked_' + jobId, '1'); } catch (e) {}
-      const viewJob = document.getElementById('view-job-link');
+      var viewJob = document.getElementById('view-job-link');
       if (viewJob) viewJob.href = 'job-detail.html?id=' + jobId + '&unlocked=1';
-
-      const email = typeof getStoredUserEmail === 'function' ? getStoredUserEmail() : '';
-      const url = '/api/jobs/' + jobId + '/unlock-status' + (email ? '?email=' + encodeURIComponent(email) : '');
-      try {
-        const res = await fetch(url);
-        const data = await res.json();
-        if (data.unlocked && data.job) {
-          document.getElementById('unlock-phone').textContent = 'Phone: ' + (data.job.contact_phone || '—');
-          document.getElementById('unlock-email').textContent = 'Email: ' + (data.job.contact_email || '—');
-          document.getElementById('unlock-job-title').textContent =
-            (data.job.title || 'Job') + (data.job.budget ? ' (' + data.job.budget + ')' : '');
-        } else {
-          document.getElementById('unlock-contact').innerHTML =
-            '<p>Unlock recorded. Open your <a href="dashboard.html">Dashboard</a> with the same email you paid with.</p>';
-        }
-      } catch (e) {
-        document.getElementById('unlock-contact').innerHTML = '<p>Payment received. Check your <a href="dashboard.html">Dashboard</a> for contact details.</p>';
-      }
       document.title = 'Contact unlocked – QuickPost Ads';
     })();
   </script>

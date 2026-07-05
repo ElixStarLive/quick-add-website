@@ -1,4 +1,4 @@
-/** UK job estimate — pricing engine (no external AI). */
+/** UK job estimate — pricing engine + optional AI classification (never fake numbers). */
 async function fetchAiEstimate(payload) {
   const res = await fetch('/api/estimate', {
     method: 'POST',
@@ -22,7 +22,7 @@ function formatEstimateHtml(data) {
     lines.push(`<strong>Your budget:</strong> ${labels[data.verdict] || data.verdict}`);
   }
   if (data.summary) lines.push(`<p style="margin:0.5rem 0 0;">${escapeHtml(data.summary)}</p>`);
-  lines.push(`<p class="form-hint" style="margin:0.5rem 0 0;">${escapeHtml(data.disclaimer || 'Guide only — get written quotes from contractors.')}</p>`);
+  lines.push(`<p style="margin:0.5rem 0 0;font-size:0.9em;opacity:0.85;">${escapeHtml(data.disclaimer || 'Guide only — get written quotes from contractors.')}</p>`);
   return lines.join('<br>');
 }
 
@@ -45,9 +45,19 @@ async function initAiEstimateUI(options) {
     budgetInput
   } = options;
 
+  let mode = 'engine';
+  try {
+    const st = await fetch('/api/ai/status').then((r) => r.json());
+    mode = st.ai_enhanced ? 'ai+engine' : 'engine';
+  } catch {
+    mode = 'engine';
+  }
+
   if (statusEl) {
     statusEl.style.display = 'block';
-    statusEl.textContent = 'UK trade rate calculator — guide prices from real labour and material rates.';
+    statusEl.textContent = mode === 'ai+engine'
+      ? 'Smart estimate: AI reads your job, UK trade rates calculate the price.'
+      : 'UK trade rate calculator — add OPENAI_API_KEY to .env for smarter job reading.';
   }
 
   if (!btnEl) return;
