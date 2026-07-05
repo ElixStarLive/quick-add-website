@@ -886,15 +886,14 @@ app.get(/\.html$/i, (req, res) => {
   return sendHtmlPage(res, base);
 });
 
-app.use(express.static(path.join(__dirname), {
-  dotfiles: 'deny',
-  index: false,
-  setHeaders(res, filePath) {
-    if (filePath.endsWith('.html')) {
-      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-    }
+const staticMiddleware = express.static(path.join(__dirname), { dotfiles: 'deny', index: false });
+app.use((req, res, next) => {
+  const pathOnly = req.path.split('?')[0];
+  if (pathOnly === '/' || /\.html$/i.test(pathOnly)) {
+    return next();
   }
-}));
+  return staticMiddleware(req, res, next);
+});
 
 app.use((err, req, res, next) => {
   console.error('Server error:', err.message);
