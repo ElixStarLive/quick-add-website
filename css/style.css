@@ -9,8 +9,8 @@
   --color-text: #ffffff;
   --color-text-muted: #b0b0b0;
   --color-border: #333333;
-  --icon-backdrop: rgba(255, 255, 255, 0.15);
-  --icon-backdrop-glow: 0 0 10px rgba(255, 255, 255, 0.12);
+  --neon-text: 0 0 6px rgba(255, 255, 255, 0.9), 0 0 14px rgba(196, 30, 58, 0.8), 0 0 26px rgba(196, 30, 58, 0.45);
+  --neon-icon: drop-shadow(0 0 2px rgba(255, 255, 255, 0.95)) drop-shadow(0 0 8px rgba(196, 30, 58, 0.9)) drop-shadow(0 0 18px rgba(196, 30, 58, 0.55));
   --font-sans: 'Segoe UI', system-ui, -apple-system, sans-serif;
   --shadow: 0 4px 20px rgba(0,0,0,0.4);
   --radius: 4px;
@@ -121,11 +121,7 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
   stroke: var(--color-primary);
   stroke-width: 2;
   stroke-linecap: round;
-  padding: 5px;
-  border-radius: 6px;
-  background: var(--icon-backdrop);
-  box-shadow: var(--icon-backdrop-glow);
-  box-sizing: content-box;
+  filter: var(--neon-icon);
 }
 
 .logo-text {
@@ -138,6 +134,7 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--color-primary);
+  text-shadow: var(--neon-text);
 }
 
 .logo-tagline {
@@ -250,6 +247,7 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
   font-weight: 800;
   line-height: 1.15;
   color: #fff;
+  text-shadow: var(--neon-text);
 }
 
 .hero-desc {
@@ -294,8 +292,7 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
   align-items: center;
   justify-content: center;
   color: var(--color-primary);
-  background: var(--icon-backdrop);
-  box-shadow: var(--icon-backdrop-glow);
+  filter: var(--neon-icon);
 }
 .hero-feature-icon svg { width: 1.2rem; height: 1.2rem; fill: currentColor; }
 
@@ -342,6 +339,7 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
   height: 5rem;
   color: var(--color-primary);
   opacity: 0.5;
+  filter: var(--neon-icon);
 }
 .hero-visual-placeholder svg { width: 100%; height: 100%; fill: currentColor; }
 
@@ -356,11 +354,7 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
   height: 1rem;
   fill: var(--color-primary);
   flex-shrink: 0;
-  padding: 3px;
-  border-radius: 50%;
-  background: var(--icon-backdrop);
-  box-shadow: var(--icon-backdrop-glow);
-  box-sizing: content-box;
+  filter: var(--neon-icon);
 }
 
 .top-bar-social .icon-social {
@@ -369,14 +363,15 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
   justify-content: center;
   min-width: 24px;
   min-height: 24px;
-  padding: 3px;
-  border-radius: 6px;
-  background: var(--icon-backdrop);
-  box-shadow: var(--icon-backdrop-glow);
   color: var(--color-text-muted);
 }
 .top-bar-social .icon-social:hover { color: var(--color-primary); }
-.top-bar-social .icon-social svg { width: 1.1rem; height: 1.1rem; fill: currentColor; }
+.top-bar-social .icon-social svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  fill: currentColor;
+  filter: var(--neon-icon);
+}
 
 .icon-inline {
   width: 1em;
@@ -384,11 +379,7 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
   vertical-align: -0.2em;
   fill: var(--color-primary);
   flex-shrink: 0;
-  padding: 0.18em;
-  border-radius: 50%;
-  background: var(--icon-backdrop);
-  box-shadow: var(--icon-backdrop-glow);
-  box-sizing: content-box;
+  filter: var(--neon-icon);
 }
 .top-bar-contact .icon-inline { margin-right: 0.2rem; }
 .job-location .icon-inline { margin-right: 0.35rem; vertical-align: -0.15em; }
@@ -491,6 +482,7 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
   margin: 0 0 1.25rem;
   font-weight: 700;
   color: #fff;
+  text-shadow: var(--neon-text);
 }
 
 /* Category grid */
@@ -519,18 +511,12 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
 
 .category-card .card-icon,
 .job-icon-item .card-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  display: block;
   width: 48px;
   height: 48px;
   margin: 0 auto 0.5rem;
   color: var(--color-primary);
-  padding: 0.35rem;
-  border-radius: 10px;
-  background: var(--icon-backdrop);
-  box-shadow: var(--icon-backdrop-glow);
-  box-sizing: border-box;
+  filter: var(--neon-icon);
 }
 .category-card .card-icon { width: 56px; height: 56px; margin-bottom: 0.75rem; }
 .job-icon-item .card-icon { width: 36px; height: 36px; margin-bottom: 0.35rem; }
@@ -559,6 +545,7 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
   line-height: 1.3;
   word-break: break-word;
   overflow-wrap: anywhere;
+  text-shadow: var(--neon-text);
 }
 
 /* Job icons grid - small icons like category */
@@ -615,6 +602,7 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
   width: 100%;
   word-break: break-word;
   overflow-wrap: anywhere;
+  text-shadow: var(--neon-text);
 }
 .job-icons-grid > .job-icon-item strong {
   flex: 1 1 auto;
@@ -642,6 +630,7 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
 .job-icon-hint {
   color: var(--color-primary) !important;
   font-weight: 600;
+  text-shadow: var(--neon-text);
 }
 
 .promo-box ul a {
@@ -700,18 +689,12 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
   border-bottom: none;
 }
 .ad-card-image .card-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  display: block;
   width: 36px;
   height: 36px;
   margin: 0 auto;
   color: var(--color-primary);
-  padding: 0.3rem;
-  border-radius: 8px;
-  background: var(--icon-backdrop);
-  box-shadow: var(--icon-backdrop-glow);
-  box-sizing: border-box;
+  filter: var(--neon-icon);
 }
 .ad-card-desc { color: var(--color-text-muted); font-size: 0.75rem; margin: 0.1rem 0 0; line-height: 1.25; }
 
@@ -742,11 +725,7 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
   width: 44px;
   height: 44px;
   fill: var(--color-primary);
-  padding: 8px;
-  border-radius: 10px;
-  background: var(--icon-backdrop);
-  box-shadow: var(--icon-backdrop-glow);
-  box-sizing: content-box;
+  filter: var(--neon-icon);
 }
 .photo-dropzone-empty span { font-weight: 600; }
 #photo-preview { width: 100%; max-height: 320px; object-fit: contain; display: block; background: #000; }
@@ -1018,6 +997,7 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
   margin: 0 0 0.5rem;
   font-weight: 700;
   color: #fff;
+  text-shadow: var(--neon-text);
 }
 
 .page-subtitle {
@@ -1207,6 +1187,7 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
   height: 3.5rem;
   border-radius: 14px;
   background: var(--color-primary);
+  filter: var(--neon-icon);
   display: flex;
   align-items: center;
   justify-content: center;
