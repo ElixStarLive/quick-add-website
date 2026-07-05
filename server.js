@@ -82,6 +82,31 @@ app.use((req, res, next) => {
   next();
 });
 
+function ensureHtmlLang(html) {
+  if (typeof html !== 'string' || !/<html[\s>]/i.test(html)) return html;
+  return html.replace(/<html([^>]*)>/i, (match, attrs) => {
+    const cleaned = String(attrs || '').replace(/\s*lang\s*=\s*["'][^"']*["']/gi, '');
+    return `<html lang="en-GB"${cleaned}>`;
+  });
+}
+
+app.use((req, res, next) => {
+  const originalSend = res.send.bind(res);
+  res.send = function sendWithLang(body) {
+    const type = res.getHeader('Content-Type');
+    const isHtml = (typeof type === 'string' && type.includes('text/html'))
+      || (typeof body === 'string' && /<html[\s>]/i.test(body));
+    if (isHtml && typeof body === 'string') {
+      if (!res.getHeader('Content-Language')) {
+        res.setHeader('Content-Language', 'en-GB');
+      }
+      return originalSend(ensureHtmlLang(body));
+    }
+    return originalSend(body);
+  };
+  next();
+});
+
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
@@ -844,13 +869,11 @@ function sendHtmlPage(res, fileName) {
   if (!fs.existsSync(filePath)) {
     return res.status(404).end();
   }
-  let html = fs.readFileSync(filePath, 'utf8');
-  if (!/<html[^>]*\slang=/i.test(html)) {
-    html = html.replace(/<html([^>]*)>/i, '<html lang="en-GB"$1>');
-  }
+  const html = ensureHtmlLang(fs.readFileSync(filePath, 'utf8'));
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   res.setHeader('Content-Language', 'en-GB');
-  res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.setHeader('Pragma', 'no-cache');
   return res.send(html);
 }
 
@@ -863,7 +886,15 @@ app.get(/\.html$/i, (req, res) => {
   return sendHtmlPage(res, base);
 });
 
-app.use(express.static(path.join(__dirname), { dotfiles: 'deny', index: false }));
+app.use(express.static(path.join(__dirname), {
+  dotfiles: 'deny',
+  index: false,
+  setHeaders(res, filePath) {
+    if (filePath.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    }
+  }
+}));
 
 app.use((err, req, res, next) => {
   console.error('Server error:', err.message);
