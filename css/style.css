@@ -9,8 +9,6 @@
   --color-text: #ffffff;
   --color-text-muted: #b0b0b0;
   --color-border: #333333;
-  --neon-text: 0 0 8px #ffffff, 0 0 18px #c41e3a, 0 0 32px #c41e3a, 0 0 48px rgba(196, 30, 58, 0.75);
-  --neon-icon-svg: drop-shadow(0 0 4px #ffffff) drop-shadow(0 0 10px #c41e3a) drop-shadow(0 0 22px rgba(196, 30, 58, 0.9));
   --font-sans: 'Segoe UI', system-ui, -apple-system, sans-serif;
   --shadow: 0 4px 20px rgba(0,0,0,0.4);
   --radius: 4px;
@@ -121,7 +119,6 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
   stroke: var(--color-primary);
   stroke-width: 2;
   stroke-linecap: round;
-  filter: var(--neon-icon-svg);
 }
 
 .logo-text {
@@ -134,7 +131,6 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--color-primary);
-  text-shadow: var(--neon-text);
 }
 
 .logo-tagline {
@@ -247,7 +243,6 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
   font-weight: 800;
   line-height: 1.15;
   color: #fff;
-  text-shadow: var(--neon-text);
 }
 
 .hero-desc {
@@ -292,25 +287,8 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
   align-items: center;
   justify-content: center;
   color: var(--color-primary);
-  position: relative;
-  z-index: 0;
 }
-.hero-feature-icon::before {
-  content: '';
-  position: absolute;
-  inset: -6px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,255,255,0.45) 0%, rgba(196,30,58,0.65) 45%, transparent 72%);
-  z-index: -1;
-}
-.hero-feature-icon svg {
-  width: 1.2rem;
-  height: 1.2rem;
-  fill: currentColor;
-  position: relative;
-  z-index: 1;
-  filter: var(--neon-icon-svg);
-}
+.hero-feature-icon svg { width: 1.2rem; height: 1.2rem; fill: currentColor; }
 
 .hero-visual {
   position: relative;
@@ -355,7 +333,6 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
   height: 5rem;
   color: var(--color-primary);
   opacity: 0.5;
-  filter: var(--neon-icon-svg);
 }
 .hero-visual-placeholder svg { width: 100%; height: 100%; fill: currentColor; }
 
@@ -365,13 +342,7 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
   gap: 0.35rem;
   color: var(--color-text-muted);
 }
-.icon-lock svg {
-  width: 1rem;
-  height: 1rem;
-  fill: var(--color-primary);
-  flex-shrink: 0;
-  filter: var(--neon-icon-svg);
-}
+.icon-lock svg { width: 1rem; height: 1rem; fill: var(--color-primary); flex-shrink: 0; }
 
 .top-bar-social .icon-social {
   display: inline-flex;
@@ -382,21 +353,9 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
   color: var(--color-text-muted);
 }
 .top-bar-social .icon-social:hover { color: var(--color-primary); }
-.top-bar-social .icon-social svg {
-  width: 1.1rem;
-  height: 1.1rem;
-  fill: currentColor;
-  filter: var(--neon-icon-svg);
-}
+.top-bar-social .icon-social svg { width: 1.1rem; height: 1.1rem; fill: currentColor; }
 
-.icon-inline {
-  width: 1em;
-  height: 1em;
-  vertical-align: -0.2em;
-  fill: var(--color-primary);
-  flex-shrink: 0;
-  filter: var(--neon-icon-svg);
-}
+.icon-inline { width: 1em; height: 1em; vertical-align: -0.2em; fill: var(--color-primary); flex-shrink: 0; }
 .top-bar-contact .icon-inline { margin-right: 0.2rem; }
 .job-location .icon-inline { margin-right: 0.35rem; vertical-align: -0.15em; }
 .nav-links .btn .icon-inline { margin-right: 0.35rem; }
@@ -498,7 +457,6 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
   margin: 0 0 1.25rem;
   font-weight: 700;
   color: #fff;
-  text-shadow: var(--neon-text);
 }
 
 /* Category grid */
@@ -526,50 +484,19 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
 }
 
 .category-card .card-icon,
-.job-icon-item .card-icon,
-.ad-card-image .card-icon {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+.job-icon-item .card-icon {
+  display: block;
+  width: 48px;
+  height: 48px;
   margin: 0 auto 0.5rem;
   color: var(--color-primary);
-  z-index: 0;
 }
-
-.category-card .card-icon::before,
-.job-icon-item .card-icon::before,
-.ad-card-image .card-icon::before {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 160%;
-  height: 160%;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(255, 255, 255, 0.5) 0%,
-    rgba(196, 30, 58, 0.7) 38%,
-    rgba(196, 30, 58, 0.3) 62%,
-    transparent 78%
-  );
-  z-index: -1;
-  pointer-events: none;
-}
-
 .category-card .card-icon { width: 56px; height: 56px; margin-bottom: 0.75rem; }
-.job-icon-item .card-icon { width: 40px; height: 40px; margin-bottom: 0.35rem; }
-.ad-card-image .card-icon { width: 40px; height: 40px; }
-
+.job-icon-item .card-icon { width: 36px; height: 36px; margin-bottom: 0.35rem; }
 .card-icon svg {
-  position: relative;
-  z-index: 1;
   width: 100%;
   height: 100%;
   fill: currentColor;
-  filter: var(--neon-icon-svg);
 }
 .category-card span {
   display: block;
@@ -591,7 +518,6 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
   line-height: 1.3;
   word-break: break-word;
   overflow-wrap: anywhere;
-  text-shadow: var(--neon-text);
 }
 
 /* Job icons grid - small icons like category */
@@ -611,7 +537,6 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
   text-align: center;
   border: 1px solid var(--color-border);
   transition: border-color 0.2s;
-  overflow: visible;
 }
 .job-icon-item:hover {
   border-color: var(--color-primary);
@@ -629,8 +554,8 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
   box-sizing: border-box;
 }
 .job-icons-grid > .job-icon-item .card-icon {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   margin: 0;
   color: var(--color-primary);
   flex-shrink: 0;
@@ -649,7 +574,6 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
   width: 100%;
   word-break: break-word;
   overflow-wrap: anywhere;
-  text-shadow: var(--neon-text);
 }
 .job-icons-grid > .job-icon-item strong {
   flex: 1 1 auto;
@@ -677,7 +601,6 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
 .job-icon-hint {
   color: var(--color-primary) !important;
   font-weight: 600;
-  text-shadow: var(--neon-text);
 }
 
 .promo-box ul a {
@@ -705,7 +628,7 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
 .ad-card {
   background: var(--color-surface);
   border-radius: var(--radius);
-  overflow: visible;
+  overflow: hidden;
   border: 1px solid var(--color-border);
   transition: border-color 0.2s, box-shadow 0.2s;
   text-align: center;
@@ -734,8 +657,15 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
   padding: 0.75rem 0.5rem 0.35rem;
   background: var(--color-surface);
   border-bottom: none;
-  overflow: visible;
 }
+.ad-card-image .card-icon {
+  display: block;
+  width: 36px;
+  height: 36px;
+  margin: 0 auto;
+  color: var(--color-primary);
+}
+.ad-card-image .card-icon svg { width: 100%; height: 100%; fill: currentColor; }
 .ad-card-desc { color: var(--color-text-muted); font-size: 0.75rem; margin: 0.1rem 0 0; line-height: 1.25; }
 
 /* Add Photo dropzone (sell form) */
@@ -761,12 +691,7 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
   color: var(--color-text-muted);
   gap: 0.35rem;
 }
-.photo-dropzone-empty svg {
-  width: 44px;
-  height: 44px;
-  fill: var(--color-primary);
-  filter: var(--neon-icon-svg);
-}
+.photo-dropzone-empty svg { width: 44px; height: 44px; fill: var(--color-primary); }
 .photo-dropzone-empty span { font-weight: 600; }
 #photo-preview { width: 100%; max-height: 320px; object-fit: contain; display: block; background: #000; }
 
@@ -1035,7 +960,6 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
   margin: 0 0 0.5rem;
   font-weight: 700;
   color: #fff;
-  text-shadow: var(--neon-text);
 }
 
 .page-subtitle {
@@ -1225,7 +1149,6 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
   height: 3.5rem;
   border-radius: 14px;
   background: var(--color-primary);
-  filter: var(--neon-icon-svg);
   display: flex;
   align-items: center;
   justify-content: center;
