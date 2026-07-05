@@ -9,6 +9,8 @@
   --color-text: #ffffff;
   --color-text-muted: #b0b0b0;
   --color-border: #333333;
+  --icon-backdrop: rgba(255, 255, 255, 0.15);
+  --icon-backdrop-glow: 0 0 10px rgba(255, 255, 255, 0.12);
   --font-sans: 'Segoe UI', system-ui, -apple-system, sans-serif;
   --shadow: 0 4px 20px rgba(0,0,0,0.4);
   --radius: 4px;
@@ -119,6 +121,11 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
   stroke: var(--color-primary);
   stroke-width: 2;
   stroke-linecap: round;
+  padding: 5px;
+  border-radius: 6px;
+  background: var(--icon-backdrop);
+  box-shadow: var(--icon-backdrop-glow);
+  box-sizing: content-box;
 }
 
 .logo-text {
@@ -287,6 +294,8 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
   align-items: center;
   justify-content: center;
   color: var(--color-primary);
+  background: var(--icon-backdrop);
+  box-shadow: var(--icon-backdrop-glow);
 }
 .hero-feature-icon svg { width: 1.2rem; height: 1.2rem; fill: currentColor; }
 
@@ -342,7 +351,17 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
   gap: 0.35rem;
   color: var(--color-text-muted);
 }
-.icon-lock svg { width: 1rem; height: 1rem; fill: var(--color-primary); flex-shrink: 0; }
+.icon-lock svg {
+  width: 1rem;
+  height: 1rem;
+  fill: var(--color-primary);
+  flex-shrink: 0;
+  padding: 3px;
+  border-radius: 50%;
+  background: var(--icon-backdrop);
+  box-shadow: var(--icon-backdrop-glow);
+  box-sizing: content-box;
+}
 
 .top-bar-social .icon-social {
   display: inline-flex;
@@ -350,12 +369,27 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
   justify-content: center;
   min-width: 24px;
   min-height: 24px;
+  padding: 3px;
+  border-radius: 6px;
+  background: var(--icon-backdrop);
+  box-shadow: var(--icon-backdrop-glow);
   color: var(--color-text-muted);
 }
 .top-bar-social .icon-social:hover { color: var(--color-primary); }
 .top-bar-social .icon-social svg { width: 1.1rem; height: 1.1rem; fill: currentColor; }
 
-.icon-inline { width: 1em; height: 1em; vertical-align: -0.2em; fill: var(--color-primary); flex-shrink: 0; }
+.icon-inline {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.2em;
+  fill: var(--color-primary);
+  flex-shrink: 0;
+  padding: 0.18em;
+  border-radius: 50%;
+  background: var(--icon-backdrop);
+  box-shadow: var(--icon-backdrop-glow);
+  box-sizing: content-box;
+}
 .top-bar-contact .icon-inline { margin-right: 0.2rem; }
 .job-location .icon-inline { margin-right: 0.35rem; vertical-align: -0.15em; }
 .nav-links .btn .icon-inline { margin-right: 0.35rem; }
@@ -485,11 +519,18 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
 
 .category-card .card-icon,
 .job-icon-item .card-icon {
-  display: block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 48px;
   height: 48px;
   margin: 0 auto 0.5rem;
   color: var(--color-primary);
+  padding: 0.35rem;
+  border-radius: 10px;
+  background: var(--icon-backdrop);
+  box-shadow: var(--icon-backdrop-glow);
+  box-sizing: border-box;
 }
 .category-card .card-icon { width: 56px; height: 56px; margin-bottom: 0.75rem; }
 .job-icon-item .card-icon { width: 36px; height: 36px; margin-bottom: 0.35rem; }
@@ -659,11 +700,18 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
   border-bottom: none;
 }
 .ad-card-image .card-icon {
-  display: block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 36px;
   height: 36px;
   margin: 0 auto;
   color: var(--color-primary);
+  padding: 0.3rem;
+  border-radius: 8px;
+  background: var(--icon-backdrop);
+  box-shadow: var(--icon-backdrop-glow);
+  box-sizing: border-box;
 }
 .ad-card-desc { color: var(--color-text-muted); font-size: 0.75rem; margin: 0.1rem 0 0; line-height: 1.25; }
 
@@ -690,7 +738,16 @@ a:hover:not(.btn):not(.unlock-btn):not(.mobile-nav-item):not(.job-icon-item):not
   color: var(--color-text-muted);
   gap: 0.35rem;
 }
-.photo-dropzone-empty svg { width: 44px; height: 44px; fill: var(--color-primary); }
+.photo-dropzone-empty svg {
+  width: 44px;
+  height: 44px;
+  fill: var(--color-primary);
+  padding: 8px;
+  border-radius: 10px;
+  background: var(--icon-backdrop);
+  box-shadow: var(--icon-backdrop-glow);
+  box-sizing: content-box;
+}
 .photo-dropzone-empty span { font-weight: 600; }
 #photo-preview { width: 100%; max-height: 320px; object-fit: contain; display: block; background: #000; }
 
