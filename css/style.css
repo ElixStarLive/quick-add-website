@@ -18,12 +18,18 @@
   box-sizing: border-box;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+  overflow-x: clip;
+}
+
 body {
   margin: 0;
   font-family: var(--font-sans);
   background: var(--color-bg);
   color: var(--color-text);
   line-height: 1.5;
+  overflow-x: clip;
 }
 
 a {
@@ -1138,6 +1144,4 @@ a:hover {
   .hero-features {
     flex-wrap: wrap;
   }
-}
-
 }
