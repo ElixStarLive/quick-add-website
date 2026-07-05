@@ -496,15 +496,20 @@ a:hover {
   margin-bottom: 0.5rem;
 }
 
-.category-card strong {
-  color: var(--color-text);
-}
-
 .category-card small {
   display: block;
   margin-top: 0.35rem;
   color: var(--color-text-muted);
   font-size: 0.8rem;
+  line-height: 1.25;
+}
+
+.category-card strong {
+  color: var(--color-text);
+  display: block;
+  line-height: 1.3;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 /* Job icons grid - small icons like category */
@@ -513,13 +518,13 @@ a:hover {
 }
 .job-icons-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
   gap: 0.75rem;
-  align-items: start;
+  align-items: stretch;
 }
 .job-icon-item {
   background: var(--color-surface);
-  padding: 0.75rem;
+  padding: 0.75rem 0.5rem;
   border-radius: var(--radius);
   text-align: center;
   border: 1px solid var(--color-border);
@@ -531,19 +536,19 @@ a:hover {
   color: #fff;
 }
 .job-icons-grid > .job-icon-item {
-  aspect-ratio: 1 / 1;
   width: 100%;
+  min-height: 8.25rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  gap: 0.3rem;
   box-sizing: border-box;
-  overflow: hidden;
 }
 .job-icons-grid > .job-icon-item .card-icon {
   width: 36px;
   height: 36px;
-  margin: 0 auto 0.35rem;
+  margin: 0;
   color: var(--color-primary);
   flex-shrink: 0;
 }
@@ -558,28 +563,31 @@ a:hover {
   font-weight: 600;
   color: var(--color-text);
   display: block;
+  width: 100%;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 .job-icons-grid > .job-icon-item strong {
+  flex: 1 1 auto;
   max-width: 100%;
-  overflow: hidden;
+  line-height: 1.3;
+  min-height: calc(2 * 1.3em);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-  line-height: 1.15;
+  overflow: hidden;
 }
 .job-icon-item small {
   display: block;
   font-size: 0.65rem;
   color: var(--color-text-muted);
-  margin-top: 0.2rem;
-  line-height: 1.15;
+  margin-top: 0;
+  line-height: 1.2;
+  flex-shrink: 0;
 }
 .job-icons-grid > .job-icon-item small {
   max-width: 100%;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
+  width: 100%;
 }
 
 .job-icon-hint {
@@ -711,12 +719,15 @@ a:hover {
   font-weight: 600;
   margin: 0;
   font-size: 0.75rem;
-  line-height: 1.2;
+  line-height: 1.3;
+  min-height: calc(2 * 1.3em);
   color: var(--color-text);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .ad-card-meta {
@@ -1745,24 +1756,28 @@ a:hover {
   }
 
   .job-icons-grid > .job-icon-item {
-    padding: 0.45rem 0.25rem;
+    padding: 0.45rem 0.3rem;
     min-width: 0;
+    min-height: 6.5rem;
+    gap: 0.2rem;
   }
 
   .job-icons-grid > .job-icon-item .card-icon {
     width: 28px;
     height: 28px;
-    margin-bottom: 0.2rem;
+    margin-bottom: 0;
   }
 
   .job-icons-grid > .job-icon-item strong {
     font-size: 0.58rem;
-    line-height: 1.1;
+    line-height: 1.25;
+    min-height: calc(2 * 1.25em);
   }
 
   .job-icons-grid > .job-icon-item small {
     font-size: 0.5rem;
     display: none;
+    line-height: 1.15;
   }
 
   .text-center .btn {
