@@ -839,11 +839,31 @@ app.get('/api/health', (req, res) => {
 });
 
 // Static frontend (after API routes)
-app.use(express.static(path.join(__dirname), { dotfiles: 'deny', index: false }));
+function sendHtmlPage(res, fileName) {
+  const filePath = path.join(__dirname, fileName);
+  if (!fs.existsSync(filePath)) {
+    return res.status(404).end();
+  }
+  let html = fs.readFileSync(filePath, 'utf8');
+  if (!/<html[^>]*\slang=/i.test(html)) {
+    html = html.replace(/<html([^>]*)>/i, '<html lang="en-GB"$1>');
+  }
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.setHeader('Content-Language', 'en-GB');
+  res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+  return res.send(html);
+}
 
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+app.get('/', (req, res) => sendHtmlPage(res, 'index.html'));
+app.get(/\.html$/i, (req, res) => {
+  const base = path.basename(decodeURIComponent(req.path));
+  if (base.includes('..') || BLOCKED_STATIC.has(base)) {
+    return res.status(404).end();
+  }
+  return sendHtmlPage(res, base);
 });
+
+app.use(express.static(path.join(__dirname), { dotfiles: 'deny', index: false }));
 
 app.use((err, req, res, next) => {
   console.error('Server error:', err.message);

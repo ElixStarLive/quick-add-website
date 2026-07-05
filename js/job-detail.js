@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', async () => {
               Contact: Locked
             </p>
             <div class="job-card-actions">
-              <a href="payment-unlock.html?job=${jobId}" class="unlock-btn" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 4px; margin-right: 10px;">Unlock Contact – ${escapeHtml(unlockFee)}</a>
+              <a href="payment-unlock.html?job=${jobId}" class="unlock-btn">Unlock Contact – ${escapeHtml(unlockFee)}</a>
             </div>
           </div>
         </div>

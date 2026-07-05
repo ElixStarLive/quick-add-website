@@ -22,7 +22,7 @@ function formatEstimateHtml(data) {
     lines.push(`<strong>Your budget:</strong> ${labels[data.verdict] || data.verdict}`);
   }
   if (data.summary) lines.push(`<p style="margin:0.5rem 0 0;">${escapeHtml(data.summary)}</p>`);
-  lines.push(`<p style="margin:0.5rem 0 0;font-size:0.9em;opacity:0.85;">${escapeHtml(data.disclaimer || 'Guide only — get written quotes from contractors.')}</p>`);
+  lines.push(`<p class="form-hint" style="margin:0.5rem 0 0;">${escapeHtml(data.disclaimer || 'Guide only — get written quotes from contractors.')}</p>`);
   return lines.join('<br>');
 }
 

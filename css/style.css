@@ -7,7 +7,8 @@
   --color-primary-hover: #a01830;
   --color-accent: #c41e3a;
   --color-text: #ffffff;
-  --color-text-muted: #d4d4d4;
+  --color-text-muted: #e8e8e8;
+  --color-link: #ff7a92;
   --color-border: #333333;
   --font-sans: 'Segoe UI', system-ui, -apple-system, sans-serif;
   --shadow: 0 4px 20px rgba(0,0,0,0.4);
@@ -67,12 +68,10 @@ a:hover {
 
 .top-bar-social a {
   color: var(--color-text-muted);
-  opacity: 0.9;
 }
 
 .top-bar-social a:hover {
-  color: var(--color-primary);
-  opacity: 1;
+  color: var(--color-link);
 }
 
 .top-bar-contact {
@@ -201,13 +200,14 @@ a:hover {
 
 .btn-outline {
   background: transparent;
-  color: var(--color-primary);
-  border: 2px solid var(--color-primary);
+  color: var(--color-link);
+  border: 2px solid var(--color-link);
 }
 
 .btn-outline:hover {
   background: var(--color-primary);
   color: white;
+  border-color: var(--color-primary);
 }
 
 /* Hero */
@@ -332,8 +332,7 @@ a:hover {
 .hero-visual-placeholder {
   width: 5rem;
   height: 5rem;
-  color: var(--color-primary);
-  opacity: 0.5;
+  color: var(--color-link);
 }
 .hero-visual-placeholder svg { width: 100%; height: 100%; fill: currentColor; }
 
@@ -378,7 +377,6 @@ a:hover {
 .promo-box p {
   margin: 0 0 0.35rem;
   font-size: 0.68rem;
-  opacity: 0.95;
   line-height: 1.3;
 }
 
@@ -386,7 +384,6 @@ a:hover {
   margin: 0 0 0.45rem;
   padding-left: 0.9rem;
   font-size: 0.62rem;
-  opacity: 0.95;
   line-height: 1.35;
 }
 
@@ -429,7 +426,7 @@ a:hover {
 }
 
 .search-bar input::placeholder {
-  color: #c8c8c8;
+  color: #d8d8d8;
   opacity: 1;
 }
 
@@ -595,7 +592,8 @@ a:hover {
   text-decoration: underline;
 }
 .promo-box ul a:hover {
-  opacity: 0.9;
+  color: #fff;
+  text-decoration-thickness: 2px;
 }
 
 /* Shop item tiles – same square shape as category icons above */
@@ -741,7 +739,7 @@ a:hover {
 .job-card:hover { border-color: var(--color-border); }
 .job-card h3 { margin: 0 0 0.35rem; font-size: 1.15rem; color: #fff; }
 .job-card .job-salary,
-.job-card .job-budget { color: var(--color-primary); font-weight: 600; margin-bottom: 0.5rem; }
+.job-card .job-budget { color: var(--color-link); font-weight: 600; margin-bottom: 0.5rem; }
 .job-card .job-location { font-size: 0.9rem; color: var(--color-text-muted); margin-bottom: 0.75rem; }
 .job-card .job-description { color: var(--color-text-muted); font-size: 0.95rem; line-height: 1.5; margin-bottom: 1rem; }
 .job-card .job-contact-locked {
@@ -798,8 +796,10 @@ a:hover {
   border-radius: var(--radius);
   margin-bottom: 1.5rem;
   font-size: 0.95rem;
+  color: var(--color-text);
 }
-.employer-banner a { color: var(--color-primary); font-weight: 600; }
+.employer-banner a { color: #fff; font-weight: 600; text-decoration: underline; }
+.employer-banner a:hover { color: var(--color-text); }
 .job-company { font-size: 0.9rem; color: var(--color-text-muted); margin-bottom: 0.25rem; }
 
 /* Dashboard & admin tables */
@@ -819,7 +819,7 @@ a:hover {
   color: var(--color-text-muted);
   font-weight: 600;
 }
-.dashboard-table a { color: var(--color-primary); }
+.dashboard-table a { color: var(--color-link); }
 .status-badge {
   display: inline-block;
   padding: 0.25rem 0.6rem;
@@ -827,10 +827,10 @@ a:hover {
   font-size: 0.8rem;
   font-weight: 600;
 }
-.status-approved { background: rgba(0, 128, 0, 0.2); color: #7fdb7f; }
-.status-pending { background: rgba(255, 165, 0, 0.2); color: #ffb366; }
-.status-paid { background: rgba(0, 128, 0, 0.2); color: #7fdb7f; }
-.status-rejected { background: rgba(196, 30, 58, 0.2); color: var(--color-primary); }
+.status-approved { background: #1a3d1a; color: #b8f0b8; }
+.status-pending { background: #3d2e10; color: #ffd699; }
+.status-paid { background: #1a3d1a; color: #b8f0b8; }
+.status-rejected { background: #3d1515; color: #ffc8d0; }
 
 /* Content sections (dark cards) */
 .content-section {
@@ -899,8 +899,17 @@ a:hover {
 
 .form-group input::placeholder,
 .form-group textarea::placeholder {
-  color: #c8c8c8;
+  color: #d8d8d8;
   opacity: 1;
+}
+
+.form-group input:-webkit-autofill,
+.form-group textarea:-webkit-autofill,
+.form-group select:-webkit-autofill,
+.search-bar input:-webkit-autofill {
+  -webkit-text-fill-color: var(--color-text);
+  box-shadow: 0 0 0 1000px var(--color-bg-elevated) inset;
+  caret-color: var(--color-text);
 }
 
 .form-group textarea {
@@ -936,6 +945,16 @@ a:hover {
   margin-bottom: 1.5rem;
 }
 
+.page-subtitle a {
+  color: var(--color-link);
+  text-decoration: underline;
+  text-underline-offset: 0.12em;
+}
+
+.page-subtitle a:hover {
+  color: #fff;
+}
+
 /* Contact info */
 .contact-info {
   background: var(--color-surface);
@@ -950,7 +969,7 @@ a:hover {
 }
 
 .contact-info a {
-  color: var(--color-primary);
+  color: var(--color-link);
 }
 
 /* Footer */
@@ -965,10 +984,12 @@ a:hover {
 
 .site-footer a {
   color: var(--color-text-muted);
+  text-decoration: underline;
+  text-underline-offset: 0.12em;
 }
 
 .site-footer a:hover {
-  color: var(--color-primary);
+  color: var(--color-link);
 }
 
 .site-footer-links {
@@ -991,9 +1012,11 @@ a:hover {
 .ad-card-report {
   font-size: 0.58rem;
   color: var(--color-text-muted);
+  text-decoration: underline;
+  text-underline-offset: 0.1em;
 }
 .ad-card-report:hover {
-  color: var(--color-primary);
+  color: var(--color-link);
 }
 
 /* CAPTCHA placeholder */
@@ -1016,6 +1039,27 @@ a:hover {
   border-radius: var(--radius);
   margin-bottom: 1.5rem;
   font-size: 0.9rem;
+  color: var(--color-text);
+}
+
+.form-notice a {
+  color: #fff;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.form-notice a:hover {
+  color: var(--color-text);
+}
+
+.form-notice--success {
+  background: #1a3d1a;
+  border-color: #3d8f3d;
+  color: #e8ffe8;
+}
+
+.form-notice--success strong {
+  color: #fff;
 }
 
 /* Legal pages */
@@ -1024,7 +1068,7 @@ a:hover {
 .legal-page h2 { font-size: 1.2rem; margin: 1.5rem 0 0.5rem; }
 .legal-page p, .legal-page li { color: var(--color-text-muted); line-height: 1.65; }
 .legal-page ul { padding-left: 1.5rem; }
-.legal-page a { color: var(--color-primary); }
+.legal-page a { color: var(--color-link); }
 
 /* Utilities */
 .text-center { text-align: center; }
@@ -1032,7 +1076,7 @@ a:hover {
 
 /* Elix Star Live app promo */
 .app-top-link {
-  color: var(--color-primary);
+  color: var(--color-link);
   font-weight: 600;
   text-decoration: none;
   margin-left: 0.5rem;
@@ -1055,11 +1099,12 @@ a:hover {
 .app-footer-promo p {
   margin: 0;
   font-size: 0.9rem;
-  color: var(--color-text-muted);
+  color: var(--color-text);
 }
 .app-footer-promo a {
-  color: var(--color-primary);
+  color: #fff;
   font-weight: 600;
+  text-decoration: underline;
 }
 
 .app-promo-section {

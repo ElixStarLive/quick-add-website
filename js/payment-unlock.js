@@ -227,8 +227,8 @@ function showContactInfo(job) {
   const paymentSection = document.getElementById('payment-section');
   const budget = job.budget || job.salary || '';
   paymentSection.innerHTML = `
-    <div class="form-notice" style="margin-bottom: 1.25rem; background: rgba(40,167,69,0.15); border-color: #28a745;">
-      <strong style="color: #28a745;">Payment successful!</strong> You have unlocked the contact details for this job.
+    <div class="form-notice form-notice--success" style="margin-bottom: 1.25rem;">
+      <strong>Payment successful!</strong> You have unlocked the contact details for this job.
     </div>
     <div class="job-card">
       <h3 style="margin-top: 0;">${escapeHtml(job.title)}</h3>
