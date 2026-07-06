@@ -812,13 +812,8 @@ a:hover {
 }
 
 .promo-box ul a {
-  display: flex;
-  align-items: center;
-  min-height: 48px;
-  padding: 0.65rem 0.5rem;
   color: #111111;
   text-decoration: underline;
-  text-underline-offset: 2px;
   font-weight: 600;
 }
 .promo-box ul a:hover {
