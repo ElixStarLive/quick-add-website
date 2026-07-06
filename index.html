@@ -7,8 +7,8 @@
   <title>QuickPost Ads | Free UK Jobs & Classified Ads</title>
   <meta name="description" content="QuickPostAds is a free UK marketplace to post jobs, find local tradespeople, buy, sell and advertise services across the UK.">
   <link rel="canonical" href="https://www.quickpostads.co.uk/">
-  <meta name="keywords" content="local jobs, job postings, free classifieds, UK trades, mobile mechanic, post job free">
-  <link rel="stylesheet" href="css/style.css?v=76">
+  <meta name="keywords" content="local jobs, UK construction trades, post job free, plumbers, electricians, builders">
+  <link rel="stylesheet" href="css/style.css?v=83">
   <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://www.quickpostads.co.uk/">
@@ -64,7 +64,7 @@
     <div class="hero-content">
       <p class="hero-label">Local jobs & services</p>
       <h1>Post Jobs &amp; Find <span class="text-gold">Local Trades</span></h1>
-      <p class="hero-desc">QuickPostAds is your trusted UK marketplace to post jobs free, find trade work, and buy &amp; sell items locally.</p>
+      <p class="hero-desc">Post construction and property maintenance jobs free. Connect with trusted local tradespeople across the UK.</p>
       <p class="hero-phone">07860266619</p>
       <div class="hero-cta">
         <a href="post-job.html" class="btn btn-primary">Post a job free</a>
@@ -93,9 +93,9 @@
         <p>Post your job free</p>
         <ul>
           <li>Renovation &amp; trades</li>
-          <li>Mobile mechanics</li>
+          <li>Heating &amp; plumbing</li>
           <li>Cleaning &amp; garden</li>
-          <li>Buy &amp; sell items</li>
+          <li>Property maintenance</li>
         </ul>
         <a href="post-job.html" class="btn btn-dark">Post Now</a>
       </div>
@@ -108,15 +108,15 @@
       <select name="work" aria-label="Category">
         <option value="">All categories</option>
         <option value="plumber">Trades &amp; building</option>
-        <option value="car">Mobile mechanics</option>
+        <option value="boiler">Heating &amp; gas</option>
         <option value="cleaning">Cleaning &amp; garden</option>
-        <option value="handyman">Other services</option>
+        <option value="handyman">Handyman</option>
       </select>
       <input type="text" name="location" placeholder="All locations" aria-label="Location">
       <button type="submit" class="btn btn-primary">Search</button>
     </form>
 
-    <p class="page-subtitle" style="margin-bottom: 1rem;">Find trade people for your jobs — builders, plumbers, electricians, decorators and <a href="jobs.html?q=mechanic">mechanics</a>. <a href="post-job.html">Post your job free</a>.</p>
+    <p class="page-subtitle home-search-hint">Find trade people for your jobs — builders, plumbers, electricians, roofers and decorators. <a href="post-job.html">Post your job free</a>.</p>
 
     <section class="app-promo-section" aria-label="Elix Star Live app">
       <div class="app-promo-card">
@@ -131,49 +131,59 @@
       </div>
     </section>
 
-    <h2 class="section-title">Browse by category</h2>
-    <p class="page-subtitle" style="margin-top:-0.5rem;margin-bottom:1rem;">Tap a category to <strong>post your job free</strong> — real form, work type pre-filled.</p>
-    <div class="category-grid" id="home-category-grid"></div>
-
-    <div id="home-categories"></div>
-
+    <section class="home-trades-section" aria-labelledby="popular-trades-title">
     <div class="section-header">
-      <h2 class="section-title">On sale live</h2>
-      <a href="search.html" class="section-view-all">View all &rsaquo;</a>
+      <h2 class="section-title" id="popular-trades-title">Popular Construction Trades</h2>
+      <a href="trades.html" class="section-view-all">View all trades &rarr;</a>
     </div>
-    <p class="page-subtitle" style="margin-top: -0.75rem; margin-bottom: 1rem;">Buy and sell items — post yours for <strong>£1 per item</strong>.</p>
-    <div class="job-icons-grid" id="on-sale-container"></div>
-    <p class="text-center mt-2">
-      <a href="post-ad.html" class="btn btn-primary">Sell an item</a>
-      <a href="search.html" class="btn btn-outline" style="margin-left: 0.5rem;">Open shop</a>
-    </p>
+    <div class="home-popular-trades-grid" id="home-popular-trades"></div>
+    </section>
+
+    <section class="home-contractor-banner" aria-label="For contractors">
+      <div class="home-contractor-banner-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M12 2L4 7v3h16V7l-8-5zm-6 9v8h2v-6h8v6h2v-8H6zm4 2h4v4h-4v-4z"/></svg>
+      </div>
+      <div class="home-contractor-banner-body">
+        <h2>Are you a contractor? Get more jobs. Grow your business.</h2>
+        <ul class="home-contractor-benefits">
+          <li>Unlimited job applications</li>
+          <li>Instant job alerts</li>
+          <li>Verified badge</li>
+          <li>Show your reputation</li>
+        </ul>
+      </div>
+      <div class="home-contractor-banner-action">
+        <a href="pricing.html" class="btn btn-primary">View Pricing</a>
+        <p class="home-contractor-price">From &pound;29.99 / month</p>
+      </div>
+    </section>
 
     <section class="how-it-works" aria-labelledby="how-it-works-title">
       <h2 class="section-title" id="how-it-works-title">How it works</h2>
       <div class="how-steps">
         <div class="how-step">
           <div class="how-step-num">1</div>
-          <div class="how-step-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 000-1.41l-2.34-2.34a1 1 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></div>
+          <div class="how-step-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg></div>
           <h3>Post your job</h3>
-          <p>Homeowners post trade, mechanic or cleaning jobs free in minutes.</p>
+          <p>It&rsquo;s free and takes less than 2 minutes.</p>
         </div>
         <div class="how-step">
           <div class="how-step-num">2</div>
-          <div class="how-step-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C8.01 14 6 11.99 6 9.5S8.01 5 10.5 5 15 7.01 15 9.5 12.99 14 10.5 14z"/></svg></div>
-          <h3>Contractors find it</h3>
-          <p>Local trades and mechanics browse jobs on Find jobs.</p>
+          <div class="how-step-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/></svg></div>
+          <h3>Receive quotes</h3>
+          <p>Local contractors respond to your job.</p>
         </div>
         <div class="how-step">
           <div class="how-step-num">3</div>
-          <div class="how-step-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg></div>
-          <h3>Unlock contact</h3>
-          <p>Contractors pay to unlock your phone and email to quote you.</p>
+          <div class="how-step-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+          <h3>Compare &amp; choose</h3>
+          <p>Compare profiles, reviews and quotes.</p>
         </div>
         <div class="how-step">
           <div class="how-step-num">4</div>
           <div class="how-step-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M16.5 3c-1.74 0-3.41.81-4.5 2.09C10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3zm-4.4 15.55l-.1.1-.1-.1C7.14 14.24 4 11.39 4 8.5 4 6.5 5.5 5 7.5 5c1.54 0 3.04.99 3.57 2.36h1.87C13.46 5.99 14.96 5 16.5 5c2 0 3.5 1.5 3.5 3.5 0 2.89-3.14 5.74-7.9 10.05z"/></svg></div>
-          <h3>Complete the job</h3>
-          <p>You hire directly — no middleman fees for homeowners.</p>
+          <h3>Hire the best</h3>
+          <p>Get the job done and leave a review.</p>
         </div>
       </div>
     </section>
@@ -192,31 +202,11 @@
   </footer>
 
   <script src="js/qp-icons-data.js?v=2"></script>
-  <script src="js/qp-icons.js?v=6"></script>
-  <script src="js/ad-cards.js?v=8"></script>
-  <script src="js/job-categories.js"></script>
-  <script src="js/service-categories.js?v=11"></script>
+  <script src="js/qp-icons.js?v=7"></script>
+  <script src="js/home-popular-trades.js?v=1"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', async () => {
-      if (typeof qpRenderHomeCategoryGrid === 'function') qpRenderHomeCategoryGrid('home-category-grid');
-      if (typeof renderServiceCategories === 'function') renderServiceCategories('home-categories');
-      const onSale = document.getElementById('on-sale-container');
-      if (onSale) {
-        try {
-          const res = await fetch('/api/ads');
-          const data = await res.json();
-          const ads = (data.ads || []).slice(0, 8);
-          onSale.innerHTML = ads.length
-            ? ads.map(function (ad) {
-                var shopUrl = ad.category
-                  ? 'search.html?category=' + encodeURIComponent(ad.category)
-                  : 'search.html';
-                return renderAdCard(ad, { link: shopUrl });
-              }).join('')
-            : '<p class="page-subtitle">No items yet. <a href="post-ad.html">Sell an item for \u00a31</a>.</p>';
-          bindAdCardPhotos(onSale);
-        } catch (e) { console.error(e); }
-      }
+    document.addEventListener('DOMContentLoaded', function () {
+      if (typeof renderHomePopularTrades === 'function') renderHomePopularTrades('home-popular-trades');
     });
   </script>
 </body>

@@ -1,89 +1,4 @@
-const JOB_CATEGORIES = {
-  'Mobile mechanic – at your address': [
-    'Mobile mechanic – oil change at your address',
-    'Mobile mechanic – oil filter at your address',
-    'Mobile mechanic – air filter at your address',
-    'Mobile mechanic – brake pads at your address',
-    'Mobile mechanic – battery replacement at your address',
-    'Mobile mechanic – tyre change at your address',
-    'Mobile mechanic – diagnostic check at your address',
-    'Mobile mechanic – car won\'t start at your address',
-    'Mobile mechanic – same day call-out'
-  ],
-  'Car servicing & maintenance': [
-    'Full car service', 'Interim / oil service', 'Oil change', 'Oil filter replacement',
-    'Air filter replacement', 'Spark plugs replacement', 'Brake fluid change', 'Battery check & replacement',
-    'Car diagnostic check', 'MOT test', 'MOT fail repair work'
-  ],
-  'Car brakes, tyres & mechanical': [
-    'Brake pads replacement', 'Brake discs replacement', 'Tyre replacement', 'Puncture repair',
-    'Wheel alignment / tracking', 'Clutch replacement', 'Exhaust repair', 'Timing belt / cambelt',
-    'Alternator repair', 'Starter motor repair', 'Air con regas', 'Lost car keys'
-  ],
-  'Plumbing – leaks & repairs': [
-    'Leaking tap repair', 'Tap replacement', 'Burst pipe emergency repair', 'Toilet repair',
-    'Blocked drain', 'Blocked sink', 'Radiator leak repair', 'Silicone reseal (bathroom/kitchen)'
-  ],
-  'Plumbing – heating & gas': [
-    'Boiler breakdown repair', 'Boiler service', 'Boiler installation', 'Gas safety certificate (CP12)',
-    'Radiator installation', 'Central heating repair', 'Power flush', 'Underfloor heating installation'
-  ],
-  'Bathrooms & kitchens': [
-    'Full bathroom renovation', 'Bathroom fitter', 'Shower installation', 'Bath installation',
-    'Full kitchen installation', 'Kitchen fitter', 'Kitchen worktop replacement', 'Wet room installation'
-  ],
-  'Electrical': [
-    'Full house rewire', 'Partial rewire', 'EICR electrical test certificate', 'Fuse box / consumer unit upgrade',
-    'Additional socket installation', 'Light fitting installation', 'Downlights / spotlights', 'Extractor fan installation',
-    'EV home charger installation', 'CCTV installation', 'Smoke alarm installation', 'Electrical fault finding'
-  ],
-  'Building & construction': [
-    'General builder', 'Full property renovation', 'Full house refurbishment', 'Renew kitchen', 'Renew bathroom',
-    'Extension build', 'Loft conversion', 'Garage conversion', 'Bricklayer', 'Plastering', 'Groundworks',
-    'Steel beam installation', 'Damp proofing', 'Insulation', 'Demolition'
-  ],
-  'Roofing & gutters': [
-    'Roof leak repair', 'New roof / re-tile', 'Flat roof repair', 'Chimney repair', 'Gutter repair',
-    'Gutter cleaning', 'Fascia & soffit replacement', 'Skylight / Velux installation', 'Lead flashing repair'
-  ],
-  'Windows, doors & UPVC': [
-    'Quality UPVC windows', 'UPVC windows supply & fit', 'UPVC doors supply & fit', 'Double glazing – new windows',
-    'Misted / foggy unit replacement', 'Composite front door', 'Bi-fold doors', 'Patio / sliding doors',
-    'Sash windows', 'Conservatory', 'Window lock / handle repair'
-  ],
-  'Painting & decorating': [
-    'Interior painting', 'Exterior painting', 'Wallpapering', 'Plastering', 'Ceiling painting',
-    'Woodwork painting', 'Coving installation', 'Crack repair & filling'
-  ],
-  'Flooring & tiling': [
-    'Laminate flooring fitting', 'Vinyl / LVT flooring', 'Carpet fitting', 'Floor tiling', 'Wall tiling',
-    'Floor sanding & sealing', 'Floor screeding', 'Skirting board fitting'
-  ],
-  'Carpentry & doors': [
-    'Carpenter / joiner', 'Internal door fitting', 'Front door replacement', 'Staircase build / repair',
-    'Built-in wardrobe', 'Shelving installation', 'Loft boarding', 'Kitchen fitting'
-  ],
-  'Garden & outdoor': [
-    'Landscaping', 'Gardening / lawn mowing', 'Hedge trimming', 'Tree surgeon', 'Fence installation',
-    'Decking installation', 'Patio laying', 'Block paving / driveway', 'Artificial grass fitting', 'Garden clearance'
-  ],
-  'Cleaning services': [
-    'Domestic cleaning', 'Deep clean', 'End of tenancy clean', 'Carpet cleaning', 'Oven cleaning',
-    'Window cleaning', 'Pressure washing (drive/patio)', 'Gutter cleaning', 'Pest control'
-  ],
-  'Handyman & repairs': [
-    'Handyman – general jobs', 'Flat pack assembly', 'TV wall mounting', 'Blind fitting', 'Furniture repair',
-    'Picture / mirror hanging', 'Curtain rail fitting', 'General home maintenance'
-  ],
-  'Appliance repair': [
-    'Washing machine repair', 'Dishwasher repair', 'Fridge / freezer repair', 'Cooker / oven repair',
-    'Tumble dryer repair', 'Hob installation', 'Extractor hood repair'
-  ],
-  'Removals & waste': [
-    'House removal', 'Man with van', 'Furniture delivery', 'Waste clearance', 'Rubbish removal',
-    'Garage clearance', 'Loft clearance', 'Office clearance'
-  ]
-};
+/** Job category logic — data in job-categories-data.js (auto-generated from lib/uk-trades-taxonomy.js) */
 
 /** Map homepage / icon labels to the best real job category option */
 function findBestJobMatch(query) {
@@ -91,58 +6,79 @@ function findBestJobMatch(query) {
   if (!q) return '';
 
   const aliases = {
-    mot: 'MOT test',
-    car: 'Oil change',
-    cleaning: 'Domestic cleaning',
-    plumbing: 'Leaking tap repair',
-    electrical: 'Full house rewire',
-    building: 'General builder',
-    roofing: 'Roof leak repair',
-    upvc: 'Quality UPVC windows',
-    painting: 'Interior painting',
-    flooring: 'Laminate flooring fitting',
-    carpentry: 'Carpenter / joiner',
+    plumber: 'Emergency Plumber',
+    plumbers: 'Emergency Plumber',
+    electrician: 'Emergency Electrician',
+    electricians: 'Emergency Electrician',
+    roofer: 'Roof Repairs',
+    roofers: 'Roof Repairs',
+    builder: 'General Builder',
+    builders: 'General Builder',
+    'gas engineer': 'Gas Engineer',
+    'gas-engineer': 'Gas Engineer',
+    'boiler repair': 'Boiler Repairs',
+    'boiler-repair': 'Boiler Repairs',
+    'boiler repairs': 'Boiler Repairs',
+    'emergency plumber': 'Emergency Plumber',
+    'emergency-plumber': 'Emergency Plumber',
+    'house extension': 'House Extension',
+    'house-extension': 'House Extension',
+    'loft conversion': 'Loft Conversion',
+    'loft-conversion': 'Loft Conversion',
+    cleaning: 'Domestic Cleaning',
+    cleaner: 'Domestic Cleaning',
+    cleaners: 'Domestic Cleaning',
+    plumbing: 'Emergency Plumber',
+    electrical: 'Emergency Electrician',
+    building: 'General Builder',
+    construction: 'General Builder',
+    roofing: 'Roof Repairs',
+    painting: 'Interior Painting',
+    painter: 'Interior Painting',
+    carpentry: 'Carpenter',
+    carpenter: 'Carpenter',
+    joiner: 'Joiner',
     garden: 'Landscaping',
-    handyman: 'Handyman – general jobs',
-    appliance: 'Washing machine repair',
-    removal: 'House removal',
-    services: 'Handyman – general jobs',
-    domestic: 'Domestic cleaning',
-    'deep clean': 'Deep clean',
-    'end of tenancy': 'End of tenancy clean',
-    'mobile mechanic': 'Mobile mechanic – oil change at your address',
-    'full service': 'Full car service',
-    'renew bathroom': 'Renew bathroom',
-    'renew kitchen': 'Renew kitchen',
-    'full renovation': 'Full property renovation',
-    'shower install': 'Shower installation',
-    'bathroom fit': 'Bathroom fitter',
-    'fuse box': 'Fuse box / consumer unit upgrade',
-    rewire: 'Full house rewire',
-    sockets: 'Additional socket installation',
-    lighting: 'Light fitting installation',
-    extension: 'Extension build',
-    'loft conversion': 'Loft conversion',
-    plastering: 'Plastering',
-    'roof leak': 'Roof leak repair',
-    'gutter cleaning': 'Gutter cleaning',
-    'upvc windows': 'Quality UPVC windows',
-    'double glazing': 'Double glazing – new windows',
-    wallpapering: 'Wallpapering',
-    laminate: 'Laminate flooring fitting',
-    carpet: 'Carpet fitting',
-    'floor tiling': 'Floor tiling',
-    carpenter: 'Carpenter / joiner',
+    gardening: 'Garden Design',
+    landscaper: 'Landscaping',
     landscaping: 'Landscaping',
-    gardening: 'Gardening / lawn mowing',
-    fencing: 'Fence installation',
-    'flat pack': 'Flat pack assembly',
-    'tv mounting': 'TV wall mounting',
-    'washing machine': 'Washing machine repair',
-    dishwasher: 'Dishwasher repair',
-    'house removal': 'House removal',
-    'man with van': 'Man with van',
-    'waste clearance': 'Waste clearance'
+    handyman: 'General Repairs',
+    handymen: 'General Repairs',
+    locksmith: 'Locksmith',
+    tiler: 'Floor Tiling',
+    plasterer: 'Plastering',
+    plastering: 'Plastering',
+    removal: 'House Removals',
+    removals: 'House Removals',
+    'man with van': 'Man with Van',
+    appliance: 'Washing Machine Repair',
+    services: 'General Repairs',
+    domestic: 'Domestic Cleaning',
+    'deep clean': 'Deep Cleaning',
+    'deep cleaning': 'Deep Cleaning',
+    'end of tenancy': 'End of Tenancy Cleaning',
+    'kitchen fitter': 'Kitchen Installation',
+    'kitchen fitting': 'Kitchen Fitting',
+    'bathroom fitter': 'Bathroom Installation',
+    'bathroom fitting': 'Bathroom Installation',
+    rewire: 'Full Rewire',
+    'consumer unit': 'Consumer Unit',
+    'fuse board': 'Fuse Board Upgrade',
+    extension: 'House Extension',
+    landscaping: 'Landscaping',
+    fencing: 'Fencing',
+    'flat pack': 'Flat Pack Assembly',
+    'washing machine': 'Washing Machine Repair',
+    dishwasher: 'Dishwasher Repair',
+    'pest control': 'Pest Control',
+    security: 'Locksmith',
+    flooring: 'Laminate Flooring',
+    windows: 'UPVC Windows',
+    doors: 'Composite Doors',
+    heating: 'Central Heating',
+    boiler: 'Boiler Repairs',
+    skip: 'Skip Hire',
+    clearance: 'House Clearance'
   };
 
   if (aliases[q]) return aliases[q];

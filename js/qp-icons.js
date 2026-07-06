@@ -100,7 +100,6 @@
   ];
 
   var SHOP_CATEGORIES = [
-    { key: 'cars', label: 'Cars', labelFull: 'Cars & vehicles', icon: 'car', href: 'search.html?category=cars' },
     { key: 'furniture', label: 'Furniture', labelFull: 'Furniture', icon: 'furniture', href: 'search.html?category=furniture' },
     { key: 'electronics', label: 'Electronics', labelFull: 'Electronics', icon: 'monitor', href: 'search.html?category=electronics' },
     { key: 'phones', label: 'Phones', labelFull: 'Phones & tablets', icon: 'phone', href: 'search.html?category=phones' },

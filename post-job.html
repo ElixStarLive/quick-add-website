@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="index,follow">
-  <title>Post a Job Free – Trades & Mechanics | QuickPost Ads</title>
-  <meta name="description" content="Post a trade, building, mechanic or cleaning job free. Your job goes live instantly; contact details unlock after contractor payment.">
+  <title>Post a Job Free – Trades &amp; Services | QuickPost Ads</title>
+  <meta name="description" content="Post a trade, building or cleaning job free. Your job goes live instantly; contact details unlock after contractor payment.">
   <link rel="canonical" href="https://www.quickpostads.co.uk/post-job.html">
   <link rel="stylesheet" href="css/style.css?v=71">
 </head>
@@ -29,7 +29,7 @@
 
   <header class="site-header">
     <div class="header-inner">
-      <a href="index.html" class="logo-block">
+      <a href="/" class="logo-block">
         <svg class="logo-icon" viewBox="0 0 40 24" aria-hidden="true">
           <path d="M4 8 L4 20 L12 20 L12 8 M8 4 L8 8 M16 12 L16 20 L24 20 L24 12 M20 8 L20 12 M28 6 L28 20 L36 20 L36 6"/>
         </svg>
@@ -39,25 +39,26 @@
         </span>
       </a>
       <nav class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="jobs.html">Find jobs</a>
-        <a href="for-employers.html">For homeowners</a>
-        <a href="categories.html">Shop</a>
-        <a href="search.html">Search ads</a>
-        <a href="dashboard.html">Dashboard</a>
-        <a href="contact.html">Contact</a>
-        <a href="post-job.html" class="btn btn-primary"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM9 10H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm-8 4H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2z"/></svg> Post a job</a>
+        <a href="/">Home</a>
+        <a href="/jobs.html" class="nav-active">Find Jobs</a>
+        <a href="/trades.html">Trades</a>
+        <a href="/roadmap.html">How it Works</a>
+        <a href="/for-contractors.html">For Contractors</a>
+        <a href="/pricing.html">Pricing</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/dashboard.html">Login</a>
+        <a href="/post-job.html" class="btn btn-primary">Post a Job FREE</a>
       </nav>
     </div>
   </header>
 
   <main class="main">
     <div class="employer-banner">
-      <strong>Post your job free.</strong> You are the customer. Contractors and mechanics pay to unlock your job details and contact. <a href="for-employers.html">For homeowners →</a>
+      <strong>Post your job free.</strong> You are the customer. Contractors pay to unlock your job details and contact. <a href="for-employers.html">For homeowners →</a>
     </div>
 
     <h1 class="page-title">Post a job</h1>
-    <p class="page-subtitle">Post renovation, trade or mobile mechanic work free. Your job goes live straight away. Your contact is hidden until a contractor pays to unlock it.</p>
+    <p class="page-subtitle">Post renovation or trade work free. Your job goes live straight away. Your contact is hidden until a contractor pays to unlock it.</p>
 
     <div class="form-notice">
       <strong>Goes live straight away.</strong> Your job appears on the Find jobs page as soon as you post it. Contractors pay to see the full details and your contact. <strong>Free to post.</strong>
@@ -132,6 +133,7 @@
     <p>QuickPost Ads · Post local jobs &amp; classifieds.</p>
   </footer>
 
+  <script src="js/job-categories-data.js"></script>
   <script src="js/job-categories.js"></script>
   <script src="js/budget-guide.js"></script>
   <script src="js/ai-estimate.js"></script>
@@ -139,10 +141,15 @@
     document.addEventListener('DOMContentLoaded', () => {
       const params = new URLSearchParams(window.location.search);
       const workFromUrl = params.get('work') || '';
+      const locationFromUrl = params.get('location') || '';
       populateJobCategorySelect('job-title', workFromUrl);
 
       const categorySearch = document.getElementById('job-category-search');
       if (workFromUrl) categorySearch.value = workFromUrl;
+      if (locationFromUrl) {
+        const locationInput = document.getElementById('job-location');
+        if (locationInput) locationInput.value = locationFromUrl;
+      }
       categorySearch.addEventListener('input', () => populateJobCategorySelect('job-title', categorySearch.value));
 
       const jobTitleSelect = document.getElementById('job-title');

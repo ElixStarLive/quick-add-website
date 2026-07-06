@@ -9,6 +9,24 @@ const multer = require('multer');
 const {
   buildEstimate
 } = require('./lib/uk-pricing-engine');
+const {
+  parseSeoPagePath,
+  parseLegacyCompoundSlug,
+  listSeoPageSlugs
+} = require('./lib/seo-pages-data');
+const {
+  renderSeoLandingPage,
+  renderSeoSitemap
+} = require('./lib/seo-page-render');
+const {
+  MARKETPLACE_HUB,
+  MARKETPLACE_CATEGORIES,
+  getMarketplaceCategory
+} = require('./lib/section-pages-data');
+const {
+  renderSectionHub,
+  renderSectionCategory
+} = require('./lib/section-page-render');
 
 require('dotenv').config();
 
@@ -878,8 +896,61 @@ function sendHtmlPage(res, fileName) {
 }
 
 app.get('/', (req, res) => sendHtmlPage(res, 'index.html'));
+
+app.get('/cars', (req, res) => res.redirect(301, '/marketplace'));
+app.get('/cars/:slug', (req, res) => res.redirect(301, '/marketplace'));
+
+app.get('/marketplace', (req, res) => {
+  const baseUrl = SITE_URL || `${req.protocol}://${req.get('host')}`;
+  const html = renderSectionHub(MARKETPLACE_HUB, MARKETPLACE_CATEGORIES, 'marketplace', baseUrl);
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.setHeader('Content-Language', 'en-GB');
+  res.setHeader('Cache-Control', 'public, max-age=3600');
+  return res.send(html);
+});
+
+app.get('/marketplace/:slug', (req, res, next) => {
+  const category = getMarketplaceCategory(String(req.params.slug || '').toLowerCase());
+  if (!category) return next();
+  const baseUrl = SITE_URL || `${req.protocol}://${req.get('host')}`;
+  const html = renderSectionCategory(MARKETPLACE_HUB, category, 'marketplace', baseUrl);
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.setHeader('Content-Language', 'en-GB');
+  res.setHeader('Cache-Control', 'public, max-age=3600');
+  return res.send(html);
+});
+
+app.get('/sitemap-seo.xml', (req, res) => {
+  const baseUrl = SITE_URL || `${req.protocol}://${req.get('host')}`;
+  const xml = renderSeoSitemap(baseUrl, listSeoPageSlugs());
+  res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+  res.setHeader('Cache-Control', 'public, max-age=3600');
+  return res.send(xml);
+});
+
+app.get('/:segment/:location', (req, res, next) => {
+  const page = parseSeoPagePath(req.params.segment, req.params.location);
+  if (!page) return next();
+  const baseUrl = SITE_URL || `${req.protocol}://${req.get('host')}`;
+  const html = renderSeoLandingPage(page, baseUrl);
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.setHeader('Content-Language', 'en-GB');
+  res.setHeader('Cache-Control', 'public, max-age=3600');
+  return res.send(html);
+});
+
+app.get(/^\/([a-z0-9-]+)$/i, (req, res, next) => {
+  const slug = req.path.replace(/^\//, '');
+  const legacy = parseLegacyCompoundSlug(slug);
+  if (legacy) return res.redirect(301, legacy.redirect);
+  return next();
+});
+
 app.get(/\.html$/i, (req, res) => {
   const base = path.basename(decodeURIComponent(req.path));
+  if (base === 'categories.html') {
+    return res.redirect(301, '/marketplace');
+  }
   if (base.includes('..') || BLOCKED_STATIC.has(base)) {
     return res.status(404).end();
   }

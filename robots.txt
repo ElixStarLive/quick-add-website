@@ -3,3 +3,4 @@ Allow: /
 Disallow: /admin.html
 
 Sitemap: https://www.quickpostads.co.uk/sitemap.xml
+Sitemap: https://www.quickpostads.co.uk/sitemap-seo.xml
