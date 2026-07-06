@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /admin.html
 
-Sitemap: https://your-domain.com/sitemap.xml
+Sitemap: https://www.quickpostads.co.uk/sitemap.xml

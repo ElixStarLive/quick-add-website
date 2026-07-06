@@ -58,8 +58,10 @@
   function tile(label, iconKey) {
     var href = postUrl(label);
     var text = tileText(label);
+    var key = typeof qpIconForLabel === 'function' ? qpIconForLabel(label, iconKey) : iconKey;
+    var icon = typeof qpIconBox === 'function' ? qpIconBox(key) : '<span class="card-icon"></span>';
     return '<a href="' + href + '" class="job-icon-item" title="Post a job: ' + esc(label) + '">' +
-      '<span class="card-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="' + ICON[iconKey] + '"/></svg></span>' +
+      icon +
       '<strong>' + esc(text) + '</strong>' +
       '<small class="job-icon-hint">Post job free</small></a>';
   }
