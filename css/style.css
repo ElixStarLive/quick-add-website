@@ -478,7 +478,8 @@ a:hover {
   z-index: 3;
 }
 
-.promo-box h3 {
+.promo-box h3,
+.promo-box-title {
   margin: 0 0 0.2rem;
   font-size: 0.8rem;
   font-weight: 700;
@@ -806,13 +807,18 @@ a:hover {
 }
 
 .job-icon-hint {
-  color: var(--color-primary) !important;
+  color: var(--color-accent) !important;
   font-weight: 600;
 }
 
 .promo-box ul a {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0.65rem 0.5rem;
   color: #111111;
   text-decoration: underline;
+  text-underline-offset: 2px;
   font-weight: 600;
 }
 .promo-box ul a:hover {
@@ -1171,6 +1177,17 @@ a:hover {
 .page-subtitle {
   color: var(--color-text-muted);
   margin-bottom: 1.5rem;
+}
+
+.page-subtitle a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-weight: 600;
+}
+
+.page-subtitle a:hover {
+  color: var(--color-primary-hover);
 }
 
 /* Contact info */
