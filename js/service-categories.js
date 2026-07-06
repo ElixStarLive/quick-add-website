@@ -43,12 +43,22 @@
     return 'post-job.html?work=' + encodeURIComponent(label);
   }
 
+  function tileText(label) {
+    if (/[–—]\s*other$/i.test(label)) return 'Other';
+    return String(label)
+      .replace(/\s*[–—]\s*/g, ' ')
+      .replace(/\.{2,}/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
   function tile(label, iconKey) {
     var href = postUrl(label);
+    var text = tileText(label);
     return '<a href="' + href + '" class="job-icon-item" title="Post a job: ' + esc(label) + '">' +
-      '<span class="card-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="' + ICON[iconKey] + '"/></svg></span>' +
-      '<strong>' + esc(label) + '</strong>' +
-      '<small class="job-icon-hint">Post job free</small></a>';
+      '<span class="job-icon-icon-box"><span class="card-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="' + ICON[iconKey] + '"/></svg></span></span>' +
+      '<span class="job-icon-text-box"><strong>' + esc(text) + '</strong>' +
+      '<small class="job-icon-hint">Post job free</small></span></a>';
   }
 
   function renderServiceCategories(containerId) {
