@@ -1371,6 +1371,15 @@ function stripHamburgerNav(html) {
     .replace(/<script[^>]*src="js\/mobile-nav\.js[^"]*"[^>]*><\/script>\s*/gi, '');
 }
 
+function injectMobileViewport(html) {
+  if (html.includes('id="mobile-viewport"')) return html;
+  const script = '<script id="mobile-viewport">(function(){var w=Math.min(window.innerWidth||430,screen.width||430);if(w>960)return;var s=(w/1200).toFixed(4);var m=document.querySelector(\'meta[name=viewport]\');if(m)m.setAttribute(\'content\',\'width=1200, initial-scale=\'+s+\', viewport-fit=cover\');document.documentElement.classList.add(\'mobile-fit\');})();</script>';
+  return html.replace(
+    /(<meta name="viewport" content="[^"]*">)/i,
+    '$1\n  ' + script
+  );
+}
+
 function injectPwaHead(html) {
   if (!html.includes('<head>') || html.includes('manifest.webmanifest')) return html;
   const tags = [
@@ -1393,11 +1402,12 @@ function injectPwaScripts(html) {
 function injectMobileAssets(html) {
   if (typeof html !== 'string') return html;
   let out = stripHamburgerNav(html);
+  out = injectMobileViewport(out);
   out = normalizeTopBarContact(out);
   out = injectCompactTopBar(out);
   out = injectPwaHead(out);
   out = injectPwaScripts(out);
-  out = out.replace(/css\/style\.css\?v=\d+/g, 'css/style.css?v=106');
+  out = out.replace(/css\/style\.css\?v=\d+/g, 'css/style.css?v=107');
   return out;
 }
 

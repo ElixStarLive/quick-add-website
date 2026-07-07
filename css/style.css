@@ -2777,6 +2777,79 @@ body.nav-menu-open {
   display: block;
 }
 
+/* Phone: shrink full desktop site (1200px) to fit screen — set by js/mobile-viewport */
+html.mobile-fit {
+  overflow-x: hidden;
+}
+
+html.mobile-fit body {
+  overflow-x: hidden;
+  min-width: 0;
+}
+
+html.mobile-fit .top-bar-inner {
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  text-align: center;
+}
+
+html.mobile-fit .top-bar-social {
+  justify-content: center;
+  width: 100%;
+}
+
+html.mobile-fit .top-bar-contact {
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 0.5rem 1.25rem;
+}
+
+html.mobile-fit .top-bar-text-short {
+  display: none !important;
+}
+
+html.mobile-fit .top-bar-contact .top-bar-text-full {
+  display: inline !important;
+}
+
+html.mobile-fit .top-bar-email-link .top-bar-text-full {
+  display: inline !important;
+}
+
+html.mobile-fit .header-inner {
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+html.mobile-fit .logo-block {
+  flex: 0 0 auto;
+}
+
+html.mobile-fit .nav-links {
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 1rem 1.25rem;
+  position: static;
+  transform: none;
+  height: auto;
+  overflow: visible;
+  border: none;
+  padding: 0;
+}
+
+html.mobile-fit .nav-toggle,
+html.mobile-fit .nav-overlay {
+  display: none !important;
+}
+
+html.mobile-fit .pwa-install-banner {
+  font-size: 0.85rem;
+}
+
 @media (max-width: 960px) {
   html {
     font-size: 13px;
