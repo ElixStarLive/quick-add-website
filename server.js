@@ -1339,23 +1339,18 @@ function injectCompactTopBar(html) {
     );
 }
 
-function injectMobileNavMarkup(html) {
-  if (!html.includes('site-header') || html.includes('nav-toggle')) return html;
-  return html.replace(
-    /(<nav class="nav-links">[\s\S]*?<\/nav>)(\s*<\/div>)(\s*<\/header>)/i,
-    '$1\n      <button type="button" class="nav-toggle" aria-label="Open menu" aria-expanded="false">\n        <span class="nav-toggle-bar" aria-hidden="true"></span>\n        <span class="nav-toggle-bar" aria-hidden="true"></span>\n        <span class="nav-toggle-bar" aria-hidden="true"></span>\n      </button>$2\n    <div class="nav-overlay" aria-hidden="true"></div>$3'
-  );
+function stripHamburgerNav(html) {
+  return html
+    .replace(/<button[^>]*class="nav-toggle"[\s\S]*?<\/button>\s*/gi, '')
+    .replace(/<div class="nav-overlay"[^>]*><\/div>\s*/gi, '')
+    .replace(/<script[^>]*src="js\/mobile-nav\.js[^"]*"[^>]*><\/script>\s*/gi, '');
 }
 
 function injectMobileAssets(html) {
   if (typeof html !== 'string') return html;
-  let out = html;
-  if (!out.includes('mobile-nav.js')) {
-    out = out.replace(/<\/body>/i, '<script src="js/mobile-nav.js?v=1"></script>\n</body>');
-  }
+  let out = stripHamburgerNav(html);
   out = injectCompactTopBar(out);
-  out = injectMobileNavMarkup(out);
-  out = out.replace(/css\/style\.css\?v=\d+/g, 'css/style.css?v=102');
+  out = out.replace(/css\/style\.css\?v=\d+/g, 'css/style.css?v=103');
   return out;
 }
 

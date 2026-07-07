@@ -2900,9 +2900,9 @@ body.nav-menu-open {
 
   .nav-links a {
     flex: 0 0 auto;
-    padding: 0.2rem 0.35rem;
+    padding: 0.35rem 0.5rem;
     border-bottom: none;
-    font-size: 0.58rem;
+    font-size: 0.9rem;
     font-weight: 600;
     white-space: nowrap;
   }
@@ -2918,8 +2918,8 @@ body.nav-menu-open {
     width: auto;
     margin-top: 0;
     min-height: auto;
-    padding: 0.22rem 0.45rem;
-    font-size: 0.55rem;
+    padding: 0.35rem 0.55rem;
+    font-size: 0.85rem;
     border-radius: var(--radius);
     flex-shrink: 0;
   }
