@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,follow">
+  <title>Edit Public Profile | QuickPost Ads</title>
+  <meta name="description" content="Edit your public contractor profile on QuickPostAds — trade, area covered, bio and website.">
+  <link rel="canonical" href="https://www.quickpostads.co.uk/edit-profile.html">
+  <link rel="stylesheet" href="css/style.css?v=110">
+</head>
+<body>
+  <div class="top-bar">
+    <div class="top-bar-inner">
+      <div class="top-bar-contact">
+        <span>Email: info@QuickPostAds.co.uk</span>
+      </div>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/" class="logo-block">
+        <span class="logo-text">
+          <span class="logo">QuickPost Ads</span>
+          <span class="logo-tagline">Jobs &amp; Services</span>
+        </span>
+      </a>
+      <nav class="nav-links">
+        <a href="/">Home</a>
+        <a href="/jobs.html">Find Jobs</a>
+        <a href="/trades.html">Trades</a>
+        <a href="/for-contractors.html">For Contractors</a>
+        <a href="/pricing.html">Pricing</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/dashboard.html">Login</a>
+        <a href="/post-job.html" class="btn btn-primary">Post a Job FREE</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main">
+    <h1 class="page-title">Edit public profile</h1>
+    <p class="page-subtitle">Your profile appears in the <a href="/contractors">Find a Contractor</a> directory so homeowners can discover you.</p>
+
+    <div id="profile-auth-required" class="form-page" style="max-width:520px;display:none;">
+      <p>You need to be logged in as a contractor to edit your profile.</p>
+      <p><a href="/dashboard.html" class="btn btn-primary">Log in</a>
+        <a href="/contractor-register.html" class="btn btn-outline" style="margin-left:0.5rem;">Register</a></p>
+    </div>
+
+    <form id="profile-form" class="form-page" style="max-width:640px;display:none;">
+      <div id="profile-status" class="form-hint" style="display:none;margin-bottom:1rem;"></div>
+
+      <div class="form-group">
+        <label for="pf-name">Your name</label>
+        <input type="text" id="pf-name" maxlength="120" autocomplete="name">
+      </div>
+      <div class="form-group">
+        <label for="pf-company">Business name</label>
+        <input type="text" id="pf-company" maxlength="120" placeholder="e.g. Smith &amp; Sons Building Ltd">
+      </div>
+      <div class="form-group">
+        <label for="pf-trade">Trade</label>
+        <input type="text" id="pf-trade" maxlength="120" placeholder="e.g. Builder, Plumber, Electrician">
+      </div>
+      <div class="form-group">
+        <label for="pf-city">Area covered</label>
+        <input type="text" id="pf-city" maxlength="80" placeholder="e.g. London, Manchester, South East">
+      </div>
+      <div class="form-group">
+        <label for="pf-website">Website (optional)</label>
+        <input type="url" id="pf-website" maxlength="200" placeholder="https://yourbusiness.co.uk">
+      </div>
+      <div class="form-group">
+        <label for="pf-bio">About your business</label>
+        <textarea id="pf-bio" rows="6" maxlength="1500" placeholder="Describe your services, experience and the areas you cover."></textarea>
+        <p class="form-hint">Do not include personal contact details here — homeowners contact you by posting a job.</p>
+      </div>
+      <div class="form-group">
+        <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;">
+          <input type="checkbox" id="pf-public" style="width:auto;">
+          <span>Make my profile public in the contractor directory</span>
+        </label>
+      </div>
+
+      <div style="display:flex;flex-wrap:wrap;gap:0.5rem;align-items:center;">
+        <button type="submit" class="btn btn-primary" id="pf-save">Save profile</button>
+        <a href="/dashboard.html" class="btn btn-outline">Back to dashboard</a>
+        <a id="pf-view" href="#" class="btn btn-outline" style="display:none;" target="_blank">View public profile</a>
+      </div>
+    </form>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer-links">
+      <a href="contractors">Find a Contractor</a>
+      <a href="terms-of-service.html">Terms of Service</a>
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <p>QuickPost Ads · Post local jobs &amp; classifieds.</p>
+  </footer>
+
+  <script src="js/site-config.js?v=1"></script>
+  <script src="js/contractor-auth.js?v=1"></script>
+  <script src="js/contractor-profile-edit.js?v=1"></script>
+</body>
+</html>

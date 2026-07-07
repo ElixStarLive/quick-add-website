@@ -25,6 +25,10 @@ const {
 const { SEO_TRADE_DEFINITIONS } = require('./lib/uk-trades-taxonomy');
 const TRADE_HUB_BY_SLUG = new Map(SEO_TRADE_DEFINITIONS.map((t) => [t.slug, t]));
 const {
+  renderContractorDirectory,
+  renderContractorProfile
+} = require('./lib/contractor-page-render');
+const {
   MARKETPLACE_HUB,
   MARKETPLACE_CATEGORIES,
   getMarketplaceCategory
@@ -372,12 +376,17 @@ function migrateContractorColumns() {
     'subscription_status TEXT DEFAULT "none"',
     'subscription_expires_at TEXT',
     'stripe_customer_id TEXT',
-    'stripe_subscription_id TEXT'
+    'stripe_subscription_id TEXT',
+    'city TEXT',
+    'bio TEXT',
+    'website TEXT',
+    'profile_slug TEXT',
+    'profile_public INTEGER DEFAULT 0'
   ];
   cols.forEach((col) => {
-    const name = col.split(' ')[0];
     db.run(`ALTER TABLE users ADD COLUMN ${col}`, () => {});
   });
+  db.run('CREATE UNIQUE INDEX IF NOT EXISTS idx_users_profile_slug ON users(profile_slug)', () => {});
 }
 
 function purgeDemoContentQuiet() {
@@ -462,11 +471,25 @@ function contractorPublicProfile(user) {
     phone: user.phone,
     company_name: user.company_name,
     trade: user.trade,
+    city: user.city || '',
+    bio: user.bio || '',
+    website: user.website || '',
+    profile_slug: user.profile_slug || '',
+    profile_public: user.profile_public ? 1 : 0,
     subscription_plan: user.subscription_plan || 'none',
     subscription_status: user.subscription_status || 'none',
     subscription_active: contractorHasActiveSubscription(user),
     subscription_expires_at: user.subscription_expires_at || null
   };
+}
+
+function slugifyContractor(value) {
+  return String(value || '')
+    .toLowerCase()
+    .replace(/&/g, ' and ')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 60);
 }
 
 function contractorHasActiveSubscription(user) {
@@ -505,6 +528,43 @@ function dbGetUserByEmail(email) {
       if (err) reject(err);
       else resolve(row || null);
     });
+  });
+}
+
+function dbGetPublicContractorBySlug(slug) {
+  return new Promise((resolve, reject) => {
+    db.get(
+      'SELECT * FROM users WHERE profile_slug = ? AND user_type = "contractor" AND profile_public = 1',
+      [String(slug || '').toLowerCase()],
+      (err, row) => (err ? reject(err) : resolve(row || null))
+    );
+  });
+}
+
+function dbListPublicContractors() {
+  return new Promise((resolve, reject) => {
+    db.all(
+      `SELECT id, name, company_name, trade, city, bio, profile_slug, subscription_status, subscription_expires_at, user_type, created_at
+       FROM users
+       WHERE user_type = "contractor" AND profile_public = 1 AND profile_slug IS NOT NULL
+       ORDER BY company_name COLLATE NOCASE, name COLLATE NOCASE`,
+      (err, rows) => (err ? reject(err) : resolve(rows || []))
+    );
+  });
+}
+
+/** Ensure a unique profile slug for a contractor (base slug, else base-id). */
+async function ensureContractorSlug(user, base) {
+  const wanted = slugifyContractor(base) || ('contractor-' + user.id);
+  return new Promise((resolve, reject) => {
+    db.get(
+      'SELECT id FROM users WHERE profile_slug = ? AND id != ?',
+      [wanted, user.id],
+      (err, row) => {
+        if (err) return reject(err);
+        resolve(row ? wanted + '-' + user.id : wanted);
+      }
+    );
   });
 }
 
@@ -1178,6 +1238,54 @@ app.get('/api/contractors/me', requireContractorAuth, (req, res) => {
   res.json({ contractor: contractorPublicProfile(req.contractor) });
 });
 
+// Update the contractor's public profile (name, company, trade, city, bio, website, visibility)
+app.put('/api/contractors/profile', rateLimit('contractor-profile', 30, 600000), requireContractorAuth, async (req, res) => {
+  const body = req.body || {};
+  const contractor = req.contractor;
+
+  const clean = (v, max) => String(v == null ? '' : v).trim().slice(0, max);
+  const name = clean(body.name, 120) || contractor.name;
+  const company_name = clean(body.company_name, 120);
+  const trade = clean(body.trade, 120);
+  const city = clean(body.city, 80);
+  const bio = clean(body.bio, 1500);
+  let website = clean(body.website, 200);
+  const makePublic = body.profile_public === true || body.profile_public === 1 || body.profile_public === '1';
+
+  if (website && !/^https?:\/\//i.test(website)) website = 'https://' + website;
+  if (website && !/^https?:\/\/[^\s.]+\.[^\s]+$/i.test(website)) {
+    return res.status(400).json({ error: 'Please enter a valid website URL (e.g. https://yourbusiness.co.uk).' });
+  }
+  if (makePublic && !company_name && !name) {
+    return res.status(400).json({ error: 'Add a business or contact name before making your profile public.' });
+  }
+
+  try {
+    let slug = contractor.profile_slug || '';
+    if (!slug && makePublic) {
+      slug = await ensureContractorSlug(contractor, company_name || name);
+    }
+
+    db.run(
+      `UPDATE users SET name = ?, company_name = ?, trade = ?, city = ?, bio = ?, website = ?,
+       profile_slug = COALESCE(?, profile_slug), profile_public = ?
+       WHERE id = ? AND user_type = 'contractor'`,
+      [name, company_name, trade, city, bio, website, slug || null, makePublic ? 1 : 0, contractor.id],
+      async function (err) {
+        if (err) return res.status(500).json({ error: err.message });
+        const updated = await dbGetUserById(contractor.id);
+        res.json({
+          message: 'Profile saved.',
+          contractor: contractorPublicProfile(updated),
+          profileUrl: updated.profile_public && updated.profile_slug ? '/contractor/' + updated.profile_slug : null
+        });
+      }
+    );
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.post('/api/contractors/subscribe', rateLimit('contractor-sub', 10, 600000), requireContractorAuth, async (req, res) => {
   const plan = String(req.body?.plan || 'pro').toLowerCase();
   if (plan !== 'pro') {
@@ -1439,13 +1547,49 @@ app.get('/marketplace/:slug', (req, res, next) => {
   return res.send(html);
 });
 
-app.get('/sitemap-seo.xml', (req, res) => {
+app.get('/sitemap-seo.xml', async (req, res) => {
   const baseUrl = SITE_URL || `${req.protocol}://${req.get('host')}`;
   const hubSlugs = SEO_TRADE_DEFINITIONS.map((t) => t.slug);
-  const xml = renderSeoSitemap(baseUrl, [...hubSlugs, ...listSeoPageSlugs()]);
+  let contractorSlugs = [];
+  try {
+    const contractors = await dbListPublicContractors();
+    contractorSlugs = ['contractors', ...contractors.map((c) => 'contractor/' + c.profile_slug)];
+  } catch (err) {
+    contractorSlugs = ['contractors'];
+  }
+  const xml = renderSeoSitemap(baseUrl, [...hubSlugs, ...contractorSlugs, ...listSeoPageSlugs()]);
   res.setHeader('Content-Type', 'application/xml; charset=utf-8');
   res.setHeader('Cache-Control', 'public, max-age=3600');
   return res.send(xml);
+});
+
+app.get('/contractors', async (req, res, next) => {
+  try {
+    const baseUrl = SITE_URL || `${req.protocol}://${req.get('host')}`;
+    const contractors = await dbListPublicContractors();
+    const html = renderContractorDirectory(contractors, baseUrl);
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.setHeader('Content-Language', 'en-GB');
+    res.setHeader('Cache-Control', 'public, max-age=600');
+    return res.send(html);
+  } catch (err) {
+    return next(err);
+  }
+});
+
+app.get('/contractor/:slug', async (req, res, next) => {
+  try {
+    const baseUrl = SITE_URL || `${req.protocol}://${req.get('host')}`;
+    const contractor = await dbGetPublicContractorBySlug(req.params.slug);
+    if (!contractor) return next();
+    const html = renderContractorProfile(contractor, baseUrl);
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.setHeader('Content-Language', 'en-GB');
+    res.setHeader('Cache-Control', 'public, max-age=600');
+    return res.send(html);
+  } catch (err) {
+    return next(err);
+  }
 });
 
 app.get('/:segment', (req, res, next) => {

@@ -8,6 +8,7 @@
   <url><loc>https://www.quickpostads.co.uk/post-ad.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.quickpostads.co.uk/search.html</loc><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.quickpostads.co.uk/trades.html</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.quickpostads.co.uk/contractors</loc><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.quickpostads.co.uk/builders</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.quickpostads.co.uk/plumbers</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.quickpostads.co.uk/gas-engineers</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>

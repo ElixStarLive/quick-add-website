@@ -37,6 +37,10 @@ document.addEventListener('DOMContentLoaded', async () => {
           ${contractor.subscription_active
             ? '<a href="jobs.html" class="btn btn-primary">Browse jobs</a>'
             : '<button type="button" class="btn btn-primary" id="dash-subscribe-btn">Subscribe to Pro — £29.99/mo</button>'}
+          <a href="edit-profile.html" class="btn btn-outline">Edit public profile</a>
+          ${contractor.profile_public && contractor.profile_slug
+            ? `<a href="/contractor/${encodeURIComponent(contractor.profile_slug)}" class="btn btn-outline" target="_blank">View public profile</a>`
+            : ''}
           <button type="button" class="btn btn-outline" id="contractor-logout-btn">Log out</button>
         </div>
         ${contractor.subscription_active ? '' : '<p class="form-hint" style="margin-top:1rem;">You must subscribe before you can view or unlock any jobs. No free job access.</p>'}
