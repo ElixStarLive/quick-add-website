@@ -2122,6 +2122,7 @@ a:hover {
   max-width: 520px;
   font-size: 0.95rem;
   color: var(--color-text-muted);
+  text-align: center;
 }
 
 .contractor-benefits li {

@@ -1410,7 +1410,7 @@ function injectMobileAssets(html) {
   out = injectCompactTopBar(out);
   out = injectPwaHead(out);
   out = injectPwaScripts(out);
-  out = out.replace(/css\/style\.css\?v=\d+/g, 'css/style.css?v=109');
+  out = out.replace(/css\/style\.css\?v=\d+/g, 'css/style.css?v=110');
   return out;
 }
 
