@@ -1355,7 +1355,7 @@ function injectMobileAssets(html) {
   }
   out = injectCompactTopBar(out);
   out = injectMobileNavMarkup(out);
-  out = out.replace(/css\/style\.css\?v=\d+/g, 'css/style.css?v=100');
+  out = out.replace(/css\/style\.css\?v=\d+/g, 'css/style.css?v=101');
   return out;
 }
 
