@@ -1331,6 +1331,18 @@ function sendHtmlPage(res, fileName) {
   return res.send(html);
 }
 
+function normalizeTopBarContact(html) {
+  return html
+    .replace(
+      /<span>(\s*<svg class="icon-inline"[\s\S]*?<\/svg>)\s*<span class="top-bar-text-full">Email: info@QuickPostAds\.co\.uk<\/span><span class="top-bar-text-short">(?:Email|info@QuickPostAds\.co\.uk)<\/span><\/span>/gi,
+      '<a href="mailto:info@QuickPostAds.co.uk" class="top-bar-email-link" aria-label="Email info@QuickPostAds.co.uk">$1<span class="top-bar-text-full">Email: info@QuickPostAds.co.uk</span></a>'
+    )
+    .replace(
+      /<span>(\s*<svg class="icon-inline"[\s\S]*?<\/svg>)\s*Email: info@QuickPostAds\.co\.uk<\/span>/gi,
+      '<a href="mailto:info@QuickPostAds.co.uk" class="top-bar-email-link" aria-label="Email info@QuickPostAds.co.uk">$1<span class="top-bar-text-full">Email: info@QuickPostAds.co.uk</span></a>'
+    );
+}
+
 function injectCompactTopBar(html) {
   if (!html.includes('top-bar-contact') || html.includes('top-bar-text-short')) return html;
   return html
@@ -1343,8 +1355,8 @@ function injectCompactTopBar(html) {
       '><span class="top-bar-text-full">Phone: 07860266619</span><span class="top-bar-text-short">07860266619</span></span>'
     )
     .replace(
-      '> Email: info@QuickPostAds.co.uk</span>',
-      '><span class="top-bar-text-full">Email: info@QuickPostAds.co.uk</span><span class="top-bar-text-short">Email</span></span>'
+      /<span>(\s*<svg class="icon-inline"[\s\S]*?<\/svg>)\s*Email: info@QuickPostAds\.co\.uk<\/span>/gi,
+      '<a href="mailto:info@QuickPostAds.co.uk" class="top-bar-email-link" aria-label="Email info@QuickPostAds.co.uk">$1<span class="top-bar-text-full">Email: info@QuickPostAds.co.uk</span></a>'
     )
     .replace(
       '> Elix Star Live</a>',
@@ -1381,10 +1393,11 @@ function injectPwaScripts(html) {
 function injectMobileAssets(html) {
   if (typeof html !== 'string') return html;
   let out = stripHamburgerNav(html);
+  out = normalizeTopBarContact(out);
   out = injectCompactTopBar(out);
   out = injectPwaHead(out);
   out = injectPwaScripts(out);
-  out = out.replace(/css\/style\.css\?v=\d+/g, 'css/style.css?v=104');
+  out = out.replace(/css\/style\.css\?v=\d+/g, 'css/style.css?v=105');
   return out;
 }
 

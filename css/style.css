@@ -100,10 +100,20 @@ a:hover {
   color: var(--color-text-muted);
 }
 
-.top-bar-contact span {
+.top-bar-contact > span,
+.top-bar-contact > .top-bar-email-link,
+.top-bar-contact > .app-top-link {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
+}
+
+.top-bar-email-link {
+  color: var(--color-text-muted);
+}
+
+.top-bar-email-link:hover {
+  color: var(--color-primary);
 }
 
 .top-bar-text-short {
@@ -895,6 +905,7 @@ a:hover {
 .top-bar-social .icon-social:hover { color: var(--color-primary); }
 .top-bar-social .icon-social svg { width: 1.1rem; height: 1.1rem; fill: currentColor; }
 .top-bar-contact .icon-inline { margin-right: 0.2rem; }
+.top-bar-email-link .icon-inline { margin-right: 0; }
 .job-location .icon-inline { margin-right: 0.35rem; vertical-align: -0.15em; }
 .nav-links .btn .icon-inline { margin-right: 0.35rem; }
 
@@ -2800,7 +2811,12 @@ body.nav-menu-open {
     max-width: 100%;
   }
 
+  .top-bar-contact > span:first-child {
+    display: none !important;
+  }
+
   .top-bar-contact > span,
+  .top-bar-contact > .top-bar-email-link,
   .top-bar-contact > .app-top-link {
     display: inline-flex;
     align-items: center;
@@ -2814,6 +2830,11 @@ body.nav-menu-open {
 
   .top-bar-contact .top-bar-text-short {
     display: inline !important;
+  }
+
+  .top-bar-email-link .top-bar-text-full,
+  .top-bar-email-link .top-bar-text-short {
+    display: none !important;
   }
 
   .top-bar-contact .icon-inline {
@@ -3438,6 +3459,7 @@ body.nav-menu-open {
   }
 
   .top-bar-contact span,
+  .top-bar-contact .top-bar-email-link,
   .top-bar-contact .app-top-link {
     white-space: nowrap;
     text-align: left;
