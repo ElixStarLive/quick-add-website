@@ -2788,22 +2788,24 @@ html.mobile-fit body {
 }
 
 html.mobile-fit .top-bar-inner {
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 0.5rem 1.5rem;
-  text-align: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  gap: 0.5rem 1rem;
 }
 
 html.mobile-fit .top-bar-social {
-  justify-content: center;
-  width: 100%;
+  justify-content: flex-start;
+  width: auto;
+  flex-shrink: 0;
 }
 
 html.mobile-fit .top-bar-contact {
-  justify-content: center;
-  flex-wrap: wrap;
-  width: 100%;
-  gap: 0.5rem 1.25rem;
+  justify-content: flex-end;
+  flex-wrap: nowrap;
+  width: auto;
+  gap: 0.75rem 1rem;
+  flex-shrink: 1;
+  min-width: 0;
 }
 
 html.mobile-fit .top-bar-text-short {
@@ -2818,33 +2820,69 @@ html.mobile-fit .top-bar-email-link .top-bar-text-full {
   display: inline !important;
 }
 
+html.mobile-fit .site-header {
+  padding: 0.65rem 1rem;
+}
+
 html.mobile-fit .header-inner {
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
   gap: 0.5rem;
 }
 
 html.mobile-fit .logo-block {
-  flex: 0 0 100%;
-  width: 100%;
-  justify-content: center;
+  flex: 0 0 auto;
+  width: auto;
+  justify-content: flex-start;
+  min-width: 0;
+}
+
+html.mobile-fit .logo {
+  font-size: 1.15rem;
+}
+
+html.mobile-fit .logo-block::before {
+  width: 2rem;
+  height: 2rem;
+  font-size: 1.1rem;
 }
 
 html.mobile-fit .nav-links {
-  flex: 0 0 100%;
-  width: 100%;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 0.65rem 1rem;
+  flex: 1 1 auto;
+  width: auto;
+  min-width: 0;
+  justify-content: flex-end;
+  flex-wrap: nowrap;
+  gap: 0.65rem;
   position: static;
   transform: none;
   height: auto;
-  overflow: visible;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
   border: none;
-  border-top: 1px solid var(--color-border);
-  padding: 0.5rem 0 0;
+  border-top: none;
+  padding: 0;
   margin: 0;
+}
+
+html.mobile-fit .nav-links::-webkit-scrollbar {
+  display: none;
+}
+
+html.mobile-fit .nav-links a {
+  font-size: 0.82rem;
+  padding: 0.15rem 0.25rem;
+  white-space: nowrap;
+}
+
+html.mobile-fit .nav-links .btn-primary {
+  font-size: 0.78rem;
+  padding: 0.35rem 0.55rem;
+  white-space: nowrap;
 }
 
 html.mobile-fit .nav-toggle,
