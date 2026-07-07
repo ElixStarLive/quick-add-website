@@ -1318,13 +1318,44 @@ function sendHtmlPage(res, fileName) {
   return res.send(html);
 }
 
+function injectCompactTopBar(html) {
+  if (!html.includes('top-bar-contact') || html.includes('top-bar-text-short')) return html;
+  return html
+    .replace(
+      '> 23 Calderon Road, Leyton, London E11 4ET</span>',
+      '><span class="top-bar-text-full">23 Calderon Road, Leyton, London E11 4ET</span><span class="top-bar-text-short">Leyton, E11</span></span>'
+    )
+    .replace(
+      '> Phone: 07860266619</span>',
+      '><span class="top-bar-text-full">Phone: 07860266619</span><span class="top-bar-text-short">07860266619</span></span>'
+    )
+    .replace(
+      '> Email: info@QuickPostAds.co.uk</span>',
+      '><span class="top-bar-text-full">Email: info@QuickPostAds.co.uk</span><span class="top-bar-text-short">info@QuickPostAds.co.uk</span></span>'
+    )
+    .replace(
+      '> Elix Star Live</a>',
+      '><span class="top-bar-text-full">Elix Star Live</span><span class="top-bar-text-short">Elix</span></a>'
+    );
+}
+
+function injectMobileNavMarkup(html) {
+  if (!html.includes('site-header') || html.includes('nav-toggle')) return html;
+  return html.replace(
+    /(<nav class="nav-links">[\s\S]*?<\/nav>)(\s*<\/div>)(\s*<\/header>)/i,
+    '$1\n      <button type="button" class="nav-toggle" aria-label="Open menu" aria-expanded="false">\n        <span class="nav-toggle-bar" aria-hidden="true"></span>\n        <span class="nav-toggle-bar" aria-hidden="true"></span>\n        <span class="nav-toggle-bar" aria-hidden="true"></span>\n      </button>$2\n    <div class="nav-overlay" aria-hidden="true"></div>$3'
+  );
+}
+
 function injectMobileAssets(html) {
   if (typeof html !== 'string') return html;
   let out = html;
   if (!out.includes('mobile-nav.js')) {
     out = out.replace(/<\/body>/i, '<script src="js/mobile-nav.js?v=1"></script>\n</body>');
   }
-  out = out.replace(/css\/style\.css\?v=\d+/g, 'css/style.css?v=98');
+  out = injectCompactTopBar(out);
+  out = injectMobileNavMarkup(out);
+  out = out.replace(/css\/style\.css\?v=\d+/g, 'css/style.css?v=100');
   return out;
 }
 
