@@ -828,6 +828,21 @@ a:hover {
   line-height: 1.6;
 }
 
+.seo-service-list {
+  list-style: none;
+  margin: 0 0 1.5rem;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.4rem 1rem;
+  color: var(--color-text-muted);
+}
+
+.seo-service-list li {
+  padding: 0.35rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
 .seo-faq {
   margin: 2rem 0;
 }

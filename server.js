@@ -19,8 +19,11 @@ const {
 } = require('./lib/seo-pages-data');
 const {
   renderSeoLandingPage,
+  renderTradeHubPage,
   renderSeoSitemap
 } = require('./lib/seo-page-render');
+const { SEO_TRADE_DEFINITIONS } = require('./lib/uk-trades-taxonomy');
+const TRADE_HUB_BY_SLUG = new Map(SEO_TRADE_DEFINITIONS.map((t) => [t.slug, t]));
 const {
   MARKETPLACE_HUB,
   MARKETPLACE_CATEGORIES,
@@ -1438,10 +1441,22 @@ app.get('/marketplace/:slug', (req, res, next) => {
 
 app.get('/sitemap-seo.xml', (req, res) => {
   const baseUrl = SITE_URL || `${req.protocol}://${req.get('host')}`;
-  const xml = renderSeoSitemap(baseUrl, listSeoPageSlugs());
+  const hubSlugs = SEO_TRADE_DEFINITIONS.map((t) => t.slug);
+  const xml = renderSeoSitemap(baseUrl, [...hubSlugs, ...listSeoPageSlugs()]);
   res.setHeader('Content-Type', 'application/xml; charset=utf-8');
   res.setHeader('Cache-Control', 'public, max-age=3600');
   return res.send(xml);
+});
+
+app.get('/:segment', (req, res, next) => {
+  const trade = TRADE_HUB_BY_SLUG.get(String(req.params.segment || '').toLowerCase());
+  if (!trade) return next();
+  const baseUrl = SITE_URL || `${req.protocol}://${req.get('host')}`;
+  const html = renderTradeHubPage(trade, baseUrl);
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.setHeader('Content-Language', 'en-GB');
+  res.setHeader('Cache-Control', 'public, max-age=3600');
+  return res.send(html);
 });
 
 app.get('/:segment/:location', (req, res, next) => {
