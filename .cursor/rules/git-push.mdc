@@ -1,0 +1,17 @@
+---
+description: Always commit and push code changes to GitHub
+alwaysApply: true
+---
+
+# Git push workflow
+
+After making any code changes the user asked for:
+
+1. Stage only relevant project files (not `.env`, secrets, or local debug dumps like `lh-*.json`).
+2. Commit with a short message focused on **why**.
+3. **Always run `git push`** after a successful commit — do not leave changes only on local disk.
+4. Tell the user the commit hash and that it is pushed to `origin/main`.
+
+If there is nothing to commit, say so and confirm the branch is already up to date with remote.
+
+Do not push unless there are actual changes to commit, unless the user explicitly asks to push existing unpushed commits.
