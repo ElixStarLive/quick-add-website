@@ -113,12 +113,61 @@ function postJobUrl(workLabel) {
   return 'post-job.html?work=' + encodeURIComponent(workLabel);
 }
 
+/** All trade categories for search filters (homepage, Find Jobs) */
+function populateWorkCategoryFilter(selectId, options) {
+  const select = document.getElementById(selectId);
+  if (!select || typeof JOB_CATEGORIES === 'undefined') return;
+  const opts = options || {};
+  const placeholder = opts.placeholder || 'All categories';
+
+  select.innerHTML = '';
+  const first = document.createElement('option');
+  first.value = '';
+  first.textContent = placeholder;
+  select.appendChild(first);
+
+  Object.entries(JOB_CATEGORIES).forEach(([group, items]) => {
+    const og = document.createElement('optgroup');
+    og.label = group;
+    items.forEach((label) => {
+      const o = document.createElement('option');
+      o.value = label;
+      o.textContent = label;
+      og.appendChild(o);
+    });
+    select.appendChild(og);
+  });
+
+  if (opts.selected) {
+    select.value = opts.selected;
+  }
+}
+
+function jobMatchesWorkCategory(jobTitle, workValue) {
+  if (!workValue) return true;
+  const title = String(jobTitle || '').toLowerCase();
+  const work = String(workValue).trim().toLowerCase();
+  if (!work) return true;
+  if (title === work || title.includes(work)) return true;
+
+  for (const [group, items] of Object.entries(JOB_CATEGORIES)) {
+    const groupLower = group.toLowerCase();
+    if (groupLower === work || groupLower.includes(work)) {
+      return items.some((item) => title.includes(item.toLowerCase()));
+    }
+    if (items.some((item) => item.toLowerCase() === work)) {
+      return title.includes(work);
+    }
+  }
+  return false;
+}
+
 function populateJobCategorySelect(selectId, filterQuery) {
   const select = document.getElementById(selectId);
   if (!select) return;
   const q = (filterQuery || '').trim();
   const qLower = q.toLowerCase();
-  select.innerHTML = '<option value="">Choose work type</option>';
+  select.innerHTML = '<option value="">All categories — select work type</option>';
   Object.entries(JOB_CATEGORIES).forEach(([group, items]) => {
     const filtered = qLower
       ? items.filter((l) => l.toLowerCase().includes(qLower) || group.toLowerCase().includes(qLower))

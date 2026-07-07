@@ -389,20 +389,25 @@ a:hover {
 }
 
 .hero-feature-icon {
-  width: 2.5rem;
-  height: 2.5rem;
-  border: none;
-  border-radius: 0;
+  width: 3rem;
+  height: 3rem;
+  border: 2px solid var(--color-primary);
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: transparent;
+  background: rgba(212, 175, 55, 0.1);
+  box-shadow: 0 0 16px rgba(212, 175, 55, 0.2);
   color: var(--color-primary);
 }
 .hero-feature-icon svg {
-  width: 1.2rem;
-  height: 1.2rem;
+  width: 1.25rem;
+  height: 1.25rem;
   fill: var(--color-primary);
+}
+
+.hero-feature span {
+  color: var(--color-primary);
 }
 
 .sr-only {
@@ -519,10 +524,117 @@ a:hover {
   color: var(--color-text);
 }
 
-/* Homepage — Popular Construction Trades (mockup) */
-.home-search-hint {
-  margin-bottom: 1.25rem;
-  text-align: center;
+/* Homepage — search block (text + single bar, no nested boxes) */
+.home-search-panel {
+  margin: 0 0 1.75rem;
+}
+
+.home-search-panel-head {
+  margin-bottom: 0.75rem;
+}
+
+.home-search-panel-title {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: var(--font-display);
+  color: var(--color-primary);
+  line-height: 1.35;
+}
+
+.home-search-panel-benefits {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.2rem 1.25rem;
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+}
+
+.home-search-panel-benefits li::before {
+  content: '✓ ';
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.home-search-panel .search-bar,
+.home-search-panel .home-search-bar {
+  max-width: none;
+  width: 100%;
+  margin: 0;
+}
+
+.home-homeowner-banner {
+  margin: 0 0 2rem;
+}
+.search-capsules {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+}
+
+.search-capsule {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  background: var(--color-bg-elevated);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 0;
+}
+
+.search-capsule-grow {
+  flex: 1 1 180px;
+  min-width: 0;
+}
+
+.search-capsule-category {
+  flex: 1 1 160px;
+  min-width: 140px;
+  max-width: 240px;
+}
+
+.search-capsule-location {
+  flex: 1 1 140px;
+  min-width: 120px;
+  max-width: 200px;
+}
+
+.search-capsule input,
+.search-capsule select {
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: var(--color-text);
+  font-size: 0.95rem;
+  padding: 0.75rem 1.15rem;
+  min-height: 48px;
+}
+
+.search-capsule input::placeholder {
+  color: var(--color-muted);
+}
+
+.search-capsule select {
+  cursor: pointer;
+  padding-right: 2rem;
+}
+
+.search-capsule-btn {
+  border-radius: 999px;
+  flex-shrink: 0;
+  min-height: 48px;
+  padding: 0.75rem 1.5rem;
+  white-space: nowrap;
+}
+
+.jobs-search-panel .search-capsules {
+  margin: 0;
 }
 
 .home-trades-section {
@@ -2529,5 +2641,536 @@ a:hover {
   }
   .how-steps {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Contractor registration paywall */
+.contractor-paywall {
+  max-width: 520px;
+  margin: 2rem auto;
+  padding: 2rem 1.75rem;
+  text-align: center;
+  background: var(--color-surface, rgba(255, 255, 255, 0.04));
+  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.12));
+  border-radius: 12px;
+}
+
+.contractor-paywall-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.contractor-paywall h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.35rem;
+}
+
+.contractor-paywall-count {
+  margin: 0 0 1rem;
+  font-size: 1.05rem;
+}
+
+.contractor-paywall-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-top: 1.25rem;
+}
+
+.contractor-register-form {
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.pricing-feature-muted {
+  opacity: 0.55;
+  text-decoration: line-through;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.checkbox-label input {
+  margin-top: 0.2rem;
+}
+
+/* ===== Mobile — same brand look as desktop ===== */
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+body.nav-menu-open {
+  overflow: hidden;
+}
+
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  margin-left: auto;
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.nav-toggle-bar {
+  display: block;
+  width: 20px;
+  height: 2px;
+  margin: 0 auto;
+  background: var(--color-primary);
+  border-radius: 1px;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.site-header.nav-open .nav-toggle-bar:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.site-header.nav-open .nav-toggle-bar:nth-child(2) {
+  opacity: 0;
+}
+
+.site-header.nav-open .nav-toggle-bar:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.nav-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  z-index: 99;
+}
+
+.site-header.nav-open .nav-overlay {
+  display: block;
+}
+
+@media (max-width: 960px) {
+  .top-bar {
+    padding: 0.4rem 1rem;
+    font-size: 0.78rem;
+  }
+
+  .top-bar-inner {
+    justify-content: center;
+  }
+
+  .top-bar-contact span:first-child,
+  .top-bar-contact span:nth-child(2) {
+    display: none;
+  }
+
+  .top-bar-contact {
+    gap: 0.5rem;
+  }
+
+  .site-header {
+    padding: 0.65rem 1rem;
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+
+  .header-inner {
+    flex-wrap: nowrap;
+    gap: 0.75rem;
+  }
+
+  .logo {
+    font-size: 1.05rem;
+  }
+
+  .nav-toggle {
+    display: flex;
+  }
+
+  .nav-links {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: min(300px, 86vw);
+    height: 100vh;
+    height: 100dvh;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 4.25rem 1.15rem 1.5rem;
+    padding-top: calc(4.25rem + env(safe-area-inset-top));
+    padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
+    background: var(--color-bg-elevated);
+    border-left: 1px solid var(--color-border-gold);
+    box-shadow: -8px 0 32px rgba(0, 0, 0, 0.55);
+    transform: translateX(105%);
+    transition: transform 0.28s ease;
+    z-index: 200;
+    overflow-y: auto;
+  }
+
+  .site-header.nav-open .nav-links {
+    transform: translateX(0);
+  }
+
+  .nav-links a {
+    padding: 0.9rem 0;
+    border-bottom: 1px solid var(--color-border);
+    font-size: 1rem;
+  }
+
+  .nav-links a.nav-active {
+    border-bottom-color: var(--color-border);
+    padding-bottom: 0.9rem;
+  }
+
+  .nav-links .btn-primary,
+  .nav-links .btn-outline {
+    width: 100%;
+    justify-content: center;
+    margin-top: 0.65rem;
+    border-radius: var(--radius);
+    min-height: 44px;
+  }
+
+  .main {
+    padding: 1.35rem 1rem;
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+
+  .hero-wrap {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    padding: 1.5rem 1rem;
+    gap: 1.25rem;
+  }
+
+  .hero-visual {
+    min-height: 220px;
+    order: -1;
+  }
+
+  .hero h1 {
+    font-size: 1.85rem;
+  }
+
+  .hero-desc {
+    font-size: 0.95rem;
+  }
+
+  .hero-cta {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero-cta .btn {
+    width: 100%;
+    justify-content: center;
+    min-height: 44px;
+  }
+
+  .promo-box {
+    position: static;
+    max-width: 100%;
+    margin-top: 0.75rem;
+  }
+
+  .how-steps {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .home-search-panel-benefits {
+    grid-template-columns: 1fr;
+  }
+
+  .home-contractor-banner {
+    grid-template-columns: 1fr;
+    text-align: center;
+    padding: 1.35rem 1rem;
+    gap: 1rem;
+  }
+
+  .home-contractor-banner-icon {
+    margin: 0 auto;
+  }
+
+  .home-contractor-benefits {
+    text-align: left;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+
+  .home-contractor-banner-action .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .home-popular-trades-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.55rem;
+  }
+
+  .home-trade-tile {
+    min-height: 108px;
+    padding: 0.65rem 0.35rem;
+  }
+
+  .home-trade-tile .card-icon svg {
+    width: 30px;
+    height: 30px;
+  }
+
+  .home-trade-tile strong {
+    font-size: 0.68rem;
+  }
+
+  .trade-cards-grid,
+  .pricing-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .jobs-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .jobs-search-panel {
+    padding: 1rem;
+  }
+
+  .search-capsules {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-capsule,
+  .search-capsule-grow,
+  .search-capsule-category,
+  .search-capsule-location {
+    flex: 1 1 auto;
+    max-width: none;
+    width: 100%;
+  }
+
+  .search-capsule-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .home-search-panel-benefits {
+    grid-template-columns: 1fr;
+  }
+
+  .home-search-panel .search-bar {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .home-search-panel .search-bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .home-search-panel .search-bar input,
+  .home-search-panel .search-bar select {
+    width: auto;
+    flex: 1 1 auto;
+    min-width: 100px;
+    border-top: none;
+    border-left: 1px solid var(--color-border);
+  }
+
+  .home-search-panel .search-bar input:first-child {
+    border-left: none;
+  }
+
+  .home-search-panel .search-bar .btn {
+    width: auto;
+    flex-shrink: 0;
+    border-radius: 0 999px 999px 0;
+  }
+
+  .jobs-search-panel .search-bar,
+  .search-bar {
+    flex-direction: column;
+    border-radius: var(--radius);
+    max-width: 100%;
+  }
+
+  .jobs-search-panel .search-bar input,
+  .search-bar input,
+  .search-bar select,
+  .search-bar input[type="text"] {
+    width: 100%;
+    border-left: none;
+    border-top: 1px solid var(--color-border);
+    border-radius: 0;
+    min-height: 44px;
+  }
+
+  .jobs-search-panel .search-bar input:first-child,
+  .search-bar input:first-child,
+  .search-bar select:first-child {
+    border-top: none;
+  }
+
+  .search-bar .btn {
+    width: 100%;
+    border-radius: 0 0 var(--radius) var(--radius);
+    justify-content: center;
+    min-height: 44px;
+  }
+
+  .jobs-filter-grid {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 0.5rem;
+    padding-bottom: 0.35rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .jobs-filter-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .jobs-filter-chip {
+    flex: 0 0 auto;
+    min-height: 44px;
+  }
+
+  .jobs-trust-pills {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .jobs-trust-pill {
+    width: 100%;
+    max-width: 320px;
+    justify-content: center;
+  }
+
+  .jobs-contractor-banner {
+    flex-direction: column;
+    text-align: center;
+    padding: 1.25rem 1rem;
+  }
+
+  .jobs-contractor-banner .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .job-detail-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .job-card-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  .job-card-actions .btn,
+  .job-card-actions .unlock-btn {
+    width: 100%;
+    justify-content: center;
+    min-height: 44px;
+  }
+
+  .contractor-hero {
+    padding: 1.5rem 0;
+  }
+
+  .contractor-benefits {
+    padding-left: 0;
+  }
+
+  .contractor-paywall {
+    margin: 1.25rem 0;
+    padding: 1.35rem 1rem;
+  }
+
+  .contractor-paywall-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .contractor-paywall-actions .btn {
+    width: 100%;
+    min-height: 44px;
+    justify-content: center;
+  }
+
+  .form-page input,
+  .form-page select,
+  .form-page textarea,
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    font-size: 16px;
+    min-height: 44px;
+  }
+
+  .btn {
+    min-height: 44px;
+  }
+
+  .btn-block {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .page-title {
+    font-size: 1.65rem;
+  }
+
+  .jobs-empty-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .jobs-empty-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 400px) {
+  .home-popular-trades-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.4rem;
+  }
+
+  .home-trade-tile strong {
+    font-size: 0.6rem;
+  }
+
+  .pricing-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .trade-cards-grid {
+    grid-template-columns: 1fr;
   }
 }

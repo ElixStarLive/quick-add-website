@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index,follow">
+  <title>Contractor Registration | QuickPostAds</title>
+  <meta name="description" content="Register as a UK contractor on QuickPostAds. Subscribe to Pro to browse construction jobs and unlock homeowner leads.">
+  <link rel="canonical" href="https://www.quickpostads.co.uk/contractor-register.html">
+  <link rel="stylesheet" href="css/style.css?v=81">
+</head>
+<body>
+  <script src="js/site-config.js?v=2"></script>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/" class="logo-block"><span class="logo-text"><span class="logo">QuickPostAds</span></span></a>
+      <nav class="nav-links">
+        <a href="/">Home</a>
+        <a href="/jobs.html">Find Jobs</a>
+        <a href="/trades.html">Trades</a>
+        <a href="/roadmap.html">How it Works</a>
+        <a href="/for-contractors.html">For Contractors</a>
+        <a href="/pricing.html">Pricing</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/dashboard.html">Login</a>
+        <a href="/post-job.html" class="btn btn-primary">Post a Job FREE</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main">
+    <h1 class="page-title page-title-gold">Contractor registration</h1>
+    <p class="page-subtitle page-subtitle-center">Create your account, then subscribe to Pro (&pound;29.99/month) to browse jobs and unlock homeowner contact. <strong>No free job access.</strong></p>
+
+    <div class="form-page contractor-register-form">
+      <form id="contractor-register-form" novalidate>
+        <div class="form-group">
+          <label for="reg-name">Full name *</label>
+          <input type="text" id="reg-name" name="name" required autocomplete="name" placeholder="John Smith">
+        </div>
+        <div class="form-group">
+          <label for="reg-company">Company / trading name</label>
+          <input type="text" id="reg-company" name="company_name" autocomplete="organization" placeholder="Smith Building Ltd">
+        </div>
+        <div class="form-group">
+          <label for="reg-trade">Main trade *</label>
+          <select id="reg-trade" name="trade" required>
+            <option value="">Select your trade…</option>
+            <option value="Builder">Builder</option>
+            <option value="Plumber">Plumber</option>
+            <option value="Electrician">Electrician</option>
+            <option value="Roofer">Roofer</option>
+            <option value="Painter &amp; decorator">Painter &amp; decorator</option>
+            <option value="Plasterer">Plasterer</option>
+            <option value="Kitchen fitter">Kitchen fitter</option>
+            <option value="Bathroom fitter">Bathroom fitter</option>
+            <option value="Handyman">Handyman</option>
+            <option value="Landscaper">Landscaper</option>
+            <option value="Other">Other construction / maintenance</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="reg-email">Business email *</label>
+          <input type="email" id="reg-email" name="email" required autocomplete="email" placeholder="you@company.co.uk">
+        </div>
+        <div class="form-group">
+          <label for="reg-phone">Mobile number *</label>
+          <input type="tel" id="reg-phone" name="phone" required autocomplete="tel" placeholder="07xxx xxxxxx">
+        </div>
+        <div class="form-group">
+          <label for="reg-password">Password *</label>
+          <input type="password" id="reg-password" name="password" required minlength="8" autocomplete="new-password" placeholder="At least 8 characters">
+        </div>
+        <div class="form-group">
+          <label for="reg-password2">Confirm password *</label>
+          <input type="password" id="reg-password2" name="password2" required minlength="8" autocomplete="new-password">
+        </div>
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="reg-terms" required>
+            I agree to the <a href="terms-of-service.html" target="_blank" rel="noopener">Terms of Service</a> and <a href="privacy-policy.html" target="_blank" rel="noopener">Privacy Policy</a>
+          </label>
+        </div>
+        <p class="form-hint">After registration you will be asked to subscribe to Pro before you can view any jobs.</p>
+        <button type="submit" class="btn btn-primary btn-block" id="reg-submit">Create account</button>
+        <p class="text-center mt-2">Already registered? <a href="dashboard.html">Log in</a></p>
+      </form>
+      <div id="register-success" class="form-notice" style="display:none;margin-top:1.5rem;"></div>
+    </div>
+  </main>
+
+  <footer class="site-footer site-footer-mockup">
+    <div class="site-footer-links">
+      <a href="pricing.html">Pricing</a>
+      <a href="contact.html">Contact</a>
+      <a href="terms-of-service.html">Terms</a>
+      <a href="privacy-policy.html">Privacy</a>
+    </div>
+    <p>QuickPostAds · UK construction &amp; property maintenance jobs.</p>
+  </footer>
+
+  <script src="js/contractor-auth.js?v=1"></script>
+  <script>
+    document.getElementById('contractor-register-form').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      var btn = document.getElementById('reg-submit');
+      var pw = document.getElementById('reg-password').value;
+      var pw2 = document.getElementById('reg-password2').value;
+      if (pw !== pw2) {
+        alert('Passwords do not match.');
+        return;
+      }
+      btn.disabled = true;
+      btn.textContent = 'Creating account…';
+      try {
+        await contractorRegister({
+          name: document.getElementById('reg-name').value.trim(),
+          company_name: document.getElementById('reg-company').value.trim(),
+          trade: document.getElementById('reg-trade').value,
+          email: document.getElementById('reg-email').value.trim(),
+          phone: document.getElementById('reg-phone').value.trim(),
+          password: pw
+        });
+        window.location.href = 'pricing.html?registered=1';
+      } catch (err) {
+        alert(err.message || 'Registration failed');
+        btn.disabled = false;
+        btn.textContent = 'Create account';
+      }
+    });
+  </script>
+</body>
+</html>

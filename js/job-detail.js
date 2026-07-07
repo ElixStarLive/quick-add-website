@@ -10,19 +10,42 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   try {
-    const response = await fetch('/api/jobs/' + jobId);
+    const response = await contractorFetch('/api/jobs/' + jobId);
     const data = await response.json();
+
+    if (response.status === 401 || response.status === 403) {
+      renderContractorPaywall(container, {
+        code: data.code || (response.status === 401 ? 'LOGIN_REQUIRED' : 'SUBSCRIPTION_REQUIRED'),
+        jobCount: data.jobCount,
+        loggedIn: response.status === 403,
+        email: (await fetchContractorMe())?.email
+      });
+      return;
+    }
 
     if (!data.job) {
       container.innerHTML = '<p class="page-subtitle">Job not found. <a href="jobs.html">Back to jobs</a></p>';
       return;
     }
 
+    const contractor = await fetchContractorMe();
+    const payerEmail = contractor?.email || '';
+    let unlocked = !data.job.locked;
+
+    if (payerEmail && !unlocked) {
+      try {
+        const statusRes = await contractorFetch('/api/jobs/' + jobId + '/unlock-status?email=' + encodeURIComponent(payerEmail));
+        const statusData = await statusRes.json();
+        if (statusData.unlocked && statusData.job) {
+          data.job = statusData.job;
+          unlocked = true;
+        }
+      } catch (e) {}
+    }
+
     const job = data.job;
     const budget = job.budget || 'Budget on request';
     const location = job.location || 'UK';
-    const unlocked = !job.locked;
-    const unlockFee = job.unlock_fee_display || '£2.00';
     const tradeGuess = job.title || 'Construction';
     const postedDate = job.created_at ? new Date(job.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Recently';
     const photoHtml = job.image_url
@@ -31,7 +54,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const descriptionHtml = unlocked
       ? '<p>' + esc(job.description || '').replace(/\n/g, '<br>') + '</p>'
-      : '<p class="job-detail-locked-text"><span class="icon-lock">🔒</span> Full job description is available after you unlock this lead. Preview: homeowners post detailed scope, timeline and budget expectations.</p>';
+      : '<p class="job-detail-locked-text"><span class="icon-lock">🔒</span> Full job description is available after you unlock this lead.</p>';
 
     container.innerHTML =
       '<div class="job-detail-layout">' +
@@ -69,7 +92,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             '</dl>' +
             (unlocked
               ? '<p class="job-unlocked-note">✓ Contact unlocked</p>'
-              : '<a href="payment-unlock.html?job=' + esc(jobId) + '" class="btn btn-primary btn-block">Unlock contact – ' + esc(unlockFee) + '</a>') +
+              : '<a href="payment-unlock.html?job=' + esc(jobId) + '" class="btn btn-primary btn-block">Unlock contact (Pro plan)</a>') +
           '</div>' +
         '</aside>' +
       '</div>' +

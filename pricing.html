@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="index,follow">
   <title>Contractor Pricing | QuickPostAds</title>
-  <meta name="description" content="Simple, transparent pricing for UK contractors. Free, Pro, Business and Enterprise plans on QuickPostAds.">
+  <meta name="description" content="Simple, transparent pricing for UK contractors. Register free, subscribe to Pro to browse jobs. No free job access.">
   <link rel="canonical" href="https://www.quickpostads.co.uk/pricing.html">
-  <link rel="stylesheet" href="css/style.css?v=79">
+  <link rel="stylesheet" href="css/style.css?v=81">
 </head>
 <body>
   <script src="js/site-config.js?v=2"></script>
@@ -30,32 +30,34 @@
 
   <main class="main page-pricing">
     <h1 class="page-title page-title-gold">Simple, Transparent Pricing</h1>
-    <p class="page-subtitle page-subtitle-center">Choose the plan that works for your business.</p>
+    <p class="page-subtitle page-subtitle-center">Register free. Subscribe to browse jobs and unlock homeowner contact. <strong>No free job browsing or free unlocks.</strong></p>
+
+    <div id="pricing-notice" class="form-notice" style="display:none;max-width:640px;margin:0 auto 1.5rem;"></div>
 
     <div class="pricing-grid">
       <div class="pricing-card">
-        <h2>Free</h2>
+        <h2>Register</h2>
         <p class="pricing-price">£0<span>/month</span></p>
         <ul class="pricing-features">
+          <li>Create contractor account</li>
           <li>Basic profile</li>
-          <li>5 job applications / month</li>
-          <li>Job alerts</li>
-          <li>Standard listing</li>
+          <li class="pricing-feature-muted">No job browsing</li>
+          <li class="pricing-feature-muted">No contact unlocks</li>
         </ul>
-        <a href="dashboard.html" class="btn btn-outline btn-block">Get started</a>
+        <a href="contractor-register.html" class="btn btn-outline btn-block">Register free</a>
       </div>
       <div class="pricing-card pricing-card-featured">
         <p class="pricing-badge">Most popular</p>
         <h2>Pro</h2>
         <p class="pricing-price">£29.99<span>/month</span></p>
         <ul class="pricing-features">
-          <li>Unlimited job applications</li>
+          <li>Browse all live jobs</li>
+          <li>Unlimited contact unlocks</li>
           <li>Verified badge</li>
           <li>Priority listing</li>
           <li>Instant job alerts</li>
-          <li>Featured profile</li>
         </ul>
-        <a href="dashboard.html" class="btn btn-primary btn-block">Start Pro</a>
+        <button type="button" class="btn btn-primary btn-block" id="pricing-pro-btn">Start Pro</button>
       </div>
       <div class="pricing-card">
         <h2>Business</h2>
@@ -84,7 +86,7 @@
     </div>
 
     <p class="pricing-footer-note">Cancel anytime · No long-term contracts · Secure payments · VAT invoice available</p>
-    <p class="text-center mt-2"><strong>Homeowners post jobs free forever.</strong> Contractors pay to unlock leads and subscribe for premium features.</p>
+    <p class="text-center mt-2"><strong>Homeowners post jobs free forever.</strong> Contractors register free but must subscribe to Pro to view or unlock any jobs.</p>
   </main>
 
   <footer class="site-footer site-footer-mockup">
@@ -96,5 +98,34 @@
     </div>
     <p>QuickPostAds · UK construction &amp; property maintenance jobs.</p>
   </footer>
+
+  <script src="js/contractor-auth.js?v=1"></script>
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var notice = document.getElementById('pricing-notice');
+      if (params.get('registered') === '1' && notice) {
+        notice.style.display = 'block';
+        notice.innerHTML = '<strong>Account created!</strong> Subscribe to Pro below to start browsing jobs.';
+      }
+
+      document.getElementById('pricing-pro-btn').addEventListener('click', async function () {
+        var contractor = await fetchContractorMe();
+        if (!contractor) {
+          window.location.href = 'contractor-register.html';
+          return;
+        }
+        if (contractor.subscription_active) {
+          window.location.href = 'jobs.html';
+          return;
+        }
+        try {
+          await startProSubscription();
+        } catch (err) {
+          alert(err.message || 'Could not start checkout');
+        }
+      });
+    })();
+  </script>
 </body>
 </html>

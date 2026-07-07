@@ -6,6 +6,8 @@ const fs = require('fs');
 const sqlite3 = require('sqlite3').verbose();
 const helmet = require('helmet');
 const multer = require('multer');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const {
   buildEstimate
 } = require('./lib/uk-pricing-engine');
@@ -54,7 +56,10 @@ function resolveDbPath() {
 }
 const DB_PATH = resolveDbPath();
 const LISTING_FEE_PENCE = 100;
+const PRO_PLAN_PRICE_PENCE = 2999;
+const STRIPE_PRO_PRICE_ID = envTrim('STRIPE_PRO_PRICE_ID');
 const STRIPE_PUBLISHABLE_KEY = envTrim('STRIPE_PUBLISHABLE_KEY') || envTrim('VITE_STRIPE_PUBLISHABLE_KEY');
+const CONTRACTOR_JWT_SECRET = SESSION_SECRET || 'dev-contractor-secret-change-me';
 
 app.set('trust proxy', 1);
 
@@ -71,6 +76,9 @@ function validateProductionConfig() {
   if (!checks.STRIPE_PUBLISHABLE_KEY) missing.push('STRIPE_PUBLISHABLE_KEY (or VITE_STRIPE_PUBLISHABLE_KEY)');
   if (!checks.ADMIN_SECRET || checks.ADMIN_SECRET.includes('your_')) missing.push('ADMIN_SECRET');
   if (!checks.SESSION_SECRET || checks.SESSION_SECRET.includes('your_')) missing.push('SESSION_SECRET');
+  if (!envTrim('STRIPE_WEBHOOK_SECRET')) {
+    console.warn('STRIPE_WEBHOOK_SECRET not set — subscription renewals/cancellations may not sync automatically.');
+  }
   if (missing.length) {
     console.error('Production startup blocked. Missing or empty:', missing.join(', '));
     console.error('Env present (true/false, values not shown):', {
@@ -182,15 +190,34 @@ app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), async
   } catch (err) {
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
+  const dbRef = global.__quickpostDb;
   if (event.type === 'payment_intent.succeeded') {
     const pi = event.data.object;
-    if (pi.metadata.type === 'unlock' && pi.metadata.job_id && pi.metadata.payer_email) {
-      const dbRef = global.__quickpostDb;
-      if (dbRef) {
-        dbRef.run(`INSERT OR IGNORE INTO payments (job_id, amount, payer_email, payment_status, payment_id) VALUES (?, ?, ?, 'paid', ?)`,
-          [pi.metadata.job_id, pi.amount / 100, pi.metadata.payer_email, pi.id]);
-      }
+    if (pi.metadata.type === 'unlock' && pi.metadata.job_id && pi.metadata.payer_email && dbRef) {
+      dbRef.run(`INSERT OR IGNORE INTO payments (job_id, amount, payer_email, payment_status, payment_id) VALUES (?, ?, ?, 'paid', ?)`,
+        [pi.metadata.job_id, pi.amount / 100, pi.metadata.payer_email, pi.id]);
     }
+  }
+  if (dbRef && event.type === 'checkout.session.completed') {
+    try {
+      await activateSubscriptionFromCheckoutSession(dbRef, event.data.object);
+    } catch (err) {
+      console.error('Webhook subscription activation error:', err.message);
+    }
+  }
+  if (dbRef && (event.type === 'customer.subscription.updated' || event.type === 'customer.subscription.deleted')) {
+    const sub = event.data.object;
+    dbRef.get('SELECT id FROM users WHERE stripe_subscription_id = ?', [sub.id], (err, user) => {
+      if (err || !user) return;
+      const active = sub.status === 'active' || sub.status === 'trialing';
+      const expiresAt = sub.current_period_end
+        ? new Date(sub.current_period_end * 1000).toISOString()
+        : null;
+      dbRef.run(
+        `UPDATE users SET subscription_status = ?, subscription_expires_at = ? WHERE id = ?`,
+        [active ? 'active' : sub.status || 'canceled', expiresAt, user.id]
+      );
+    });
   }
   res.json({ received: true });
 });
@@ -326,8 +353,26 @@ function initializeDatabase() {
 }
 
 function finishDatabaseInit() {
+  migrateContractorColumns();
   insertForSaleTable();
   if (IS_PRODUCTION) purgeDemoContentQuiet();
+}
+
+function migrateContractorColumns() {
+  const cols = [
+    'user_type TEXT DEFAULT "homeowner"',
+    'company_name TEXT',
+    'trade TEXT',
+    'subscription_plan TEXT DEFAULT "none"',
+    'subscription_status TEXT DEFAULT "none"',
+    'subscription_expires_at TEXT',
+    'stripe_customer_id TEXT',
+    'stripe_subscription_id TEXT'
+  ];
+  cols.forEach((col) => {
+    const name = col.split(' ')[0];
+    db.run(`ALTER TABLE users ADD COLUMN ${col}`, () => {});
+  });
 }
 
 function purgeDemoContentQuiet() {
@@ -403,6 +448,160 @@ function publicJob(job, unlocked = false) {
   return base;
 }
 
+function contractorPublicProfile(user) {
+  if (!user) return null;
+  return {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    phone: user.phone,
+    company_name: user.company_name,
+    trade: user.trade,
+    subscription_plan: user.subscription_plan || 'none',
+    subscription_status: user.subscription_status || 'none',
+    subscription_active: contractorHasActiveSubscription(user),
+    subscription_expires_at: user.subscription_expires_at || null
+  };
+}
+
+function contractorHasActiveSubscription(user) {
+  if (!user || user.user_type !== 'contractor') return false;
+  if (user.subscription_status !== 'active') return false;
+  if (!user.subscription_expires_at) return true;
+  return new Date(user.subscription_expires_at).getTime() > Date.now();
+}
+
+function signContractorToken(user) {
+  return jwt.sign(
+    { id: user.id, email: user.email, type: 'contractor' },
+    CONTRACTOR_JWT_SECRET,
+    { expiresIn: '14d' }
+  );
+}
+
+function getBearerToken(req) {
+  const header = req.headers.authorization || '';
+  if (header.startsWith('Bearer ')) return header.slice(7).trim();
+  return (req.headers['x-contractor-token'] || '').trim();
+}
+
+function dbGetUserById(id) {
+  return new Promise((resolve, reject) => {
+    db.get('SELECT * FROM users WHERE id = ? AND user_type = "contractor"', [id], (err, row) => {
+      if (err) reject(err);
+      else resolve(row || null);
+    });
+  });
+}
+
+function dbGetUserByEmail(email) {
+  return new Promise((resolve, reject) => {
+    db.get('SELECT * FROM users WHERE email = ?', [email], (err, row) => {
+      if (err) reject(err);
+      else resolve(row || null);
+    });
+  });
+}
+
+function activateContractorSubscription(dbRef, contractorId, { plan, stripeCustomerId, stripeSubscriptionId, expiresAt }) {
+  dbRef.run(
+    `UPDATE users SET subscription_plan = ?, subscription_status = 'active', subscription_expires_at = ?,
+     stripe_customer_id = COALESCE(?, stripe_customer_id), stripe_subscription_id = COALESCE(?, stripe_subscription_id)
+     WHERE id = ? AND user_type = 'contractor'`,
+    [plan || 'pro', expiresAt, stripeCustomerId || null, stripeSubscriptionId || null, contractorId]
+  );
+}
+
+async function resolveSubscriptionExpiry(subscriptionRef) {
+  if (!stripe || !subscriptionRef) return null;
+  try {
+    const sub = typeof subscriptionRef === 'object' && subscriptionRef.current_period_end
+      ? subscriptionRef
+      : await stripe.subscriptions.retrieve(typeof subscriptionRef === 'string' ? subscriptionRef : subscriptionRef.id);
+    return sub.current_period_end
+      ? new Date(sub.current_period_end * 1000).toISOString()
+      : null;
+  } catch (err) {
+    console.error('Subscription lookup error:', err.message);
+    return null;
+  }
+}
+
+async function activateSubscriptionFromCheckoutSession(dbRef, session) {
+  if (!session?.metadata?.contractor_id || session.mode !== 'subscription') return;
+  const subId = typeof session.subscription === 'string'
+    ? session.subscription
+    : session.subscription?.id;
+  const expiresAt = await resolveSubscriptionExpiry(session.subscription);
+  activateContractorSubscription(dbRef, session.metadata.contractor_id, {
+    plan: session.metadata.plan || 'pro',
+    stripeCustomerId: session.customer,
+    stripeSubscriptionId: subId,
+    expiresAt
+  });
+}
+
+function optionalContractorAuth(req, res, next) {
+  const token = getBearerToken(req);
+  if (!token) {
+    req.contractor = null;
+    return next();
+  }
+  try {
+    const payload = jwt.verify(token, CONTRACTOR_JWT_SECRET);
+    if (payload.type !== 'contractor') {
+      req.contractor = null;
+      return next();
+    }
+    dbGetUserById(payload.id).then((user) => {
+      req.contractor = user;
+      next();
+    }).catch(() => {
+      req.contractor = null;
+      next();
+    });
+  } catch {
+    req.contractor = null;
+    next();
+  }
+}
+
+function requireContractorAuth(req, res, next) {
+  optionalContractorAuth(req, res, () => {
+    if (!req.contractor) {
+      return res.status(401).json({
+        error: 'Please log in or register as a contractor.',
+        code: 'LOGIN_REQUIRED',
+        registerUrl: '/contractor-register.html',
+        loginUrl: '/dashboard.html'
+      });
+    }
+    next();
+  });
+}
+
+function requireContractorSubscription(req, res, next) {
+  requireContractorAuth(req, res, () => {
+    if (!contractorHasActiveSubscription(req.contractor)) {
+      return res.status(403).json({
+        error: 'An active Pro subscription is required to view jobs.',
+        code: 'SUBSCRIPTION_REQUIRED',
+        pricingUrl: '/pricing.html'
+      });
+    }
+    next();
+  });
+}
+
+function countApprovedJobs() {
+  return new Promise((resolve, reject) => {
+    db.get('SELECT COUNT(*) AS c FROM jobs WHERE status = "approved"', (err, row) => {
+      if (err) reject(err);
+      else resolve(row?.c || 0);
+    });
+  });
+}
+
 async function verifyListingPayment(paymentIntentId, sellerEmail) {
   if (!stripe || !paymentIntentId) return false;
   if (IS_PRODUCTION && !paymentIntentId) return false;
@@ -430,16 +629,54 @@ app.post('/api/estimate', rateLimit('estimate', 20, 60000), (req, res) => {
   res.json(result);
 });
 
-// Get all approved jobs (locked: no description/contact until unlocked)
-app.get('/api/jobs', (req, res) => {
-  db.all('SELECT * FROM jobs WHERE status = "approved" ORDER BY created_at DESC', (err, jobs) => {
-    if (err) {
-      res.status(500).json({ error: err.message });
-      return;
+// Get all approved jobs — contractors must be logged in with active subscription
+app.get('/api/jobs', optionalContractorAuth, async (req, res) => {
+  try {
+    if (!req.contractor) {
+      const jobCount = await countApprovedJobs();
+      return res.status(401).json({
+        error: 'Register and subscribe as a contractor to browse jobs.',
+        code: 'LOGIN_REQUIRED',
+        jobCount,
+        registerUrl: '/contractor-register.html',
+        loginUrl: '/dashboard.html'
+      });
     }
-    const locked = jobs.map((j) => publicJob(j, false));
-    res.json({ jobs: locked });
-  });
+    if (!contractorHasActiveSubscription(req.contractor)) {
+      const jobCount = await countApprovedJobs();
+      return res.status(403).json({
+        error: 'Active Pro subscription required to view jobs. No free job browsing.',
+        code: 'SUBSCRIPTION_REQUIRED',
+        jobCount,
+        pricingUrl: '/pricing.html'
+      });
+    }
+    db.all('SELECT * FROM jobs WHERE status = "approved" ORDER BY created_at DESC', (err, jobs) => {
+      if (err) {
+        res.status(500).json({ error: err.message });
+        return;
+      }
+      const locked = jobs.map((j) => publicJob(j, false));
+      res.json({ jobs: locked });
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Public job count teaser (no job details)
+app.get('/api/jobs/teaser', async (req, res) => {
+  try {
+    const jobCount = await countApprovedJobs();
+    res.json({
+      jobCount,
+      message: 'Register and subscribe to browse live construction jobs.',
+      registerUrl: '/contractor-register.html',
+      pricingUrl: '/pricing.html'
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // List for-sale shop items
@@ -517,10 +754,28 @@ app.post('/api/ads/create-intent', rateLimit('ads-intent', 20, 60000), async (re
   }
 });
 
-// Get job by ID (contact hidden until unlocked)
-app.get('/api/jobs/:id', (req, res) => {
+// Get job by ID (contact hidden until unlocked; subscription required to view)
+app.get('/api/jobs/:id', optionalContractorAuth, (req, res) => {
   const jobId = req.params.id;
-  const payerEmail = (req.query.email || '').trim();
+  if (jobId === 'teaser') return res.status(404).json({ error: 'Not found' });
+
+  const payerEmail = (req.query.email || req.contractor?.email || '').trim();
+
+  if (!req.contractor) {
+    return res.status(401).json({
+      error: 'Register and subscribe as a contractor to view job details.',
+      code: 'LOGIN_REQUIRED',
+      registerUrl: '/contractor-register.html'
+    });
+  }
+  if (!contractorHasActiveSubscription(req.contractor)) {
+    return res.status(403).json({
+      error: 'Active Pro subscription required to view this job.',
+      code: 'SUBSCRIPTION_REQUIRED',
+      pricingUrl: '/pricing.html'
+    });
+  }
+
   db.get('SELECT * FROM jobs WHERE id = ? AND status = "approved"', [jobId], (err, job) => {
     if (err) {
       res.status(500).json({ error: err.message });
@@ -572,10 +827,10 @@ app.post('/api/jobs', rateLimit('jobs', 10, 60000), (req, res) => {
   });
 });
 
-// Check if job is unlocked for a specific email
-app.get('/api/jobs/:id/unlock-status', (req, res) => {
+// Check if job is unlocked for a specific email (contractor must be subscribed)
+app.get('/api/jobs/:id/unlock-status', requireContractorSubscription, (req, res) => {
   const jobId = req.params.id;
-  const payerEmail = req.query.email;
+  const payerEmail = req.query.email || req.contractor.email;
   
   db.get('SELECT * FROM payments WHERE job_id = ? AND payer_email = ? AND payment_status = "paid"', 
     [jobId, payerEmail], (err, payment) => {
@@ -593,10 +848,37 @@ app.get('/api/jobs/:id/unlock-status', (req, res) => {
           res.json({ unlocked: true, job: publicJob(job, true) });
         });
       } else {
-        res.json({ unlocked: false });
+        res.json({ unlocked: false, includedInPlan: true });
       }
     }
   );
+});
+
+// Pro subscribers unlock contact at no extra cost
+app.post('/api/jobs/:id/unlock-subscriber', rateLimit('unlock-sub', 30, 60000), requireContractorSubscription, (req, res) => {
+  const jobId = req.params.id;
+  const payerEmail = req.contractor.email;
+
+  db.get('SELECT * FROM jobs WHERE id = ? AND status = "approved"', [jobId], (err, job) => {
+    if (err) return res.status(500).json({ error: err.message });
+    if (!job) return res.status(404).json({ error: 'Job not found' });
+
+    db.get('SELECT id FROM payments WHERE job_id = ? AND payer_email = ? AND payment_status = "paid"',
+      [jobId, payerEmail], (payErr, existing) => {
+        if (payErr) return res.status(500).json({ error: payErr.message });
+        if (existing) {
+          return res.json({ success: true, job: publicJob(job, true), message: 'Already unlocked.' });
+        }
+        db.run(
+          `INSERT INTO payments (user_id, job_id, amount, payer_email, payment_status, payment_id) VALUES (?, ?, 0, ?, 'paid', ?)`,
+          [req.contractor.id, jobId, payerEmail, `sub-${req.contractor.id}-${jobId}`],
+          function (insErr) {
+            if (insErr) return res.status(500).json({ error: insErr.message });
+            res.json({ success: true, job: publicJob(job, true), message: 'Contact unlocked with your Pro plan.' });
+          }
+        );
+      });
+  });
 });
 
 // Mock payment — development only
@@ -649,50 +931,12 @@ app.get('/api/stripe/config', (req, res) => {
   });
 });
 
-// Stripe: create PaymentIntent for job unlock
-app.post('/api/payments/create-intent', rateLimit('pay-intent', 30, 60000), async (req, res) => {
-  const { job_id, payer_email } = req.body;
-  if (!stripe || !STRIPE_PUBLISHABLE_KEY) {
-    return res.status(503).json({ error: 'Stripe is not configured on the server.' });
-  }
-  if (!job_id || !payer_email) {
-    return res.status(400).json({ error: 'Job ID and email are required.' });
-  }
-
-  try {
-    const job = await new Promise((resolve, reject) => {
-      db.get('SELECT * FROM jobs WHERE id = ?', [job_id], (err, row) => {
-        if (err) reject(err);
-        else resolve(row);
-      });
-    });
-    if (!job) return res.status(404).json({ error: 'Job not found' });
-
-    const enriched = enrichJob(job);
-    const amount = enriched.unlock_fee_pence;
-
-    const paymentIntent = await stripe.paymentIntents.create(
-      buildStripePaymentIntentOptions({
-        amount,
-        receipt_email: payer_email,
-        metadata: {
-          type: 'unlock',
-          job_id: String(job_id),
-          payer_email
-        }
-      })
-    );
-
-    res.json({
-      clientSecret: paymentIntent.client_secret,
-      amount,
-      unlock_fee_display: enriched.unlock_fee_display,
-      budget: enriched.budget
-    });
-  } catch (error) {
-    console.error('Create intent error:', error);
-    res.status(500).json({ error: error.message });
-  }
+// Stripe: create PaymentIntent for job unlock (legacy — Pro plan includes unlocks)
+app.post('/api/payments/create-intent', rateLimit('pay-intent', 30, 60000), requireContractorSubscription, async (req, res) => {
+  return res.status(400).json({
+    error: 'Job unlocks are included in your Pro subscription. Use the unlock button on the job page.',
+    code: 'USE_SUBSCRIPTION_UNLOCK'
+  });
 });
 
 // Stripe: confirm payment and unlock job
@@ -849,6 +1093,182 @@ app.post('/api/contact', rateLimit('contact', 5, 600000), (req, res) => {
     });
 });
 
+// ----- Contractor registration, login & subscription -----
+
+app.post('/api/contractors/register', rateLimit('contractor-reg', 10, 600000), async (req, res) => {
+  const { name, email, password, phone, company_name, trade } = req.body || {};
+  const cleanEmail = String(email || '').trim().toLowerCase();
+  const cleanName = String(name || '').trim();
+  const cleanPassword = String(password || '');
+
+  if (!cleanName || !cleanEmail || !cleanPassword) {
+    return res.status(400).json({ error: 'Name, email and password are required.' });
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
+    return res.status(400).json({ error: 'Please enter a valid email address.' });
+  }
+  if (cleanPassword.length < 8) {
+    return res.status(400).json({ error: 'Password must be at least 8 characters.' });
+  }
+
+  try {
+    const existing = await dbGetUserByEmail(cleanEmail);
+    if (existing) {
+      return res.status(409).json({ error: 'An account with this email already exists. Please log in.' });
+    }
+    const hash = await bcrypt.hash(cleanPassword, 12);
+    db.run(
+      `INSERT INTO users (name, email, password, phone, company_name, trade, user_type) VALUES (?, ?, ?, ?, ?, ?, 'contractor')`,
+      [cleanName, cleanEmail, hash, String(phone || '').trim(), String(company_name || '').trim(), String(trade || '').trim()],
+      function (err) {
+        if (err) return res.status(500).json({ error: err.message });
+        const user = {
+          id: this.lastID,
+          name: cleanName,
+          email: cleanEmail,
+          phone: phone || '',
+          company_name: company_name || '',
+          trade: trade || '',
+          user_type: 'contractor',
+          subscription_plan: 'none',
+          subscription_status: 'none'
+        };
+        const token = signContractorToken(user);
+        res.status(201).json({
+          message: 'Account created. Subscribe to Pro to browse and unlock jobs.',
+          token,
+          contractor: contractorPublicProfile(user)
+        });
+      }
+    );
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/contractors/login', rateLimit('contractor-login', 20, 600000), async (req, res) => {
+  const cleanEmail = String(req.body?.email || '').trim().toLowerCase();
+  const cleanPassword = String(req.body?.password || '');
+
+  if (!cleanEmail || !cleanPassword) {
+    return res.status(400).json({ error: 'Email and password are required.' });
+  }
+
+  try {
+    const user = await dbGetUserByEmail(cleanEmail);
+    if (!user || user.user_type !== 'contractor') {
+      return res.status(401).json({ error: 'Invalid email or password.' });
+    }
+    const ok = await bcrypt.compare(cleanPassword, user.password);
+    if (!ok) return res.status(401).json({ error: 'Invalid email or password.' });
+
+    const token = signContractorToken(user);
+    res.json({ token, contractor: contractorPublicProfile(user) });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/api/contractors/me', requireContractorAuth, (req, res) => {
+  res.json({ contractor: contractorPublicProfile(req.contractor) });
+});
+
+app.post('/api/contractors/subscribe', rateLimit('contractor-sub', 10, 600000), requireContractorAuth, async (req, res) => {
+  const plan = String(req.body?.plan || 'pro').toLowerCase();
+  if (plan !== 'pro') {
+    return res.status(400).json({ error: 'Online checkout is available for the Pro plan. Contact us for Business or Enterprise.' });
+  }
+  if (!stripe) {
+    return res.status(503).json({ error: 'Stripe is not configured.' });
+  }
+
+  const contractor = req.contractor;
+  const baseUrl = SITE_URL || 'http://localhost:' + PORT;
+  const successUrl = `${baseUrl}/dashboard.html?subscribed=1&session_id={CHECKOUT_SESSION_ID}`;
+  const cancelUrl = `${baseUrl}/pricing.html?canceled=1`;
+
+  try {
+    const lineItem = STRIPE_PRO_PRICE_ID
+      ? { price: STRIPE_PRO_PRICE_ID, quantity: 1 }
+      : {
+          price_data: {
+            currency: 'gbp',
+            product_data: { name: 'QuickPostAds Pro — unlimited job access' },
+            unit_amount: PRO_PLAN_PRICE_PENCE,
+            recurring: { interval: 'month' }
+          },
+          quantity: 1
+        };
+
+    const sessionConfig = {
+      mode: 'subscription',
+      client_reference_id: String(contractor.id),
+      line_items: [lineItem],
+      success_url: successUrl,
+      cancel_url: cancelUrl,
+      metadata: {
+        contractor_id: String(contractor.id),
+        plan: 'pro'
+      },
+      subscription_data: {
+        metadata: {
+          contractor_id: String(contractor.id),
+          plan: 'pro'
+        }
+      }
+    };
+
+    if (contractor.stripe_customer_id) {
+      sessionConfig.customer = contractor.stripe_customer_id;
+    } else {
+      sessionConfig.customer_email = contractor.email;
+    }
+
+    const session = await stripe.checkout.sessions.create(sessionConfig);
+
+    res.json({ checkoutUrl: session.url, sessionId: session.id });
+  } catch (err) {
+    console.error('Subscribe checkout error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/contractors/confirm-subscription', rateLimit('contractor-sub-confirm', 10, 600000), requireContractorAuth, async (req, res) => {
+  const sessionId = String(req.body?.session_id || '').trim();
+  if (!stripe || !sessionId) {
+    return res.status(400).json({ error: 'Missing checkout session.' });
+  }
+
+  try {
+    const session = await stripe.checkout.sessions.retrieve(sessionId, { expand: ['subscription'] });
+    if (session.metadata?.contractor_id !== String(req.contractor.id)) {
+      return res.status(403).json({ error: 'This checkout session does not belong to your account.' });
+    }
+    if (session.status !== 'complete') {
+      return res.status(400).json({ error: 'Checkout not completed yet.', status: session.status });
+    }
+
+    const sub = session.subscription;
+    const expiresAt = await resolveSubscriptionExpiry(sub);
+
+    activateContractorSubscription(db, req.contractor.id, {
+      plan: session.metadata?.plan || 'pro',
+      stripeCustomerId: session.customer,
+      stripeSubscriptionId: typeof sub === 'string' ? sub : sub?.id,
+      expiresAt
+    });
+
+    const updated = await dbGetUserById(req.contractor.id);
+    res.json({
+      message: 'Pro subscription active. You can now browse and unlock jobs.',
+      contractor: contractorPublicProfile(updated)
+    });
+  } catch (err) {
+    console.error('Confirm subscription error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Dashboard: jobs posted + unlocks purchased by email
 app.get('/api/dashboard', (req, res) => {
   const email = (req.query.email || '').trim();
@@ -887,12 +1307,23 @@ function sendHtmlPage(res, fileName) {
   if (!fs.existsSync(filePath)) {
     return res.status(404).end();
   }
-  const html = ensureHtmlLang(fs.readFileSync(filePath, 'utf8'));
+  let html = ensureHtmlLang(fs.readFileSync(filePath, 'utf8'));
+  html = injectMobileAssets(html);
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   res.setHeader('Content-Language', 'en-GB');
   res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
   res.setHeader('Pragma', 'no-cache');
   return res.send(html);
+}
+
+function injectMobileAssets(html) {
+  if (typeof html !== 'string') return html;
+  let out = html;
+  if (!out.includes('mobile-nav.js')) {
+    out = out.replace(/<\/body>/i, '<script src="js/mobile-nav.js?v=1"></script>\n</body>');
+  }
+  out = out.replace(/css\/style\.css\?v=\d+/g, 'css/style.css?v=93');
+  return out;
 }
 
 app.get('/', (req, res) => sendHtmlPage(res, 'index.html'));

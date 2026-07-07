@@ -17,6 +17,7 @@ const ACTIVE_BY_FILE = {
   'contact.html': 'contact',
   'post-job.html': 'jobs',
   'dashboard.html': 'login',
+  'contractor-register.html': 'login',
   'payment-unlock.html': 'jobs',
   'unlock-success.html': 'jobs',
   'post-ad.html': 'jobs',

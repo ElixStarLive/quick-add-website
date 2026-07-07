@@ -8,7 +8,7 @@
   <meta name="description" content="QuickPostAds is a free UK marketplace to post jobs, find local tradespeople, buy, sell and advertise services across the UK.">
   <link rel="canonical" href="https://www.quickpostads.co.uk/">
   <meta name="keywords" content="local jobs, UK construction trades, post job free, plumbers, electricians, builders">
-  <link rel="stylesheet" href="css/style.css?v=83">
+  <link rel="stylesheet" href="css/style.css?v=93">
   <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://www.quickpostads.co.uk/">
@@ -103,31 +103,42 @@
   </section>
 
   <main class="main">
-    <form class="search-bar" action="jobs.html" method="get">
-      <input type="search" name="q" placeholder="What are you looking for?" aria-label="Search jobs">
-      <select name="work" aria-label="Category">
-        <option value="">All categories</option>
-        <option value="plumber">Trades &amp; building</option>
-        <option value="boiler">Heating &amp; gas</option>
-        <option value="cleaning">Cleaning &amp; garden</option>
-        <option value="handyman">Handyman</option>
-      </select>
-      <input type="text" name="location" placeholder="All locations" aria-label="Location">
-      <button type="submit" class="btn btn-primary">Search</button>
-    </form>
+    <section class="home-search-panel" aria-label="Find trade people for your jobs">
+      <div class="home-search-panel-head">
+        <h2 class="home-search-panel-title">Find trade people for your jobs</h2>
+        <ul class="home-search-panel-benefits">
+          <li>Builders, plumbers, electricians, roofers and decorators</li>
+          <li>Post your job free</li>
+          <li>UK-wide coverage</li>
+          <li>All categories</li>
+        </ul>
+      </div>
+      <form class="search-bar home-search-bar" action="jobs.html" method="get">
+        <input type="search" name="q" placeholder="Search trades…" aria-label="Search jobs">
+        <select name="work" id="home-work-select" aria-label="Category">
+          <option value="">All categories</option>
+        </select>
+        <input type="text" name="location" placeholder="All locations" aria-label="Location">
+        <button type="submit" class="btn btn-primary">Search</button>
+      </form>
+    </section>
 
-    <p class="page-subtitle home-search-hint">Find trade people for your jobs — builders, plumbers, electricians, roofers and decorators. <a href="post-job.html">Post your job free</a>.</p>
-
-    <section class="app-promo-section" aria-label="Elix Star Live app">
-      <div class="app-promo-card">
-        <div class="app-promo-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
-        </div>
-        <div class="app-promo-text">
-          <h2>Elix Star Live</h2>
-          <p>Our TikTok-style video app — watch short videos, create content, and go live. Free on web &amp; mobile.</p>
-        </div>
-        <a href="https://www.elixstarlive.co.uk" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Open app</a>
+    <section class="home-contractor-banner home-homeowner-banner" aria-label="Post a job free">
+      <div class="home-contractor-banner-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      </div>
+      <div class="home-contractor-banner-body">
+        <h2>Need a tradesperson?</h2>
+        <ul class="home-contractor-benefits">
+          <li>Free for homeowners</li>
+          <li>Contact stays private</li>
+          <li>UK-wide coverage</li>
+          <li>Post your job in under 2 minutes</li>
+        </ul>
+      </div>
+      <div class="home-contractor-banner-action">
+        <a href="post-job.html" class="btn btn-primary">Post a job free</a>
+        <p class="home-contractor-price">No cost to post</p>
       </div>
     </section>
 
@@ -146,15 +157,15 @@
       <div class="home-contractor-banner-body">
         <h2>Are you a contractor? Get more jobs. Grow your business.</h2>
         <ul class="home-contractor-benefits">
-          <li>Unlimited job applications</li>
+          <li>Register free — Pro plan to browse jobs</li>
+          <li>Unlimited contact unlocks on Pro</li>
           <li>Instant job alerts</li>
-          <li>Verified badge</li>
-          <li>Show your reputation</li>
+          <li>Verified badge &amp; show your reputation</li>
         </ul>
       </div>
       <div class="home-contractor-banner-action">
-        <a href="pricing.html" class="btn btn-primary">View Pricing</a>
-        <p class="home-contractor-price">From &pound;29.99 / month</p>
+        <a href="contractor-register.html" class="btn btn-primary">Register as contractor</a>
+        <p class="home-contractor-price">Pro from &pound;29.99 / month</p>
       </div>
     </section>
 
@@ -204,10 +215,14 @@
   <script src="js/qp-icons-data.js?v=2"></script>
   <script src="js/qp-icons.js?v=7"></script>
   <script src="js/home-popular-trades.js?v=1"></script>
+  <script src="js/job-categories-data.js"></script>
+  <script src="js/job-categories.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       if (typeof renderHomePopularTrades === 'function') renderHomePopularTrades('home-popular-trades');
+      if (typeof populateWorkCategoryFilter === 'function') populateWorkCategoryFilter('home-work-select');
     });
   </script>
+  <script src="js/mobile-nav.js?v=1"></script>
 </body>
 </html>
