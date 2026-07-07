@@ -1,4 +1,5 @@
 const express = require('express');
+const compression = require('compression');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
@@ -150,6 +151,7 @@ app.use(helmet({
   crossOriginResourcePolicy: { policy: 'same-origin' }
 }));
 
+app.use(compression());
 app.use(cors(IS_PRODUCTION && SITE_URL ? { origin: SITE_URL } : {}));
 
 let stripe;
@@ -1322,7 +1324,7 @@ function injectMobileAssets(html) {
   if (!out.includes('mobile-nav.js')) {
     out = out.replace(/<\/body>/i, '<script src="js/mobile-nav.js?v=1"></script>\n</body>');
   }
-  out = out.replace(/css\/style\.css\?v=\d+/g, 'css/style.css?v=93');
+  out = out.replace(/css\/style\.css\?v=\d+/g, 'css/style.css?v=95');
   return out;
 }
 
@@ -1388,7 +1390,16 @@ app.get(/\.html$/i, (req, res) => {
   return sendHtmlPage(res, base);
 });
 
-const staticMiddleware = express.static(path.join(__dirname), { dotfiles: 'deny', index: false });
+const staticMiddleware = express.static(path.join(__dirname), {
+  dotfiles: 'deny',
+  index: false,
+  maxAge: IS_PRODUCTION ? '7d' : 0,
+  setHeaders(res, filePath) {
+    if (/\.(css|js|webp|jpg|jpeg|png|svg|woff2?)$/i.test(filePath)) {
+      res.setHeader('Cache-Control', IS_PRODUCTION ? 'public, max-age=604800, immutable' : 'no-cache');
+    }
+  }
+});
 app.use((req, res, next) => {
   const pathOnly = req.path.split('?')[0];
   if (pathOnly === '/' || /\.html$/i.test(pathOnly)) {

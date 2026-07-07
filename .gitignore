@@ -9,3 +9,6 @@ uploads/*
 Thumbs.db
 *.log
 .npm
+lighthouse*.json
+images/hero-trades-original.jpg
+images/hero-trades-800.jpg

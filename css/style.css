@@ -34,6 +34,20 @@ body {
   background: var(--color-bg);
   color: var(--color-text);
   line-height: 1.5;
+  overflow-x: hidden;
+  min-width: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;
+}
+
+img,
+picture,
+video {
+  max-width: 100%;
+  height: auto;
 }
 
 a {
@@ -317,6 +331,8 @@ a:hover {
 }
 
 .hero-content {
+  grid-column: 1;
+  grid-row: 1;
   position: relative;
   z-index: 2;
 }
@@ -330,6 +346,8 @@ a:hover {
   margin-bottom: 0.5rem;
 }
 
+.hero-wrap h1,
+.hero-content h1,
 .hero h1 {
   margin: 0 0 0.75rem;
   font-family: var(--font-display);
@@ -339,6 +357,8 @@ a:hover {
   color: var(--color-text);
 }
 
+.hero-wrap h1 .text-gold,
+.hero-content h1 .text-gold,
 .hero h1 .text-gold {
   background: var(--gold-gradient);
   -webkit-background-clip: text;
@@ -812,6 +832,8 @@ a:hover {
 }
 
 .hero-visual {
+  grid-column: 2;
+  grid-row: 1;
   position: relative;
   min-height: 320px;
   background: var(--color-bg);
@@ -2577,30 +2599,18 @@ a:hover {
 
 @media (max-width: 600px) {
   .home-popular-trades-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
   }
   .home-trade-tile .card-icon {
-    width: 64px;
-    height: 64px;
+    width: clamp(48px, 14vw, 64px);
+    height: clamp(48px, 14vw, 64px);
   }
   .home-trade-tile strong {
-    font-size: 0.78rem;
+    font-size: clamp(0.62rem, 2.8vw, 0.78rem);
   }
 }
 
 @media (max-width: 900px) {
-  .hero-wrap {
-    grid-template-columns: 1fr;
-    min-height: auto;
-  }
-  .hero-visual {
-    min-height: 200px;
-  }
-  .promo-box {
-    position: static;
-    max-width: 100%;
-    margin-top: 1rem;
-  }
   .how-steps {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -2608,15 +2618,10 @@ a:hover {
 
 @media (max-width: 600px) {
   .top-bar-contact {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .search-bar {
-    flex-direction: column;
-  }
-  .search-bar select {
-    border-left: none;
-    border-top: 1px solid var(--color-border);
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
   }
   .category-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -2627,7 +2632,9 @@ a:hover {
   .ads-grid {
     grid-template-columns: 1fr;
   }
-  .hero h1 {
+  .hero-wrap h1,
+.hero-content h1,
+.hero h1 {
     font-size: 1.75rem;
   }
   .popular-services-grid {
@@ -2855,40 +2862,58 @@ body.nav-menu-open {
   }
 
   .hero-wrap {
-    grid-template-columns: 1fr;
     min-height: auto;
-    padding: 1.5rem 1rem;
-    gap: 1.25rem;
+    padding: 1.25rem max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+    gap: clamp(0.75rem, 2vw, 1.5rem);
   }
 
-  .hero-visual {
-    min-height: 220px;
-    order: -1;
-  }
-
+  .hero-wrap h1,
+  .hero-content h1,
   .hero h1 {
-    font-size: 1.85rem;
+    font-size: clamp(1.25rem, 4.5vw, 2.35rem);
   }
 
   .hero-desc {
-    font-size: 0.95rem;
+    max-width: none;
+    font-size: clamp(0.82rem, 2.6vw, 0.95rem);
+  }
+
+  .hero-phone {
+    font-size: clamp(1rem, 3.5vw, 1.35rem);
   }
 
   .hero-cta {
-    flex-direction: column;
-    align-items: stretch;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
   }
 
   .hero-cta .btn {
-    width: 100%;
-    justify-content: center;
+    width: auto;
+    flex: 1 1 auto;
+    min-width: min(100%, 140px);
     min-height: 44px;
+    justify-content: center;
+  }
+
+  .hero-features {
+    gap: clamp(0.65rem, 2vw, 1.25rem);
+    flex-wrap: wrap;
+  }
+
+  .hero-feature-icon {
+    width: clamp(2.25rem, 8vw, 3rem);
+    height: clamp(2.25rem, 8vw, 3rem);
+  }
+
+  .hero-visual {
+    min-height: clamp(160px, 42vw, 320px);
   }
 
   .promo-box {
-    position: static;
-    max-width: 100%;
-    margin-top: 0.75rem;
+    position: absolute;
+    max-width: min(165px, 42vw);
   }
 
   .how-steps {
@@ -2897,53 +2922,33 @@ body.nav-menu-open {
   }
 
   .home-search-panel-benefits {
-    grid-template-columns: 1fr;
-  }
-
-  .home-contractor-banner {
-    grid-template-columns: 1fr;
-    text-align: center;
-    padding: 1.35rem 1rem;
-    gap: 1rem;
-  }
-
-  .home-contractor-banner-icon {
-    margin: 0 auto;
-  }
-
-  .home-contractor-benefits {
-    text-align: left;
-    max-width: 300px;
-    margin: 0 auto;
-  }
-
-  .home-contractor-banner-action .btn {
-    width: 100%;
-    justify-content: center;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.2rem 0.75rem;
+    font-size: clamp(0.75rem, 2.5vw, 0.82rem);
   }
 
   .home-popular-trades-grid {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0.55rem;
+    grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+    gap: clamp(0.4rem, 1.5vw, 0.65rem);
   }
 
   .home-trade-tile {
-    min-height: 108px;
-    padding: 0.65rem 0.35rem;
+    min-height: clamp(88px, 24vw, 120px);
+    padding: clamp(0.45rem, 1.5vw, 0.65rem) 0.35rem;
   }
 
   .home-trade-tile .card-icon svg {
-    width: 30px;
-    height: 30px;
+    width: clamp(24px, 7vw, 34px);
+    height: clamp(24px, 7vw, 34px);
   }
 
   .home-trade-tile strong {
-    font-size: 0.68rem;
+    font-size: clamp(0.62rem, 2.6vw, 0.78rem);
   }
 
   .trade-cards-grid,
   .pricing-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     gap: 1rem;
   }
 
@@ -2956,86 +2961,72 @@ body.nav-menu-open {
   }
 
   .search-capsules {
-    flex-direction: column;
-    align-items: stretch;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
   }
 
-  .search-capsule,
-  .search-capsule-grow,
+  .search-capsule-grow {
+    flex: 1 1 140px;
+    min-width: 120px;
+  }
+
   .search-capsule-category,
   .search-capsule-location {
-    flex: 1 1 auto;
-    max-width: none;
-    width: 100%;
+    flex: 1 1 120px;
+    min-width: 100px;
   }
 
   .search-capsule-btn {
-    width: 100%;
-    justify-content: center;
+    flex-shrink: 0;
   }
 
-  .home-search-panel-benefits {
-    grid-template-columns: 1fr;
-  }
-
-  .home-search-panel .search-bar {
+  .home-search-panel .search-bar,
+  .jobs-search-panel .search-bar,
+  .search-bar {
     flex-direction: row;
     flex-wrap: nowrap;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    border-radius: 999px;
+    max-width: 100%;
   }
 
-  .home-search-panel .search-bar::-webkit-scrollbar {
+  .home-search-panel .search-bar::-webkit-scrollbar,
+  .jobs-search-panel .search-bar::-webkit-scrollbar,
+  .search-bar::-webkit-scrollbar {
     display: none;
   }
 
   .home-search-panel .search-bar input,
-  .home-search-panel .search-bar select {
-    width: auto;
-    flex: 1 1 auto;
-    min-width: 100px;
-    border-top: none;
-    border-left: 1px solid var(--color-border);
-  }
-
-  .home-search-panel .search-bar input:first-child {
-    border-left: none;
-  }
-
-  .home-search-panel .search-bar .btn {
-    width: auto;
-    flex-shrink: 0;
-    border-radius: 0 999px 999px 0;
-  }
-
-  .jobs-search-panel .search-bar,
-  .search-bar {
-    flex-direction: column;
-    border-radius: var(--radius);
-    max-width: 100%;
-  }
-
+  .home-search-panel .search-bar select,
   .jobs-search-panel .search-bar input,
   .search-bar input,
   .search-bar select,
   .search-bar input[type="text"] {
-    width: 100%;
-    border-left: none;
-    border-top: 1px solid var(--color-border);
+    width: auto;
+    flex: 1 1 auto;
+    min-width: 88px;
+    border-top: none;
+    border-left: 1px solid var(--color-border);
     border-radius: 0;
     min-height: 44px;
   }
 
+  .home-search-panel .search-bar input:first-child,
+  .home-search-panel .search-bar select:first-child,
   .jobs-search-panel .search-bar input:first-child,
   .search-bar input:first-child,
   .search-bar select:first-child {
-    border-top: none;
+    border-left: none;
   }
 
+  .home-search-panel .search-bar .btn,
   .search-bar .btn {
-    width: 100%;
-    border-radius: 0 0 var(--radius) var(--radius);
+    width: auto;
+    flex-shrink: 0;
+    border-radius: 0 999px 999px 0;
     justify-content: center;
     min-height: 44px;
   }
@@ -3156,20 +3147,63 @@ body.nav-menu-open {
   }
 }
 
-@media (max-width: 400px) {
-  .home-popular-trades-grid {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0.4rem;
+@media (max-width: 640px) {
+  .home-contractor-banner {
+    grid-template-columns: 1fr;
+    text-align: center;
+    padding: 1.35rem 1rem;
+    gap: 1rem;
   }
 
-  .home-trade-tile strong {
-    font-size: 0.6rem;
+  .home-contractor-banner-icon {
+    margin: 0 auto;
   }
 
-  .pricing-grid {
+  .home-contractor-benefits {
+    text-align: left;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+
+  .home-contractor-banner-action .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 479px) {
+  .hero-wrap {
     grid-template-columns: 1fr;
   }
 
+  .hero-content {
+    grid-column: 1;
+    grid-row: auto;
+    order: 1;
+  }
+
+  .hero-visual {
+    grid-column: 1;
+    grid-row: auto;
+    order: 2;
+  }
+
+  .hero-cta {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero-cta .btn {
+    width: 100%;
+  }
+
+  .home-search-panel-benefits {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 400px) {
+  .pricing-grid,
   .trade-cards-grid {
     grid-template-columns: 1fr;
   }
