@@ -2779,35 +2779,31 @@ body.nav-menu-open {
 
 @media (max-width: 960px) {
   html {
-    font-size: 12px;
+    font-size: 13px;
   }
 
   .top-bar {
-    padding: 0.3rem max(0.65rem, env(safe-area-inset-left));
+    padding: 0.35rem max(0.65rem, env(safe-area-inset-left));
     padding-right: max(0.65rem, env(safe-area-inset-right));
-    font-size: clamp(0.62rem, 2.4vw, 0.74rem);
-    line-height: 1.25;
+    font-size: clamp(0.72rem, 2.8vw, 0.82rem);
+    line-height: 1.3;
   }
 
   .top-bar-inner {
     justify-content: center;
-    flex-wrap: wrap;
-    gap: 0.25rem 0.4rem;
+    flex-wrap: nowrap;
+    gap: 0.35rem;
   }
 
   .top-bar-social {
-    gap: 0.45rem;
-  }
-
-  .top-bar-social .icon-social svg {
-    width: 0.9rem;
-    height: 0.9rem;
+    display: none;
   }
 
   .top-bar-contact {
-    gap: 0.35rem 0.5rem;
-    flex-wrap: wrap;
+    gap: 0.5rem 0.75rem;
+    flex-wrap: nowrap;
     justify-content: center;
+    width: 100%;
     max-width: 100%;
   }
 
@@ -2893,17 +2889,14 @@ body.nav-menu-open {
     max-height: none;
     display: flex;
     flex-direction: row;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 0.35rem;
-    padding: 0.35rem 0 0.45rem;
+    gap: 0.3rem 0.45rem;
+    padding: 0.4rem 0 0.5rem;
     margin: 0;
     transform: none;
     transition: none;
-    overflow-x: auto;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
+    overflow: visible;
     background: transparent;
     border: none;
     border-top: 1px solid var(--color-border);
@@ -2921,9 +2914,9 @@ body.nav-menu-open {
 
   .nav-links a {
     flex: 0 0 auto;
-    padding: 0.35rem 0.5rem;
+    padding: 0.3rem 0.45rem;
     border-bottom: none;
-    font-size: 0.9rem;
+    font-size: 0.82rem;
     font-weight: 600;
     white-space: nowrap;
   }
@@ -2993,29 +2986,29 @@ body.nav-menu-open {
   }
 
   .home-contractor-banner-body h2 {
-    font-size: 0.72rem;
+    font-size: 0.82rem;
     margin-bottom: 0.35rem;
   }
 
   .home-contractor-benefits {
-    font-size: 0.58rem;
+    font-size: 0.68rem;
     grid-template-columns: 1fr 1fr;
-    gap: 0.1rem 0.5rem;
+    gap: 0.15rem 0.5rem;
   }
 
   .home-contractor-banner-action .btn {
     width: auto;
-    min-height: 28px;
-    padding: 0.3rem 0.5rem;
-    font-size: 0.58rem;
+    min-height: 32px;
+    padding: 0.35rem 0.55rem;
+    font-size: 0.68rem;
   }
 
   .home-contractor-price {
-    font-size: 0.55rem;
+    font-size: 0.62rem;
   }
 
   .home-search-panel-title {
-    font-size: 0.92rem;
+    font-size: 1rem;
   }
 
   .home-search-panel {
@@ -3091,28 +3084,28 @@ body.nav-menu-open {
   }
 
   .hero-label {
-    font-size: 0.55rem;
-    margin-bottom: 0.15rem;
+    font-size: 0.65rem;
+    margin-bottom: 0.2rem;
   }
 
   .hero-wrap h1,
   .hero-content h1,
   .hero h1 {
-    font-size: 0.95rem;
-    line-height: 1.12;
-    margin-bottom: 0.3rem;
+    font-size: 1.2rem;
+    line-height: 1.15;
+    margin-bottom: 0.35rem;
   }
 
   .hero-desc {
     max-width: none;
-    font-size: 0.62rem;
-    margin-bottom: 0.3rem;
-    line-height: 1.35;
+    font-size: 0.78rem;
+    margin-bottom: 0.35rem;
+    line-height: 1.4;
   }
 
   .hero-phone {
-    font-size: 0.7rem;
-    margin-bottom: 0.3rem;
+    font-size: 0.88rem;
+    margin-bottom: 0.35rem;
   }
 
   .hero-cta {
@@ -3126,30 +3119,30 @@ body.nav-menu-open {
     width: auto;
     flex: 1 1 auto;
     min-width: 0;
-    min-height: 28px;
-    padding: 0.25rem 0.4rem;
-    font-size: 0.58rem;
+    min-height: 34px;
+    padding: 0.35rem 0.5rem;
+    font-size: 0.72rem;
     justify-content: center;
   }
 
   .hero-features {
-    gap: 0.3rem;
-    margin-top: 0.35rem;
+    gap: 0.4rem;
+    margin-top: 0.45rem;
     flex-wrap: nowrap;
   }
 
   .hero-feature {
-    font-size: 0.48rem;
+    font-size: 0.58rem;
   }
 
   .hero-feature-icon {
-    width: 1.35rem;
-    height: 1.35rem;
+    width: 1.6rem;
+    height: 1.6rem;
   }
 
   .hero-feature-icon svg {
-    width: 0.65rem;
-    height: 0.65rem;
+    width: 0.75rem;
+    height: 0.75rem;
   }
 
   .hero-visual {
@@ -3199,8 +3192,8 @@ body.nav-menu-open {
 
   .home-search-panel-benefits {
     grid-template-columns: repeat(2, 1fr);
-    gap: 0.1rem 0.5rem;
-    font-size: 0.58rem;
+    gap: 0.2rem 0.5rem;
+    font-size: 0.72rem;
   }
 
   .home-popular-trades-grid {
@@ -3220,7 +3213,7 @@ body.nav-menu-open {
   }
 
   .home-trade-tile strong {
-    font-size: 0.5rem;
+    font-size: 0.62rem;
   }
 
   .trade-cards-grid,
@@ -3281,9 +3274,9 @@ body.nav-menu-open {
     border-top: none;
     border-left: 1px solid var(--color-border);
     border-radius: 0;
-    min-height: 30px;
-    padding: 0.35rem 0.45rem;
-    font-size: 0.65rem;
+    min-height: 36px;
+    padding: 0.4rem 0.5rem;
+    font-size: 0.75rem;
   }
 
   .home-search-panel .search-bar input:first-child,
@@ -3300,9 +3293,9 @@ body.nav-menu-open {
     flex-shrink: 0;
     border-radius: 0 999px 999px 0;
     justify-content: center;
-    min-height: 30px;
-    padding: 0.35rem 0.65rem;
-    font-size: 0.6rem;
+    min-height: 36px;
+    padding: 0.4rem 0.75rem;
+    font-size: 0.72rem;
   }
 
   .jobs-filter-grid {
@@ -3425,13 +3418,13 @@ body.nav-menu-open {
 
 @media (max-width: 480px) {
   html {
-    font-size: 11px;
+    font-size: 12px;
   }
 
   .top-bar {
-    padding: 0.15rem max(0.35rem, env(safe-area-inset-left));
-    padding-right: max(0.35rem, env(safe-area-inset-right));
-    font-size: 0.48rem;
+    padding: 0.25rem max(0.45rem, env(safe-area-inset-left));
+    padding-right: max(0.45rem, env(safe-area-inset-right));
+    font-size: 0.72rem;
   }
 
   .top-bar-inner {

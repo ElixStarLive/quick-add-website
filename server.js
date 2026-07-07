@@ -1397,7 +1397,7 @@ function injectMobileAssets(html) {
   out = injectCompactTopBar(out);
   out = injectPwaHead(out);
   out = injectPwaScripts(out);
-  out = out.replace(/css\/style\.css\?v=\d+/g, 'css/style.css?v=105');
+  out = out.replace(/css\/style\.css\?v=\d+/g, 'css/style.css?v=106');
   return out;
 }
 
