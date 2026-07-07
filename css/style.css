@@ -351,7 +351,7 @@ a:hover {
 .hero h1 {
   margin: 0 0 0.75rem;
   font-family: var(--font-display);
-  font-size: 2.85rem;
+  font-size: clamp(1.25rem, 4.5vw, 2.85rem);
   font-weight: 700;
   line-height: 1.12;
   color: var(--color-text);
@@ -667,6 +667,7 @@ a:hover {
   grid-template-columns: repeat(8, 1fr);
   gap: 0.85rem;
   margin-bottom: 0;
+  min-height: 280px;
 }
 
 .home-trade-tile {
@@ -836,6 +837,7 @@ a:hover {
   grid-row: 1;
   position: relative;
   min-height: 320px;
+  aspect-ratio: 3 / 2;
   background: var(--color-bg);
   border-radius: var(--radius);
   display: flex;
@@ -2862,10 +2864,11 @@ body.nav-menu-open {
   }
 
   .hero-wrap {
-    min-height: auto;
     padding: 1.25rem max(1rem, env(safe-area-inset-left));
     padding-right: max(1rem, env(safe-area-inset-right));
     gap: clamp(0.75rem, 2vw, 1.5rem);
+    min-height: clamp(320px, 70vw, 420px);
+    grid-template-columns: 1fr 1fr;
   }
 
   .hero-wrap h1,
@@ -2884,15 +2887,12 @@ body.nav-menu-open {
   }
 
   .hero-cta {
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .hero-cta .btn {
-    width: auto;
-    flex: 1 1 auto;
-    min-width: min(100%, 140px);
+    width: 100%;
     min-height: 44px;
     justify-content: center;
   }
@@ -2909,6 +2909,7 @@ body.nav-menu-open {
 
   .hero-visual {
     min-height: clamp(160px, 42vw, 320px);
+    width: 100%;
   }
 
   .promo-box {
@@ -2930,6 +2931,7 @@ body.nav-menu-open {
   .home-popular-trades-grid {
     grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
     gap: clamp(0.4rem, 1.5vw, 0.65rem);
+    min-height: 320px;
   }
 
   .home-trade-tile {
@@ -3172,31 +3174,6 @@ body.nav-menu-open {
 }
 
 @media (max-width: 479px) {
-  .hero-wrap {
-    grid-template-columns: 1fr;
-  }
-
-  .hero-content {
-    grid-column: 1;
-    grid-row: auto;
-    order: 1;
-  }
-
-  .hero-visual {
-    grid-column: 1;
-    grid-row: auto;
-    order: 2;
-  }
-
-  .hero-cta {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .hero-cta .btn {
-    width: 100%;
-  }
-
   .home-search-panel-benefits {
     grid-template-columns: 1fr;
   }

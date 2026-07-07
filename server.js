@@ -1324,7 +1324,7 @@ function injectMobileAssets(html) {
   if (!out.includes('mobile-nav.js')) {
     out = out.replace(/<\/body>/i, '<script src="js/mobile-nav.js?v=1"></script>\n</body>');
   }
-  out = out.replace(/css\/style\.css\?v=\d+/g, 'css/style.css?v=95');
+  out = out.replace(/css\/style\.css\?v=\d+/g, 'css/style.css?v=98');
   return out;
 }
 

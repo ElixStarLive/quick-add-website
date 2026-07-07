@@ -8,9 +8,9 @@
   <meta name="description" content="QuickPostAds is a free UK marketplace to post jobs, find local tradespeople, buy, sell and advertise services across the UK.">
   <link rel="canonical" href="https://www.quickpostads.co.uk/">
   <meta name="keywords" content="local jobs, UK construction trades, post job free, plumbers, electricians, builders">
-  <link rel="stylesheet" href="css/critical-home.css?v=3">
-  <link rel="stylesheet" href="css/style.css?v=95">
-  <link rel="preload" as="image" href="images/hero-trades-480.webp" imagesrcset="images/hero-trades-480.webp 480w, images/hero-trades.webp 800w" imagesizes="(max-width: 960px) 100vw, 600px" type="image/webp" fetchpriority="high">
+  <link rel="preload" as="image" href="images/hero-trades-480.webp" type="image/webp" fetchpriority="high">
+  <link rel="stylesheet" href="css/style.css?v=98">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect fill='%23d4af37' width='32' height='32' rx='4'/%3E%3Ctext x='16' y='22' text-anchor='middle' fill='%23111111' font-size='18' font-family='sans-serif'%3EQ%3C/text%3E%3C/svg%3E">
   <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://www.quickpostads.co.uk/">
@@ -21,7 +21,6 @@
   <meta name="twitter:title" content="QuickPost Ads | Free UK Jobs & Classified Ads">
   <meta name="twitter:description" content="QuickPostAds is a free UK marketplace to post jobs, find local tradespeople, buy, sell and advertise services across the UK.">
   <meta name="twitter:image" content="https://www.quickpostads.co.uk/images/hero-trades.jpg">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect fill='%23d4af37' width='32' height='32' rx='4'/%3E%3Ctext x='16' y='22' text-anchor='middle' fill='%23111111' font-size='18' font-family='sans-serif'%3EQ%3C/text%3E%3C/svg%3E">
 </head>
 <body>
   <div class="top-bar">
@@ -35,6 +34,7 @@
         <span><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg> 23 Calderon Road, Leyton, London E11 4ET</span>
         <span><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg> Phone: 07860266619</span>
         <span><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg> Email: info@QuickPostAds.co.uk</span>
+        <a href="https://www.elixstarlive.co.uk" class="app-top-link" target="_blank" rel="noopener noreferrer"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg> Elix Star Live</a>
       </div>
     </div>
   </div>
@@ -57,29 +57,16 @@
         <a href="contact.html">Contact</a>
         <a href="post-job.html" class="btn btn-primary"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM9 10H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm-8 4H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2z"/></svg> Post a job</a>
       </nav>
+      <button type="button" class="nav-toggle" aria-label="Open menu" aria-expanded="false">
+        <span class="nav-toggle-bar" aria-hidden="true"></span>
+        <span class="nav-toggle-bar" aria-hidden="true"></span>
+        <span class="nav-toggle-bar" aria-hidden="true"></span>
+      </button>
     </div>
+    <div class="nav-overlay" aria-hidden="true"></div>
   </header>
 
   <section class="hero-wrap">
-    <div class="hero-visual">
-      <picture>
-        <source srcset="images/hero-trades-480.webp 480w, images/hero-trades.webp 800w" sizes="(max-width: 960px) 100vw, 600px" type="image/webp">
-        <source srcset="images/hero-trades-480.jpg 480w, images/hero-trades.jpg 800w" sizes="(max-width: 960px) 100vw, 600px" type="image/jpeg">
-        <img class="hero-image" src="images/hero-trades-480.webp" alt="Local tradespeople connecting with UK homeowners" width="600" height="400" fetchpriority="high" decoding="sync">
-      </picture>
-      <div class="hero-visual-overlay" aria-hidden="true"></div>
-      <div class="promo-box">
-        <p class="promo-box-title">QuickPost Offer!</p>
-        <p>Post your job free</p>
-        <ul>
-          <li>Renovation &amp; trades</li>
-          <li>Heating &amp; plumbing</li>
-          <li>Cleaning &amp; garden</li>
-          <li>Property maintenance</li>
-        </ul>
-        <a href="post-job.html" class="btn btn-dark">Post Now</a>
-      </div>
-    </div>
     <div class="hero-content">
       <p class="hero-label">Local jobs & services</p>
       <h1>Post Jobs &amp; Find <span class="text-gold">Local Trades</span></h1>
@@ -102,6 +89,27 @@
           <div class="hero-feature-icon"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg></div>
           <span>Free</span>
         </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <picture>
+        <source media="(max-width: 960px)" srcset="images/hero-trades-480.webp" type="image/webp">
+        <source media="(max-width: 960px)" srcset="images/hero-trades-480.jpg" type="image/jpeg">
+        <source srcset="images/hero-trades.webp" type="image/webp">
+        <source srcset="images/hero-trades.jpg" type="image/jpeg">
+        <img class="hero-image" src="images/hero-trades-480.webp" alt="Local tradespeople connecting with UK homeowners" width="600" height="400" fetchpriority="high" decoding="sync">
+      </picture>
+      <div class="hero-visual-overlay" aria-hidden="true"></div>
+      <div class="promo-box">
+        <p class="promo-box-title">QuickPost Offer!</p>
+        <p>Post your job free</p>
+        <ul>
+          <li>Renovation &amp; trades</li>
+          <li>Heating &amp; plumbing</li>
+          <li>Cleaning &amp; garden</li>
+          <li>Property maintenance</li>
+        </ul>
+        <a href="post-job.html" class="btn btn-dark">Post Now</a>
       </div>
     </div>
   </section>
@@ -207,6 +215,9 @@
 
 
   <footer class="site-footer">
+    <div class="app-footer-promo">
+      <p><strong>Also from us:</strong> <a href="https://www.elixstarlive.co.uk" target="_blank" rel="noopener noreferrer">Elix Star Live</a> — TikTok-style video app — watch, create &amp; go live</p>
+    </div>
     <div class="site-footer-links">
       <a href="terms-of-service.html">Terms of Service</a>
       <a href="privacy-policy.html">Privacy Policy</a>
