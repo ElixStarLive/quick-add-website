@@ -2800,20 +2800,20 @@ body.nav-menu-open {
     max-width: 100%;
   }
 
-  .top-bar-contact span,
-  .top-bar-contact .app-top-link {
+  .top-bar-contact > span,
+  .top-bar-contact > .app-top-link {
     display: inline-flex;
     align-items: center;
     gap: 0.15rem;
     white-space: nowrap;
   }
 
-  .top-bar-text-full {
-    display: none;
+  .top-bar-contact .top-bar-text-full {
+    display: none !important;
   }
 
-  .top-bar-text-short {
-    display: inline;
+  .top-bar-contact .top-bar-text-short {
+    display: inline !important;
   }
 
   .top-bar-contact .icon-inline {
@@ -3452,5 +3452,87 @@ body.nav-menu-open {
   .pricing-grid,
   .trade-cards-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+/* PWA install banner */
+.pwa-install-banner {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 500;
+  padding: 0.65rem max(0.75rem, env(safe-area-inset-left)) calc(0.65rem + env(safe-area-inset-bottom)) max(0.75rem, env(safe-area-inset-right));
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.92) 0%, #0a0a0a 100%);
+  border-top: 1px solid var(--color-border-gold);
+  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.55);
+}
+
+.pwa-install-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.pwa-install-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.pwa-install-copy strong {
+  color: var(--color-primary);
+  font-size: 0.95rem;
+}
+
+.pwa-install-copy span {
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.pwa-install-hint {
+  margin: 0.15rem 0 0;
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+}
+
+.pwa-install-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.pwa-install-btn {
+  padding: 0.45rem 0.85rem;
+  font-size: 0.82rem;
+  min-height: auto;
+}
+
+.pwa-install-close {
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.pwa-install-close:hover {
+  color: var(--color-primary);
+  border-color: var(--color-border-gold);
+}
+
+@media (display-mode: standalone) {
+  .pwa-install-banner {
+    display: none;
   }
 }

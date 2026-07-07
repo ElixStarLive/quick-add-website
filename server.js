@@ -1303,6 +1303,19 @@ app.get('/api/health', (req, res) => {
   res.json({ ok: true, env: NODE_ENV, stripe: Boolean(stripe), estimator: 'engine' });
 });
 
+app.get('/manifest.webmanifest', (req, res) => {
+  res.setHeader('Content-Type', 'application/manifest+json; charset=utf-8');
+  res.setHeader('Cache-Control', 'public, max-age=86400');
+  res.sendFile(path.join(__dirname, 'manifest.webmanifest'));
+});
+
+app.get('/sw.js', (req, res) => {
+  res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Service-Worker-Allowed', '/');
+  res.sendFile(path.join(__dirname, 'sw.js'));
+});
+
 // Static frontend (after API routes)
 function sendHtmlPage(res, fileName) {
   const filePath = path.join(__dirname, fileName);
@@ -1331,7 +1344,7 @@ function injectCompactTopBar(html) {
     )
     .replace(
       '> Email: info@QuickPostAds.co.uk</span>',
-      '><span class="top-bar-text-full">Email: info@QuickPostAds.co.uk</span><span class="top-bar-text-short">info@QuickPostAds.co.uk</span></span>'
+      '><span class="top-bar-text-full">Email: info@QuickPostAds.co.uk</span><span class="top-bar-text-short">Email</span></span>'
     )
     .replace(
       '> Elix Star Live</a>',
@@ -1346,11 +1359,32 @@ function stripHamburgerNav(html) {
     .replace(/<script[^>]*src="js\/mobile-nav\.js[^"]*"[^>]*><\/script>\s*/gi, '');
 }
 
+function injectPwaHead(html) {
+  if (!html.includes('<head>') || html.includes('manifest.webmanifest')) return html;
+  const tags = [
+    '<link rel="manifest" href="/manifest.webmanifest">',
+    '<meta name="theme-color" content="#000000">',
+    '<meta name="mobile-web-app-capable" content="yes">',
+    '<meta name="apple-mobile-web-app-capable" content="yes">',
+    '<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">',
+    '<meta name="apple-mobile-web-app-title" content="QuickPostAds">',
+    '<link rel="apple-touch-icon" href="/icons/icon-192.svg">'
+  ].join('\n  ');
+  return html.replace('<head>', '<head>\n  ' + tags);
+}
+
+function injectPwaScripts(html) {
+  if (!html.includes('</body>') || html.includes('js/pwa.js')) return html;
+  return html.replace(/<\/body>/i, '<script src="js/pwa.js?v=1" defer></script>\n</body>');
+}
+
 function injectMobileAssets(html) {
   if (typeof html !== 'string') return html;
   let out = stripHamburgerNav(html);
   out = injectCompactTopBar(out);
-  out = out.replace(/css\/style\.css\?v=\d+/g, 'css/style.css?v=103');
+  out = injectPwaHead(out);
+  out = injectPwaScripts(out);
+  out = out.replace(/css\/style\.css\?v=\d+/g, 'css/style.css?v=104');
   return out;
 }
 

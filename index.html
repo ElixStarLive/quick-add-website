@@ -9,7 +9,14 @@
   <link rel="canonical" href="https://www.quickpostads.co.uk/">
   <meta name="keywords" content="local jobs, UK construction trades, post job free, plumbers, electricians, builders">
   <link rel="preload" as="image" href="images/hero-trades-480.webp" type="image/webp" fetchpriority="high">
-  <link rel="stylesheet" href="css/style.css?v=103">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#000000">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="QuickPostAds">
+  <link rel="apple-touch-icon" href="/icons/icon-192.svg">
+  <link rel="stylesheet" href="css/style.css?v=104">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect fill='%23d4af37' width='32' height='32' rx='4'/%3E%3Ctext x='16' y='22' text-anchor='middle' fill='%23111111' font-size='18' font-family='sans-serif'%3EQ%3C/text%3E%3C/svg%3E">
   <!-- Open Graph -->
   <meta property="og:type" content="website">
@@ -33,7 +40,7 @@
       <div class="top-bar-contact">
         <span><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span class="top-bar-text-full">23 Calderon Road, Leyton, London E11 4ET</span><span class="top-bar-text-short">Leyton, E11</span></span>
         <span><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg><span class="top-bar-text-full">Phone: 07860266619</span><span class="top-bar-text-short">07860266619</span></span>
-        <span><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg><span class="top-bar-text-full">Email: info@QuickPostAds.co.uk</span><span class="top-bar-text-short">info@QuickPostAds.co.uk</span></span>
+        <span><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg><span class="top-bar-text-full">Email: info@QuickPostAds.co.uk</span><span class="top-bar-text-short">Email</span></span>
         <a href="https://www.elixstarlive.co.uk" class="app-top-link" target="_blank" rel="noopener noreferrer"><svg class="icon-inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg><span class="top-bar-text-full">Elix Star Live</span><span class="top-bar-text-short">Elix</span></a>
       </div>
     </div>
@@ -224,6 +231,7 @@
   <script src="js/site-config.js?v=2" defer></script>
   <script src="js/app-promo.js?v=1" defer></script>
   <script src="js/home-popular-trades.js?v=2" defer></script>
+  <script src="js/pwa.js?v=1" defer></script>
   <script defer>
     document.addEventListener('DOMContentLoaded', function () {
       var idle = window.requestIdleCallback || function (cb) { setTimeout(cb, 1); };
