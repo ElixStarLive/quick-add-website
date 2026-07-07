@@ -29,6 +29,43 @@
   <meta name="twitter:title" content="QuickPost Ads | Free UK Jobs & Classified Ads">
   <meta name="twitter:description" content="QuickPostAds is a free UK marketplace to post jobs, find local tradespeople, buy, sell and advertise services across the UK.">
   <meta name="twitter:image" content="https://www.quickpostads.co.uk/images/hero-trades.jpg">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://www.quickpostads.co.uk/#organization",
+        "name": "QuickPostAds",
+        "url": "https://www.quickpostads.co.uk/",
+        "logo": "https://www.quickpostads.co.uk/icons/icon-512.svg",
+        "description": "UK marketplace connecting homeowners with trusted local tradespeople for construction and property maintenance jobs.",
+        "areaServed": "United Kingdom",
+        "email": "info@QuickPostAds.co.uk",
+        "telephone": "+447860266619",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "23 Calderon Road, Leyton",
+          "addressLocality": "London",
+          "postalCode": "E11 4ET",
+          "addressCountry": "GB"
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://www.quickpostads.co.uk/#website",
+        "url": "https://www.quickpostads.co.uk/",
+        "name": "QuickPostAds",
+        "publisher": { "@id": "https://www.quickpostads.co.uk/#organization" },
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://www.quickpostads.co.uk/jobs.html?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
   <div class="top-bar">
