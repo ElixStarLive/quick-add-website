@@ -10,5 +10,8 @@ Thumbs.db
 *.log
 .npm
 lighthouse*.json
+lh-*.json
+_live-home.html
+.ssh-deploy/
 images/hero-trades-original.jpg
 images/hero-trades-800.jpg
